@@ -22,14 +22,14 @@ Locks, battery, SSD, configuration, then guided tests of the screen, keyboard, t
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/results.png" alt="Aman Check: condition report of a Mac" width="820">
+  <img src="docs/screenshots/report.png" alt="Aman Check: condition report of a Mac, ready to export as PDF" width="900">
 </p>
 
 ## Screenshots
 
-| Guided tests | Keyboard test |
+| Overview: configuration, battery and SSD | Locks, counters and what to check before buying |
 |---|---|
-| <img src="docs/screenshots/tests.png" alt="Guided tests" width="520"> | <img src="docs/screenshots/keyboard.png" alt="Keyboard test" width="520"> |
+| <img src="docs/screenshots/overview.png" alt="Overview of the checked Mac" width="520"> | <img src="docs/screenshots/locks.png" alt="Locks and summary" width="520"> |
 
 ## What it is for
 
@@ -108,8 +108,10 @@ xattr -dr com.apple.quarantine "/Applications/Aman Check.app"
 Swift Package Manager only, no Xcode project. The Command Line Tools are enough.
 
 ```bash
-./build_app.sh        # Aman Check.app (release, ad hoc signature, Hardened Runtime)
-./scripts/test.sh     # unit tests (Swift Testing), also works without Xcode
+./build_app.sh                 # Aman Check.app for this machine's architecture
+UNIVERSAL=1 ./build_app.sh     # universal binary (Apple Silicon + Intel), ad hoc signature, Hardened Runtime
+./scripts/make-dmg.sh          # dist/Aman-Check-<version>.dmg
+./scripts/test.sh              # unit tests (Swift Testing), also works without Xcode
 ```
 
 Useful launch arguments during development:

@@ -1,5 +1,7 @@
 #!/bin/bash
 # Construit « Aman Check.app » (même méthode qu'Aman Disk : SwiftPM + bundle fait main).
+#   ./build_app.sh               → architecture de cette machine (développement)
+#   UNIVERSAL=1 ./build_app.sh   → binaire universel, puis scripts/make-dmg.sh pour le DMG
 #
 # Signature : ad hoc par défaut (pas de compte développeur). Pour une distribution,
 # SIGN_IDENTITY="Developer ID Application: …" puis notarisation (spec §10).
@@ -9,18 +11,34 @@ set -e
 cd "$(dirname "$0")"
 
 VERSION="${VERSION:-1.0.0}"
+# UNIVERSAL=1 : binaire universel (Apple Silicon + Intel) pour une distribution, comme Aman Disk.
+# Une compilation par architecture (--triple ne demande pas xcbuild), puis lipo.
+UNIVERSAL="${UNIVERSAL:-0}"
 SIGN_IDENTITY="${SIGN_IDENTITY:--}"
 APP_NAME="Aman Check.app"
 CONTENTS="$APP_NAME/Contents"
+BUILT_BINARY=".build/AmanCheck-bundle-binary"
 
-echo "Compilation (release, $(uname -m))…"
-swift build -c release --product AmanCheck
-BIN_PATH="$(swift build -c release --show-bin-path)"
+if [ "$UNIVERSAL" == "1" ]; then
+    echo "Compilation (release, universel arm64 + x86_64)…"
+    SLICES=()
+    for ARCH in arm64 x86_64; do
+        swift build -c release --product AmanCheck --triple "$ARCH-apple-macosx14.0"
+        SLICES+=("$(swift build -c release --product AmanCheck --triple "$ARCH-apple-macosx14.0" --show-bin-path)/AmanCheck")
+    done
+    lipo -create "${SLICES[@]}" -output "$BUILT_BINARY"
+    BIN_PATH="$(swift build -c release --product AmanCheck --triple "x86_64-apple-macosx14.0" --show-bin-path)"
+else
+    echo "Compilation (release, $(uname -m))…"
+    swift build -c release --product AmanCheck
+    BIN_PATH="$(swift build -c release --show-bin-path)"
+    cp "$BIN_PATH/AmanCheck" "$BUILT_BINARY"
+fi
 
 echo "Création du bundle…"
 rm -rf "$APP_NAME"
 mkdir -p "$CONTENTS/MacOS" "$CONTENTS/Resources"
-cp "$BIN_PATH/AmanCheck" "$CONTENTS/MacOS/AmanCheck"
+cp "$BUILT_BINARY" "$CONTENTS/MacOS/AmanCheck"
 cp "Branding/Aman-Disk-brand/app-icon/AppIcon.icns" "$CONTENTS/Resources/AppIcon.icns"
 # Ressources SwiftPM (base des ponts USB de DiskHealthCore) : à côté de l'exécutable et dans Resources.
 for bundle in "$BIN_PATH"/*.bundle; do

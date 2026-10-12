@@ -1,0 +1,42 @@
+AMAN CHECK - HOW TO INSTALL
+===========================
+
+1. Drag "Aman Check" onto the "Applications" folder in this window.
+2. Open Aman Check from your Applications folder.
+
+
+THE FIRST TIME, macOS BLOCKS THE APP
+------------------------------------
+
+Aman Check is free and open source, but it isn't signed with a paid
+Apple Developer ID, so macOS can't verify who made it and blocks it
+the first time you open it. You only need to allow it once.
+
+
+macOS 15 Sequoia or later
+
+  1. Open Aman Check, then click "Done" in the warning.
+  2. Go to System Settings > Privacy & Security and scroll down
+     to "Security".
+  3. Next to "Aman Check was blocked to protect your Mac",
+     click "Open Anyway", then confirm with your password or Touch ID.
+
+  If the "Open Anyway" button isn't there, open Aman Check once more,
+  then go back to System Settings.
+
+
+macOS 14 Sonoma
+
+  In the Applications folder, Control-click Aman Check, choose "Open",
+  then click "Open".
+
+
+Or, in Terminal (any version)
+
+  xattr -dr com.apple.quarantine "/Applications/Aman Check.app"
+
+
+After that, Aman Check opens normally, like any other app.
+
+Source code, help and new versions:
+https://github.com/MidZai/aman_check
