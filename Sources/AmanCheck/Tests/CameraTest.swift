@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 import AVFoundation
+import IOKit.audio
 import AmanCore
 import AmanDesign
 import DiskHealthCore
@@ -35,6 +36,7 @@ final class CameraSession: NSObject, ObservableObject, AVCaptureVideoDataOutputS
         }
         // Caméra intégrée uniquement : pas une caméra externe ni l'iPhone (Continuité).
         let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices
+            .filter { !$0.isContinuityCamera && $0.transportType == Int32(kIOAudioDeviceTransportTypeBuiltIn) }
         DiagnosticLog.shared.log("caméra", "périphériques intégrés : \(devices.map(\.localizedName))")
         guard let device = devices.first else { state = .noCamera; return }
         deviceName = device.localizedName
@@ -161,6 +163,8 @@ private struct CameraPreview: NSViewRepresentable {
 struct CameraTestView: View {
     let finish: (TestResult) -> Void
     @StateObject private var camera = CameraSession()
+    /// Aucune image après 8 secondes : la caméra est détectée mais n'envoie rien.
+    @State private var noPictureAfterDelay = false
 
     var body: some View {
         TestScaffold(title: L("Camera", "Caméra"),
@@ -202,6 +206,11 @@ struct CameraTestView: View {
                         if let name = camera.deviceName {
                             Text(name).foregroundStyle(.secondary)
                         }
+                        if noPictureAfterDelay && camera.frames == 0 {
+                            Label(L("The camera was found but sends no image.", "La caméra est détectée mais n'envoie aucune image."),
+                                  systemImage: "exclamationmark.triangle")
+                                .foregroundStyle(.orange)
+                        }
                     }
                     .font(.callout)
                     HintRow(text: L("Check sharpness, colors, stains on the lens and lines in the picture. Cover the camera with a finger: the picture must go dark, which proves it is live.",
@@ -221,14 +230,18 @@ struct CameraTestView: View {
                                       summary: L("The camera does not start", "La caméra ne démarre pas"), details: [message]))
                 }
             default:
+                // La réponse négative reste toujours possible : seule la réponse positive attend une image.
                 Button(L("No, There Is a Problem", "Non, il y a un problème")) { complete(ok: false) }
-                    .disabled(camera.frames == 0)
                 Button(L("Yes, the Picture Is Good", "Oui, l'image est bonne")) { complete(ok: true) }
                     .buttonStyle(.borderedProminent)
                     .disabled(camera.frames == 0)
             }
         }
         .task { await camera.start() }
+        .task {
+            try? await Task.sleep(nanoseconds: 8_000_000_000)
+            if camera.frames == 0 { noPictureAfterDelay = true }
+        }
         .onDisappear { camera.stop() }
     }
 
