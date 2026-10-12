@@ -368,4 +368,5 @@ Les phases 1 à 3 permettent déjà un pilote avec des boutiques, en créant les
 - [ ] Durée de validité de 30 jours et effacement à 90 jours : à confirmer (avant la phase 1).
 - [ ] Tarif en dinars et mode d'encaissement local pour l'Algérie (avant le pilote boutiques).
 - [ ] Texte du bandeau légal de niveau 2 et page de confidentialité : à faire relire (avant la mise en ligne).
+- [ ] Retrait d'un rapport publié après effacement du Mac : le jeton de retrait n'existe que dans le trousseau du Mac, donc le vendeur ne peut plus retirer son rapport une fois le Mac effacé, alors que §3 dit qu'il le peut à tout moment. Piste : permettre le retrait avec la clé de licence.
 - [ ] Identification « licence + modèle + 4 derniers caractères » côté serveur : sur les numéros de série à 12 caractères (Mac Intel, premiers M1), ces 4 caractères désignent la configuration, pas l'exemplaire ; deux Mac de même configuration sont confondus. À trancher avant d'en faire une clé de rattachement.
