@@ -165,10 +165,11 @@ public enum BatteryAnalysis {
         var status: CheckStatus = percent >= thresholds.good ? .good : (percent >= thresholds.watch ? .watch : .problem)
         if condition == .problem { status = .problem }
 
-        // Recoupement avec la « Capacité maximale » affichée par macOS.
+        // Recoupement avec la « Capacité maximale » affichée par macOS : il ne peut que dégrader un statut
+        // bon ou à surveiller ; un problème (« Service recommandé ») reste un problème.
         if let macOS = power?.maximumCapacityPercent {
             if abs(macOS - percent) > 5 {
-                status = .manualRequired
+                if status != .problem { status = .manualRequired }
                 notes.append(L("macOS shows \(macOS)% while the battery reports \(percent)%: check in System Settings > Battery.",
                                "macOS affiche \(macOS) % alors que la batterie indique \(percent) % : vérifiez dans Réglages Système > Batterie."))
             } else {
@@ -195,8 +196,9 @@ public enum BatteryAnalysis {
             detail = L("out of \(Formatters.integer(rated)) planned for this battery", "sur \(Formatters.integer(rated)) prévus pour cette batterie")
             status = cycles >= rated ? .watch : .good
         } else {
+            // Sans nombre prévu, le compte ne peut pas être jugé : une information, pas un point vert.
             detail = L("rated count unknown for this model", "nombre prévu inconnu pour ce modèle")
-            status = .good
+            status = .info
         }
         return Measurement(id: id, value: .int(Int64(cycles)), unit: L("cycles", "cycles"), status: status,
                            method: "CycleCount" + (source.map { " · \(L("rated", "prévu")) : \($0)" } ?? ""),

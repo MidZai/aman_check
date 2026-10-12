@@ -124,3 +124,29 @@ struct BatteryAnalysisTests {
         #expect(find(BatteryAnalysis.analyze(registry: r, power: nil, ratedCyclesFromModel: nil), MetricID.batteryCycles)?.status == .watch)
     }
 }
+
+@Suite("Batterie · statut rouge jamais rétrogradé")
+struct BatteryStatusTests {
+    private func find(_ list: [Measurement], _ id: String) -> Measurement? { list.first { $0.id == id } }
+
+    @Test("« Service recommandé » + écart de 8 points avec macOS : reste un problème, note de divergence ajoutée")
+    func mismatchDoesNotDowngradeProblem() {
+        var r = BatteryRegistry()
+        r.designCapacity = 5000
+        r.appleRawMaxCapacity = 4500
+        let m = find(BatteryAnalysis.analyze(registry: r, power: PowerProfile(condition: "Service Recommended", maximumCapacityPercent: 82),
+                                             ratedCyclesFromModel: nil), MetricID.batteryHealth)
+        #expect(m?.status == .problem)
+        #expect(m?.note?.contains("82") == true)
+    }
+
+    @Test("Nombre de cycles prévu inconnu : information, pas vert")
+    func unknownRatedCyclesIsInfo() {
+        var r = BatteryRegistry()
+        r.cycleCount = 300
+        let m = find(BatteryAnalysis.analyze(registry: r, power: nil, ratedCyclesFromModel: nil), MetricID.batteryCycles)
+        #expect(m?.status == .info)
+        r.designCycleCount = 1000
+        #expect(find(BatteryAnalysis.analyze(registry: r, power: nil, ratedCyclesFromModel: nil), MetricID.batteryCycles)?.status == .good)
+    }
+}
