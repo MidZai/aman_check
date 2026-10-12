@@ -133,9 +133,9 @@ final class CheckController: ObservableObject {
         phase = .analyzing
         measurements = []
         reportID = ConditionReport.makeID()
-        // Nouveau contrôle = nouveau rapport : les tests guidés sont à refaire (niveau 2, prérequis §8).
-        results = [:]
-        analysisStartedAt = Date()
+        // Des tests guidés faits avant cette analyse ne disparaissent pas en silence : ils sont conservés et
+        // rattachés à ce contrôle (la confirmation de « Relancer » couvre le cas d'un nouveau contrôle).
+        analysisStartedAt = TestResult.analysisStart(keeping: Array(results.values), now: Date())
         steps = Dictionary(uniqueKeysWithValues: AnalysisStep.allCases.map { ($0, .pending) })
 
         // Identité (et lecture du SSD, dont la capacité fait partie de la configuration).
