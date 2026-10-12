@@ -1,0 +1,395 @@
+{
+  "appVersion" : "1.0.0",
+  "generatedAt" : "2026-10-11T10:00:00Z",
+  "measurements" : [
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "MacBook Pro (16 pouces, 2019)",
+      "id" : "identity.model_name",
+      "provenance" : "derived",
+      "status" : "info",
+      "value" : {
+        "text" : {
+          "_0" : "MacBookPro16,1"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "2019",
+      "id" : "identity.model_year",
+      "provenance" : "derived",
+      "status" : "info",
+      "value" : {
+        "int" : {
+          "_0" : 2019
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "2,4 GHz",
+      "display" : "Intel Core i9-9980HK",
+      "id" : "identity.chip",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "value" : {
+        "text" : {
+          "_0" : "Intel Core i9-9980HK"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "32 Go",
+      "id" : "identity.ram",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "unit" : "Go",
+      "value" : {
+        "int" : {
+          "_0" : 32
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "1 To",
+      "id" : "identity.storage_capacity",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "value" : {
+        "int" : {
+          "_0" : 1000204886016
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "macOS 26.4.1",
+      "id" : "identity.macos",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "value" : {
+        "text" : {
+          "_0" : "26.4.1"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "4 derniers caractères",
+      "display" : "••••Q2XD",
+      "id" : "identity.serial",
+      "method" : "IOPlatformSerialNumber",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "value" : {
+        "text" : {
+          "_0" : "Q2XD"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "Aucun signal détecté",
+      "id" : "security.activation_lock",
+      "note" : "Faites tout de même effacer le Mac devant vous.",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "text" : {
+          "_0" : "activation_lock_disabled"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "Aucun signal détecté",
+      "id" : "security.mdm",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "text" : {
+          "_0" : "no"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "Sa lecture exige les droits administrateur.",
+      "display" : "À vérifier soi-même",
+      "id" : "security.firmware_password",
+      "method" : "firmwarepasswd -check (droits administrateur requis)",
+      "note" : "Redémarrez en maintenant Option (⌥) : si un mot de passe est demandé, le Mac est verrouillé.",
+      "provenance" : "measuredAuto",
+      "status" : "manualRequired"
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "Non",
+      "id" : "security.virtual_machine",
+      "method" : "sysctl kern.hv_vmm_present",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "int" : {
+          "_0" : 0
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "de sa capacité d'origine",
+      "display" : "83 %",
+      "id" : "battery.health_percent",
+      "method" : "NominalChargeCapacity \/ DesignCapacity = 7270 \/ 8790 mAh",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "unit" : "%",
+      "value" : {
+        "int" : {
+          "_0" : 83
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "sur 1 000 prévus pour cette batterie",
+      "display" : "510",
+      "id" : "battery.cycles",
+      "method" : "CycleCount · prévu : table des modèles",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "unit" : "cycles",
+      "value" : {
+        "int" : {
+          "_0" : 510
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "Normale",
+      "id" : "battery.condition",
+      "method" : "SPPowerDataType · sppower_battery_health",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "text" : {
+          "_0" : "Normal"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "8 790 mAh",
+      "id" : "battery.design_capacity",
+      "method" : "DesignCapacity",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "unit" : "mAh",
+      "value" : {
+        "int" : {
+          "_0" : 8790
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "7 270 mAh",
+      "id" : "battery.max_capacity",
+      "method" : "NominalChargeCapacity",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "unit" : "mAh",
+      "value" : {
+        "int" : {
+          "_0" : 7270
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "En bonne santé",
+      "id" : "storage.health",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "text" : {
+          "_0" : "good"
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "≈ 5 mois sous tension",
+      "display" : "3 650 h",
+      "id" : "storage.power_on_hours",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "unit" : "h",
+      "value" : {
+        "int" : {
+          "_0" : 3650
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "42 To",
+      "id" : "storage.data_written",
+      "provenance" : "measuredAuto",
+      "status" : "info",
+      "value" : {
+        "int" : {
+          "_0" : 42000000000000
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "3 %",
+      "id" : "storage.percentage_used",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "unit" : "%",
+      "value" : {
+        "int" : {
+          "_0" : 3
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "detail" : "12 réseaux détectés à proximité",
+      "display" : "Fonctionnel",
+      "id" : "connectivity.wifi",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "int" : {
+          "_0" : 12
+        }
+      }
+    },
+    {
+      "collectedAt" : "2026-10-11T13:49:55Z",
+      "display" : "Fonctionnel",
+      "id" : "connectivity.bluetooth",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "value" : {
+        "text" : {
+          "_0" : "on"
+        }
+      }
+    }
+  ],
+  "plannedTests" : [
+    "screen",
+    "keyboard",
+    "touchBar",
+    "trackpad",
+    "speakers",
+    "microphone",
+    "camera",
+    "touchID",
+    "ports"
+  ],
+  "procedureVersion" : "1.0",
+  "profile" : {
+    "chip" : "intelT2",
+    "hasBattery" : true,
+    "hasBuiltInCamera" : true,
+    "hasBuiltInKeyboard" : true,
+    "hasBuiltInMic" : true,
+    "hasBuiltInTrackpad" : true,
+    "hasHDMI" : false,
+    "hasHeadphoneJack" : true,
+    "hasInternalSpeakers" : true,
+    "hasMagSafe" : false,
+    "hasPhysicalEscape" : true,
+    "hasPhysicalFunctionRow" : false,
+    "hasSDSlot" : false,
+    "hasTouchBar" : true,
+    "hasTouchID" : true,
+    "isSimulated" : false,
+    "kind" : "laptop",
+    "model" : {
+      "chip" : "intelT2",
+      "family" : "MacBook Pro",
+      "hasCamera" : true,
+      "hasHDMI" : false,
+      "hasMagSafe" : false,
+      "hasPhysicalEscape" : true,
+      "hasSDSlot" : false,
+      "hasTouchBar" : true,
+      "hasTouchID" : true,
+      "identifiers" : [
+        "MacBookPro16,1",
+        "MacBookPro16,4"
+      ],
+      "inches" : 16,
+      "kind" : "laptop",
+      "lastMacOS" : 26,
+      "ratedBatteryCycles" : 1000,
+      "thunderboltPorts" : 4,
+      "year" : 2019
+    },
+    "modelIdentifier" : "MacBookPro16,1",
+    "thunderboltPorts" : 4,
+    "trackpadForceTouch" : true
+  },
+  "reportID" : "AC-7K3P-Q2XD",
+  "schemaVersion" : 1,
+  "sellerName" : "Boutique Exemple",
+  "simulated" : false,
+  "tests" : [
+    {
+      "completedAt" : "2026-10-11T13:49:55Z",
+      "details" : [
+
+      ],
+      "outcome" : "passed",
+      "provenance" : "userObserved",
+      "status" : "good",
+      "summary" : "Aucun défaut constaté",
+      "test" : "screen"
+    },
+    {
+      "completedAt" : "2026-10-11T13:49:55Z",
+      "details" : [
+
+      ],
+      "outcome" : "passed",
+      "provenance" : "measuredAuto",
+      "status" : "good",
+      "summary" : "66 touches sur 66 détectées",
+      "test" : "keyboard"
+    },
+    {
+      "completedAt" : "2026-10-11T13:49:55Z",
+      "details" : [
+        "Non reçus : Clic forcé (appuyez plus fort)"
+      ],
+      "outcome" : "failed",
+      "provenance" : "measuredAuto",
+      "status" : "watch",
+      "summary" : "5 gestes sur 6 · 100 % de la surface",
+      "test" : "trackpad"
+    },
+    {
+      "completedAt" : "2026-10-11T13:49:55Z",
+      "details" : [
+
+      ],
+      "outcome" : "skipped",
+      "provenance" : "userObserved",
+      "status" : "notTested",
+      "summary" : "Ignoré par l'utilisateur",
+      "test" : "camera"
+    }
+  ],
+  "trustLevel" : 1
+}

@@ -1,0 +1,38 @@
+// Aman Check niveau 2 : API, page publique et webhook de paiement (cahier des charges §4).
+// Secrets (wrangler secret put) : SIGNING_PRIVATE_KEY, SIGNING_PUBLIC_KEYS, PAYMENT_WEBHOOK_SECRET, IP_HASH_SECRET.
+{
+  "name": "aman-check",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "aman-check",
+      // TODO: remplacer par l'identifiant renvoyé par `wrangler d1 create aman-check`.
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Effacement du contenu à 90 jours et purge des compteurs de débit (adresses IP hachées) au-delà d'une heure.
+  "triggers": { "crons": ["17 * * * *"] },
+  "vars": {
+    // TODO (question ouverte §14) : nom de domaine définitif. Doit correspondre à PublishClient.baseURL dans l'app.
+    "PUBLIC_BASE_URL": "https://DOMAINE",
+    "MIN_APP_VERSION": "1.0.0",
+    "VALIDITY_DAYS": "30",
+    "RETENTION_DAYS": "90",
+    "PRO_MONTHLY_CAP": "300",
+    "PUBLISH_PER_HOUR": "10",
+    "READS_PER_MINUTE": "60",
+    "SIGNING_KEY_ID": "k1",
+    // Page d'achat du prestataire (ouverte par « Obtenir une clé » via /acheter).
+    "PURCHASE_URL": "",
+    // Prix affichés : configuration, jamais dans le code de l'app (§9).
+    "PRICES": "{\"single\":\"4,99 €\",\"proMonthly\":\"19 € / mois\",\"proYearly\":\"149 € / an\"}",
+    // Correspondance produit du prestataire → offre (§9). Exemple : {"123":"single","456":"pro"}.
+    "PAYMENT_PRODUCTS": "{}",
+    "CONTACT_EMAIL": "contact@DOMAINE",
+    "DOWNLOAD_URL": "https://DOMAINE/"
+  }
+}

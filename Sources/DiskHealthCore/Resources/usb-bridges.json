@@ -1,0 +1,5 @@
+[
+  { "vendorId": "0x152d", "vendor": "JMicron", "notes": "USB to SATA / NVMe bridges (e.g. JMS583, JMS567, JMS578)" },
+  { "vendorId": "0x174c", "vendor": "ASMedia", "notes": "USB to SATA / NVMe bridges (e.g. ASM2362, ASM2364, ASM1153E)" },
+  { "vendorId": "0x0bda", "vendor": "Realtek", "notes": "USB to NVMe / SATA bridges (e.g. RTL9210, RTL9210B)" }
+]

@@ -1,0 +1,22 @@
+#!/usr/bin/env node
+// Offre Pro : logo (PNG, 32 Ko au plus) et nom du magasin, affichés sur la page et le PDF.
+//
+//   scripts/set-logo --key ACK-XXXX-XXXX-XXXX-XXXX --logo logo.png [--shop "Magasin Y"] [--remote]
+import { readFileSync } from "node:fs";
+import { d1, hashKey, parseArgs, sql } from "./lib.mjs";
+
+const args = parseArgs(process.argv.slice(2));
+if (!args.key || (!args.logo && !args.shop)) {
+  console.error("usage : set-logo --key CLÉ [--logo fichier.png] [--shop NOM] [--remote]");
+  process.exit(64);
+}
+const sets = [];
+if (args.logo) {
+  const png = readFileSync(args.logo);
+  if (png.subarray(0, 8).toString("hex") !== "89504e470d0a1a0a") { console.error("Le logo doit être un PNG."); process.exit(65); }
+  if (png.length > 32 * 1024) { console.error("Logo trop lourd (32 Ko au plus)."); process.exit(65); }
+  sets.push(`logo = X'${png.toString("hex")}'`);
+}
+if (args.shop) sets.push(`shop_name = ${sql(args.shop)}`);
+d1(`UPDATE licenses SET ${sets.join(", ")} WHERE key_hash = ${sql(hashKey(args.key))} AND plan = 'pro';`, { remote: !!args.remote });
+console.log("Logo et nom du magasin enregistrés (offre Pro uniquement).");

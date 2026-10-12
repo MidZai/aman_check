@@ -1,0 +1,51 @@
+# Aman Check — à vérifier à la main sur le MacBookPro16,1
+
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (39 tests).
+Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
+
+| Test | Ce qu'il faut constater | Critère |
+|---|---|---|
+| Écran | Couleur sur 100 % de l'écran, Dock et barre de menus compris ; Espace / → / ← / Échap ; sortie qui rétablit Dock, barre de menus et curseur | §6.1 |
+| Clavier | Chaque touche passe au vert, y compris espace, fn, ⌃, ⌥ et ⌘ gauche/droite, flèches ; total 65 (ANSI) ou 66 (ISO) | §6.2 |
+| Clavier ISO | Si le clavier est ISO (AZERTY), appuyer sur la touche « @ » à gauche du 1 doit faire passer le dessin en ISO automatiquement | §6.2 |
+| Touch Bar | 12 zones bleues apparaissent sur la Touch Bar ; chacune passe au vert au toucher (si rien : réglage « Commandes de l'app ») | — |
+| Trackpad | Clic, clic secondaire, défilement, pincement, rotation, clic forcé détectés ; la grille 8×5 se remplit | §6.3 |
+| Caméra | Image de la caméra FaceTime HD affichée (demande d'autorisation au premier lancement) ; refus → « Non testé » | §6.4 |
+| Haut-parleurs | Son audible ; gauche et droite distincts ; message si AirPods/HDMI actifs | §6.5 |
+| Micro | Jauge qui bouge, enregistrement de 3 s relu | §6.5 |
+| Touch ID | Empreinte reconnue | §7.6 |
+| Ports | Une clé USB valide un port sans clic ; déplacée, elle valide le suivant (case allumée = n° UsbCPortNumber) ; chargeur débranché/rebranché ; écran externe ; casque | §6.6 |
+
+Profils simulés (sans ces Mac) : `Aman Check.app/Contents/MacOS/AmanCheck --simulate-model Macmini9,1`
+(aussi iMac21,1, Mac13,1, MacBookAir10,1, MacBookPro15,1, MacBookPro18,3).
+
+## Non validé (pas de machine disponible)
+- Apple Silicon : clés batterie (`MaxCapacity` en %, `NominalChargeCapacity`), « Capacité maximale » de SPPowerDataType, `sppci_cores`, classes des ports USB, `UsbCPortNumber`.
+- Mac de bureau réels, Mac Intel sans T2 (Activation Lock non lisible).
+- Touches F1–F12 physiques (keyCodes média, Mission Control 160, Launchpad 131), lecteur SD, HDMI.
+
+## Niveau 2 — rapport vérifiable en ligne
+
+Tests automatiques : `./scripts/test.sh` (52 tests Swift) et `cd server && npm test` (36 tests du serveur, base D1 locale).
+
+Serveur local pour les essais :
+```
+cd server
+scripts/generate-signing-key dev1          # puis remplir .dev.vars (voir server/README.md)
+npm run db:migrate:local
+scripts/issue-license --plan single --credits 3 --note essai
+npx wrangler dev --port 8787
+open -n "Aman Check.app" --args --publish-server http://127.0.0.1:8787
+```
+
+| Vérification | Ce qu'il faut constater | Critère |
+|---|---|---|
+| Parcours vendeur | Contrôle → Rapport → « Publier un rapport vérifiable… » (⇧⌘P) → la feuille liste « Envoyé et rendu public » / « Jamais envoyé » → clé → « Vérifier » affiche le solde → « Publier » → QR code, lien, « Copier le lien », « Copier le texte pour l'annonce », « Retirer de la publication » ; le PDF exporté porte le QR code, l'identifiant public et l'empreinte | §3, §8 |
+| Machines et téléphones | Sur la machine de développement **et sur un Mac Apple Silicon** : contrôle, publication, scan du QR code depuis un téléphone **Android** et un **iPhone** ; page lisible en moins de 3 secondes en 4G | §12 |
+| Coupure réseau | Couper le Wi-Fi pendant la publication : message « Le serveur n'a pas pu être joint… », rapport local intact et exportable en PDF de niveau 1 ; rallumer, republier : même identifiant public, **un seul crédit décompté** (`GET /v1/licenses/me`) | §12 |
+| Retrait | « Retirer de la publication » : la page affiche « Ce rapport a été retiré par son auteur », sans contenu ; le badge repasse en Niveau 1 | §5 |
+| Périphériques externes | Test clavier avec un clavier USB/Bluetooth branché : écran d'attente, le test démarre seul au débranchement. Idem trackpad avec une souris | §8 prérequis |
+
+Fait automatiquement (mode `--snapshot` avec `--snapshot-publish-key` et le serveur local) : publication réelle depuis l'app, archive JSON, PDF de niveau 2 et fiche A5 ; les QR codes rendus ont été relus par CoreImage. Captures de la page publique (5 états, téléphone 390 px) : `docs/screenshots/online-page/`.
+
+Non fait : achat de test en bac à sable (aucun compte chez le prestataire), déploiement Cloudflare (nom de domaine non choisi).

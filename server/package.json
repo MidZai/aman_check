@@ -1,0 +1,25 @@
+{
+  "name": "aman-check-server",
+  "private": true,
+  "type": "module",
+  "description": "Aman Check niveau 2 : API de publication et page publique de vérification (Cloudflare Workers).",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "db:migrate:local": "wrangler d1 migrations apply aman-check --local",
+    "db:migrate:remote": "wrangler d1 migrations apply aman-check --remote",
+    "catalog": "cd .. && swift run AmanCatalogExport server/src/catalog.json"
+  },
+  "dependencies": {
+    "hono": "4.13.13"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.4.0",
+    "@cloudflare/workers-types": "5.20261011.1",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3",
+    "wrangler": "4.149.0"
+  }
+}

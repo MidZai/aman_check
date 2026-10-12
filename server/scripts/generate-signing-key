@@ -1,0 +1,15 @@
+#!/usr/bin/env node
+// Crée une paire de clés Ed25519 pour signer les publications (cahier des charges §5).
+//
+//   scripts/generate-signing-key k2
+//
+// Puis : wrangler secret put SIGNING_PRIVATE_KEY (valeur « private »),
+// ajouter { keyId, publicKey } à SIGNING_PUBLIC_KEYS (garder les anciennes clés pour la rotation)
+// et passer SIGNING_KEY_ID à la nouvelle valeur.
+import { generateKeyPairSync } from "node:crypto";
+
+const keyId = process.argv[2] ?? "k1";
+const { privateKey, publicKey } = generateKeyPairSync("ed25519");
+const pkcs8 = privateKey.export({ format: "der", type: "pkcs8" }).toString("base64");
+const raw = publicKey.export({ format: "der", type: "spki" }).subarray(12).toString("base64");
+console.log(JSON.stringify({ keyId, private: pkcs8, public: { keyId, publicKey: raw } }, null, 2));

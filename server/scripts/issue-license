@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+// Crée une clé de licence à la main (cahier des charges §9) : boutiques pilotes,
+// ventes encaissées localement en Algérie, hors prestataire de paiement.
+//
+//   scripts/issue-license --plan single [--credits 1] [--note "Boutique X"] [--remote] [--dry-run]
+//   scripts/issue-license --plan pro --months 12 [--shop "Magasin Y"] [--remote]
+//
+// La clé n'est affichée qu'une fois : le serveur n'en garde que le hachage.
+import { d1, hashKey, parseArgs, random, sql } from "./lib.mjs";
+
+const args = parseArgs(process.argv.slice(2));
+const plan = args.plan ?? "single";
+if (!["single", "pro"].includes(plan) || args.help) {
+  console.error("usage : issue-license --plan single|pro [--credits N] [--months N] [--shop NOM] [--note TEXTE] [--remote] [--dry-run]");
+  process.exit(64);
+}
+const raw = random(16);
+const key = `ACK-${raw.slice(0, 4)}-${raw.slice(4, 8)}-${raw.slice(8, 12)}-${raw.slice(12, 16)}`;
+const now = new Date();
+const credits = plan === "single" ? Number.parseInt(args.credits ?? "1", 10) : 0;
+const months = Number.parseInt(args.months ?? "1", 10);
+const validUntil = plan === "pro" ? new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + months, now.getUTCDate(), 23, 59, 59)).toISOString() : null;
+const id = `lic_${random(16)}`;
+// Aucune donnée personnelle : la note sert de référence de commande (« manual:… »).
+const orderRef = `manual:${now.toISOString().slice(0, 10)}${args.note ? `:${args.note}` : ""}`;
+
+const statement = `INSERT INTO licenses (id, key_hash, plan, credits, valid_until, order_ref, status, shop_name, created_at) VALUES (${[
+  sql(id), sql(hashKey(key)), sql(plan), sql(credits), sql(validUntil), sql(orderRef), sql("active"), sql(args.shop ?? null), sql(now.toISOString()),
+].join(", ")});`;
+
+if (args["dry-run"]) {
+  console.log(statement);
+} else {
+  d1(statement, { remote: !!args.remote });
+}
+console.log(`\nClé de licence (${plan === "single" ? `${credits} crédit${credits > 1 ? "s" : ""}` : `Pro jusqu'au ${validUntil.slice(0, 10)}`}) :\n\n    ${key}\n`);
+console.log(`Base : ${args["dry-run"] ? "aucune (essai)" : args.remote ? "production" : "locale"} · identifiant ${id}`);

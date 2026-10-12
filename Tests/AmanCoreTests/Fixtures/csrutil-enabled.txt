@@ -1,0 +1,1 @@
+System Integrity Protection status: enabled.

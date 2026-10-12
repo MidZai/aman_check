@@ -1,0 +1,926 @@
+{
+  "blockers" : [
+    "security.activation_lock",
+    "security.mdm",
+    "security.virtual_machine"
+  ],
+  "comment" : "Généré par AmanCatalogExport depuis AmanCore. Ne pas modifier à la main : npm run catalog.",
+  "languages" : {
+    "en" : {
+      "errors" : {
+        "app_too_old" : "Update Aman Check to publish.",
+        "invalid_license" : "This key is not recognized.",
+        "invalid_report" : "The report could not be read. Run the check again.",
+        "invalid_token" : "This Mac cannot withdraw this report.",
+        "network" : "The server could not be reached. Your report is still here and can be exported as a PDF; you can try again without being charged twice.",
+        "no_credit" : "There are no publications left on this key.",
+        "not_found" : "This report is no longer online.",
+        "privacy_check_failed" : "The report contains information that must not leave this Mac. Nothing was sent.",
+        "rate_limited" : "Too many attempts. Try again in a few minutes.",
+        "report_too_old" : "This check is more than 24 hours old. Run it again before publishing.",
+        "server" : "The server gave an unexpected answer. Try again later.",
+        "simulated_profile" : "A simulated profile cannot be published.",
+        "too_large" : "Report too large."
+      },
+      "lists" : {
+        "buyerChecks" : [
+          "Compare the 4 characters of the serial number with the ones on the Mac.",
+          "Compare the date of the report with the date of the listing.",
+          "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in."
+        ],
+        "doesNotProve" : [
+          "That the Mac is in good condition today: the report dates from the day of the check.",
+          "That the tests marked Observed by the user are accurate: they are declarative.",
+          "That the Mac is neither stolen nor locked after it is erased.",
+          "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller."
+        ],
+        "neverSent" : [
+          "The Mac's full serial number",
+          "Serial numbers of the battery, SSD and displays",
+          "Account name, computer name, Apple Account",
+          "Files, photos, audio or video recordings from the tests",
+          "Wi-Fi network names, Bluetooth devices",
+          "Diagnostic log and raw command output"
+        ],
+        "proves" : [
+          "It was produced by the Aman Check app, on the date shown.",
+          "Its content has not been changed since it was published.",
+          "It concerns a Mac whose serial number ends with the 4 characters shown."
+        ],
+        "sent" : [
+          "Model, year, processor, memory, storage, macOS version",
+          "Last 4 characters of the serial number",
+          "Battery, SSD, lock and wireless measurements",
+          "Results of the guided tests and their date",
+          "Name of the seller or shop, if entered",
+          "Version of the app and of the procedure"
+        ]
+      },
+      "metrics" : {
+        "battery.condition" : {
+          "isJudged" : true,
+          "label" : "Condition reported by macOS",
+          "level" : "essential",
+          "section" : "battery"
+        },
+        "battery.cycles" : {
+          "help" : "One cycle = 100% of the battery used, possibly over several days.",
+          "isJudged" : true,
+          "label" : "Charge cycles",
+          "level" : "essential",
+          "section" : "battery"
+        },
+        "battery.design_capacity" : {
+          "isJudged" : false,
+          "label" : "Original capacity",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "battery.health_percent" : {
+          "help" : "Charge the battery can hold today, compared with when it was new.",
+          "isJudged" : true,
+          "label" : "Battery capacity",
+          "level" : "essential",
+          "section" : "battery"
+        },
+        "battery.is_charging" : {
+          "isJudged" : false,
+          "label" : "Power",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "battery.max_capacity" : {
+          "isJudged" : false,
+          "label" : "Current full-charge capacity",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "battery.temperature" : {
+          "isJudged" : false,
+          "label" : "Battery temperature",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "connectivity.bluetooth" : {
+          "isJudged" : true,
+          "label" : "Bluetooth",
+          "level" : "essential",
+          "section" : "connectivity"
+        },
+        "connectivity.wifi" : {
+          "isJudged" : true,
+          "label" : "Wi-Fi",
+          "level" : "essential",
+          "section" : "connectivity"
+        },
+        "identity.chip" : {
+          "isJudged" : false,
+          "label" : "Processor",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.cpu_cores" : {
+          "isJudged" : false,
+          "label" : "Cores",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.display" : {
+          "isJudged" : false,
+          "label" : "Display",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.gpu" : {
+          "isJudged" : false,
+          "label" : "Graphics",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.macos" : {
+          "isJudged" : false,
+          "label" : "Installed macOS",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.macos_max" : {
+          "help" : "Most recent version of macOS Apple provides for this model.",
+          "isJudged" : false,
+          "label" : "Latest supported macOS",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.model_identifier" : {
+          "isJudged" : false,
+          "label" : "Model identifier",
+          "level" : "advanced",
+          "section" : "identity"
+        },
+        "identity.model_name" : {
+          "isJudged" : false,
+          "label" : "Model",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.model_year" : {
+          "help" : "Year the model went on sale, not the manufacturing date of this Mac (which recent serial numbers no longer reveal).",
+          "isJudged" : false,
+          "label" : "Model release year",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.ram" : {
+          "isJudged" : false,
+          "label" : "Memory (RAM)",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.serial" : {
+          "help" : "Only the last 4 characters are shown. The buyer can check the full number on checkcoverage.apple.com.",
+          "isJudged" : false,
+          "label" : "Serial number",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.storage_capacity" : {
+          "isJudged" : false,
+          "label" : "Storage",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "security.activation_lock" : {
+          "help" : "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.",
+          "isJudged" : true,
+          "label" : "iCloud Activation Lock",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.apple_account" : {
+          "help" : "Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.",
+          "isJudged" : true,
+          "label" : "Apple Account signed in",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.chip" : {
+          "isJudged" : false,
+          "label" : "Security chip",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.config_profiles" : {
+          "isJudged" : false,
+          "label" : "Configuration profiles",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.filevault" : {
+          "help" : "Disk encryption. Neither good nor bad: it is erased with the Mac.",
+          "isJudged" : false,
+          "label" : "FileVault encryption",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.firmware_password" : {
+          "help" : "A password set in the Mac's firmware blocks startup from another disk and recovery mode.",
+          "isJudged" : true,
+          "label" : "Firmware password",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.mdm" : {
+          "help" : "A Mac owned by a company or a school can be locked or wiped remotely by its organization.",
+          "isJudged" : true,
+          "label" : "Company management (MDM)",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.sip" : {
+          "help" : "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.",
+          "isJudged" : true,
+          "label" : "System Integrity Protection (SIP)",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.virtual_machine" : {
+          "help" : "A report generated inside a virtual machine does not describe a real Mac.",
+          "isJudged" : true,
+          "label" : "Virtual machine",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "storage.available_spare" : {
+          "isJudged" : true,
+          "label" : "SSD spare capacity",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.data_written" : {
+          "help" : "Total amount written to the SSD since it was made: the main cause of SSD wear.",
+          "isJudged" : false,
+          "label" : "Data written to the SSD",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.health" : {
+          "help" : "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.",
+          "isJudged" : true,
+          "label" : "SSD health",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.interface" : {
+          "isJudged" : false,
+          "label" : "Interface",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.media_errors" : {
+          "isJudged" : true,
+          "label" : "Data errors",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.model" : {
+          "isJudged" : false,
+          "label" : "SSD model",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.percentage_used" : {
+          "help" : "Share of the rated endurance already used, as reported by the SSD.",
+          "isJudged" : true,
+          "label" : "SSD wear",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.power_on_hours" : {
+          "help" : "Time the SSD has been powered on. This is not the age of the Mac.",
+          "isJudged" : false,
+          "label" : "SSD power-on hours",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.temperature" : {
+          "isJudged" : false,
+          "label" : "SSD temperature",
+          "level" : "advanced",
+          "section" : "storage"
+        }
+      },
+      "outcomes" : {
+        "aborted" : "Interrupted",
+        "failed" : "Failed",
+        "passed" : "Passed",
+        "skipped" : "Skipped"
+      },
+      "provenance" : {
+        "derived" : {
+          "label" : "Calculated",
+          "short" : "calculated"
+        },
+        "measuredAuto" : {
+          "label" : "Measured automatically",
+          "short" : "measured"
+        },
+        "userObserved" : {
+          "label" : "Observed by the user",
+          "short" : "observed"
+        }
+      },
+      "sections" : {
+        "battery" : "Battery",
+        "connectivity" : "Wireless",
+        "identity" : "Configuration",
+        "locks" : "Locks",
+        "security" : "System protection",
+        "storage" : "Storage"
+      },
+      "statuses" : {
+        "good" : {
+          "label" : "Good"
+        },
+        "info" : {
+          "label" : "Information"
+        },
+        "manualRequired" : {
+          "label" : "Check manually"
+        },
+        "notApplicable" : {
+          "label" : "Not applicable"
+        },
+        "notTested" : {
+          "label" : "Not tested"
+        },
+        "problem" : {
+          "label" : "Problem detected"
+        },
+        "unavailable" : {
+          "label" : "Not available"
+        },
+        "watch" : {
+          "label" : "Needs attention"
+        }
+      },
+      "tests" : {
+        "camera" : {
+          "subtitle" : "Live picture",
+          "title" : "Camera"
+        },
+        "keyboard" : {
+          "subtitle" : "Every key, one by one",
+          "title" : "Keyboard"
+        },
+        "microphone" : {
+          "subtitle" : "Level and recording",
+          "title" : "Microphone"
+        },
+        "ports" : {
+          "subtitle" : "USB-C, charging, video, headphones",
+          "title" : "Ports"
+        },
+        "screen" : {
+          "subtitle" : "Dead pixels, stains, uneven backlight",
+          "title" : "Display"
+        },
+        "speakers" : {
+          "subtitle" : "Left, right, crackling",
+          "title" : "Speakers"
+        },
+        "touchBar" : {
+          "subtitle" : "Display and touch, end to end",
+          "title" : "Touch Bar"
+        },
+        "touchID" : {
+          "subtitle" : "Fingerprint reader",
+          "title" : "Touch ID"
+        },
+        "trackpad" : {
+          "subtitle" : "Clicks, gestures, Force Touch, whole surface",
+          "title" : "Trackpad"
+        }
+      },
+      "text" : {
+        "checkThisMac" : "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.",
+        "checkThisMacTitle" : "Check that it is this Mac",
+        "disclaimer" : "This report is a snapshot taken on the date shown and registered online by Aman Check. The registration shows that its content has not been changed since it was published; it says nothing about the Mac's condition today. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. It makes no promise about how the Mac works or how long it will last.",
+        "disclaimerLevel1" : "This report is a snapshot taken on the date shown. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. This document is neither a certification nor a warranty.",
+        "footerCTA" : "Check your Mac for free with Aman Check",
+        "linkPreview" : "Condition report · {model} · checked on {date}",
+        "neverSentTitle" : "Never sent",
+        "pdfMatch" : "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.",
+        "provesTitle" : "What this report proves and does not prove",
+        "reportTitle" : "Condition report",
+        "sentTitle" : "Sent and made public",
+        "simulatedWarning" : "Simulated profile (development): the model and its capabilities come from the catalog, the measurements from another Mac. This report does not describe a real Mac.",
+        "stateErased" : "The content of this report was erased 90 days after it was published. Only its identifier, fingerprint and dates remain.",
+        "stateNotFound" : "No report matches this link. Be wary of a PDF whose QR code leads here.",
+        "stateOld" : "This report is more than 30 days old. Ask for a new check.",
+        "stateReplaced" : "A more recent report exists for this Mac.",
+        "stateReplacedLink" : "See the latest version",
+        "stateValid" : "Report registered on {date}, content unchanged since.",
+        "stateWithdrawn" : "This report was withdrawn by its author.",
+        "trustLevel1" : "Level 1 · Local condition report",
+        "trustLevel2" : "Level 2 · Report registered online",
+        "verifiableReport" : "Verifiable report"
+      }
+    },
+    "fr" : {
+      "errors" : {
+        "app_too_old" : "Mettez à jour Aman Check pour publier.",
+        "invalid_license" : "Cette clé n'est pas reconnue.",
+        "invalid_report" : "Le rapport n'a pas pu être lu. Relancez le contrôle.",
+        "invalid_token" : "Ce Mac ne peut pas retirer ce rapport.",
+        "network" : "Le serveur n'a pas pu être joint. Votre rapport reste sur ce Mac et peut être exporté en PDF ; vous pouvez réessayer sans être débité deux fois.",
+        "no_credit" : "Il ne reste plus de publication sur cette clé.",
+        "not_found" : "Ce rapport n'est plus en ligne.",
+        "privacy_check_failed" : "Le rapport contient une information qui ne doit pas quitter ce Mac. Rien n'a été envoyé.",
+        "rate_limited" : "Trop de tentatives. Réessayez dans quelques minutes.",
+        "report_too_old" : "Ce contrôle date de plus de 24 heures. Relancez-le avant de publier.",
+        "server" : "Le serveur a répondu de façon inattendue. Réessayez plus tard.",
+        "simulated_profile" : "Un profil simulé ne peut pas être publié.",
+        "too_large" : "Rapport trop volumineux."
+      },
+      "lists" : {
+        "buyerChecks" : [
+          "Comparez les 4 caractères du numéro de série avec ceux du Mac.",
+          "Comparez la date du rapport avec celle de l'annonce.",
+          "Faites effacer le Mac devant vous, et vérifiez que l'assistant de configuration ne demande aucun identifiant Apple ni d'entreprise."
+        ],
+        "doesNotProve" : [
+          "Que le Mac est en bon état aujourd'hui : le rapport date du jour du contrôle.",
+          "Que les tests « Constaté par l'utilisateur » sont exacts : ils sont déclaratifs.",
+          "Que le Mac n'est ni volé ni verrouillé après effacement.",
+          "Que le vendeur n'a pas fabriqué un rapport trompeur sur son propre Mac : l'enregistrement empêche les retouches après coup, pas un vendeur déterminé."
+        ],
+        "neverSent" : [
+          "Numéro de série complet du Mac",
+          "Numéros de série de la batterie, du SSD, des écrans",
+          "Nom du compte, nom de l'ordinateur, identifiant Apple",
+          "Fichiers, photos, enregistrements audio ou vidéo des tests",
+          "Noms des réseaux Wi-Fi, appareils Bluetooth",
+          "Journal de diagnostic et sorties brutes des commandes"
+        ],
+        "proves" : [
+          "Il a été produit par l'app Aman Check, à la date indiquée.",
+          "Son contenu n'a pas été modifié depuis sa publication.",
+          "Il concerne un Mac dont le numéro de série se termine par les 4 caractères affichés."
+        ],
+        "sent" : [
+          "Modèle, année, processeur, mémoire, stockage, version de macOS",
+          "4 derniers caractères du numéro de série",
+          "Mesures de batterie, de SSD, de verrouillages, de sans-fil",
+          "Résultats des tests guidés et leur date",
+          "Nom du vendeur ou du magasin, s'il a été saisi",
+          "Version de l'app et de la procédure"
+        ]
+      },
+      "metrics" : {
+        "battery.condition" : {
+          "isJudged" : true,
+          "label" : "État indiqué par macOS",
+          "level" : "essential",
+          "section" : "battery"
+        },
+        "battery.cycles" : {
+          "help" : "Un cycle = 100 % de la batterie utilisés, éventuellement sur plusieurs jours.",
+          "isJudged" : true,
+          "label" : "Cycles de charge",
+          "level" : "essential",
+          "section" : "battery"
+        },
+        "battery.design_capacity" : {
+          "isJudged" : false,
+          "label" : "Capacité d'origine",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "battery.health_percent" : {
+          "help" : "Charge que la batterie peut contenir aujourd'hui, comparée à celle d'origine.",
+          "isJudged" : true,
+          "label" : "Capacité de la batterie",
+          "level" : "essential",
+          "section" : "battery"
+        },
+        "battery.is_charging" : {
+          "isJudged" : false,
+          "label" : "Alimentation",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "battery.max_capacity" : {
+          "isJudged" : false,
+          "label" : "Capacité actuelle à pleine charge",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "battery.temperature" : {
+          "isJudged" : false,
+          "label" : "Température de la batterie",
+          "level" : "advanced",
+          "section" : "battery"
+        },
+        "connectivity.bluetooth" : {
+          "isJudged" : true,
+          "label" : "Bluetooth",
+          "level" : "essential",
+          "section" : "connectivity"
+        },
+        "connectivity.wifi" : {
+          "isJudged" : true,
+          "label" : "Wi-Fi",
+          "level" : "essential",
+          "section" : "connectivity"
+        },
+        "identity.chip" : {
+          "isJudged" : false,
+          "label" : "Processeur",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.cpu_cores" : {
+          "isJudged" : false,
+          "label" : "Cœurs",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.display" : {
+          "isJudged" : false,
+          "label" : "Écran",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.gpu" : {
+          "isJudged" : false,
+          "label" : "Graphisme",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.macos" : {
+          "isJudged" : false,
+          "label" : "macOS installé",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.macos_max" : {
+          "help" : "Version de macOS la plus récente qu'Apple propose pour ce modèle.",
+          "isJudged" : false,
+          "label" : "macOS maximal supporté",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.model_identifier" : {
+          "isJudged" : false,
+          "label" : "Identifiant du modèle",
+          "level" : "advanced",
+          "section" : "identity"
+        },
+        "identity.model_name" : {
+          "isJudged" : false,
+          "label" : "Modèle",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.model_year" : {
+          "help" : "Année de sortie du modèle, et non la date de fabrication de ce Mac (que les numéros de série récents ne révèlent plus).",
+          "isJudged" : false,
+          "label" : "Année de commercialisation du modèle",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.ram" : {
+          "isJudged" : false,
+          "label" : "Mémoire (RAM)",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.serial" : {
+          "help" : "Seuls les 4 derniers caractères sont affichés. L'acheteur peut vérifier le numéro complet sur checkcoverage.apple.com.",
+          "isJudged" : false,
+          "label" : "N° de série",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "identity.storage_capacity" : {
+          "isJudged" : false,
+          "label" : "Stockage",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "security.activation_lock" : {
+          "help" : "Lié au compte Apple du propriétaire et à Localiser. Un Mac verrouillé ne peut pas être configuré par quelqu'un d'autre après effacement.",
+          "isJudged" : true,
+          "label" : "Verrouillage d'activation iCloud",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.apple_account" : {
+          "help" : "Compte Apple (iCloud) connecté dans la session actuelle. C'est lui qui pilote Localiser et le verrouillage d'activation : le vendeur doit se déconnecter et effacer le Mac avant la remise. Seul le nombre de comptes est lu, jamais l'identifiant.",
+          "isJudged" : true,
+          "label" : "Compte Apple connecté",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.chip" : {
+          "isJudged" : false,
+          "label" : "Puce de sécurité",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.config_profiles" : {
+          "isJudged" : false,
+          "label" : "Profils de configuration",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.filevault" : {
+          "help" : "Chiffrement du disque. Ni bon ni mauvais : il disparaît avec l'effacement du Mac.",
+          "isJudged" : false,
+          "label" : "Chiffrement FileVault",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.firmware_password" : {
+          "help" : "Un mot de passe enregistré dans le firmware bloque le démarrage sur un autre disque et le mode de récupération.",
+          "isJudged" : true,
+          "label" : "Mot de passe firmware",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.mdm" : {
+          "help" : "Un Mac appartenant à une entreprise ou à une école peut être verrouillé ou effacé à distance par son organisation.",
+          "isJudged" : true,
+          "label" : "Gestion par une entreprise (MDM)",
+          "level" : "essential",
+          "section" : "locks"
+        },
+        "security.sip" : {
+          "help" : "Activée par défaut sur tous les Mac. Désactivée, c'est un signe de modification du système.",
+          "isJudged" : true,
+          "label" : "Protection de l'intégrité du système (SIP)",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "security.virtual_machine" : {
+          "help" : "Un rapport généré dans une machine virtuelle ne décrit pas un vrai Mac.",
+          "isJudged" : true,
+          "label" : "Machine virtuelle",
+          "level" : "advanced",
+          "section" : "security"
+        },
+        "storage.available_spare" : {
+          "isJudged" : true,
+          "label" : "Réserve du SSD",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.data_written" : {
+          "help" : "Volume total écrit sur le SSD depuis sa fabrication : principal facteur d'usure.",
+          "isJudged" : false,
+          "label" : "Données écrites sur le SSD",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.health" : {
+          "help" : "État déclaré par le SSD lui-même (S.M.A.R.T.), lu avec le moteur d'Aman Disk.",
+          "isJudged" : true,
+          "label" : "Santé du SSD",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.interface" : {
+          "isJudged" : false,
+          "label" : "Interface",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.media_errors" : {
+          "isJudged" : true,
+          "label" : "Erreurs de données",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.model" : {
+          "isJudged" : false,
+          "label" : "Modèle du SSD",
+          "level" : "advanced",
+          "section" : "storage"
+        },
+        "storage.percentage_used" : {
+          "help" : "Part de l'endurance prévue déjà consommée, selon le SSD.",
+          "isJudged" : true,
+          "label" : "Usure du SSD",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.power_on_hours" : {
+          "help" : "Temps pendant lequel le SSD a été sous tension. Ce n'est pas l'âge du Mac.",
+          "isJudged" : false,
+          "label" : "Heures de fonctionnement du SSD",
+          "level" : "essential",
+          "section" : "storage"
+        },
+        "storage.temperature" : {
+          "isJudged" : false,
+          "label" : "Température du SSD",
+          "level" : "advanced",
+          "section" : "storage"
+        }
+      },
+      "outcomes" : {
+        "aborted" : "Interrompu",
+        "failed" : "Échoué",
+        "passed" : "Réussi",
+        "skipped" : "Ignoré"
+      },
+      "provenance" : {
+        "derived" : {
+          "label" : "Calculé",
+          "short" : "calculé"
+        },
+        "measuredAuto" : {
+          "label" : "Mesuré automatiquement",
+          "short" : "mesuré"
+        },
+        "userObserved" : {
+          "label" : "Constaté par l'utilisateur",
+          "short" : "constaté"
+        }
+      },
+      "sections" : {
+        "battery" : "Batterie",
+        "connectivity" : "Sans fil",
+        "identity" : "Configuration",
+        "locks" : "Verrouillages",
+        "security" : "Protection du système",
+        "storage" : "Stockage"
+      },
+      "statuses" : {
+        "good" : {
+          "label" : "Bon"
+        },
+        "info" : {
+          "label" : "Information"
+        },
+        "manualRequired" : {
+          "label" : "Vérification manuelle"
+        },
+        "notApplicable" : {
+          "label" : "Sans objet"
+        },
+        "notTested" : {
+          "label" : "Non testé"
+        },
+        "problem" : {
+          "label" : "Problème détecté"
+        },
+        "unavailable" : {
+          "label" : "Non disponible"
+        },
+        "watch" : {
+          "label" : "À surveiller"
+        }
+      },
+      "tests" : {
+        "camera" : {
+          "subtitle" : "Image en direct",
+          "title" : "Caméra"
+        },
+        "keyboard" : {
+          "subtitle" : "Chaque touche, une par une",
+          "title" : "Clavier"
+        },
+        "microphone" : {
+          "subtitle" : "Niveau et enregistrement",
+          "title" : "Micro"
+        },
+        "ports" : {
+          "subtitle" : "USB-C, charge, vidéo, casque",
+          "title" : "Ports et connecteurs"
+        },
+        "screen" : {
+          "subtitle" : "Pixels morts, taches, rétroéclairage inégal",
+          "title" : "Écran"
+        },
+        "speakers" : {
+          "subtitle" : "Gauche, droite, grésillements",
+          "title" : "Haut-parleurs"
+        },
+        "touchBar" : {
+          "subtitle" : "Affichage et toucher, d'un bout à l'autre",
+          "title" : "Touch Bar"
+        },
+        "touchID" : {
+          "subtitle" : "Lecteur d'empreintes",
+          "title" : "Touch ID"
+        },
+        "trackpad" : {
+          "subtitle" : "Clics, gestes, Force Touch, toute la surface",
+          "title" : "Trackpad"
+        }
+      },
+      "text" : {
+        "checkThisMac" : "Comparez les 4 derniers caractères avec le numéro de série gravé sous la machine, ou affiché dans le menu Pomme › À propos de ce Mac.",
+        "checkThisMacTitle" : "Vérifiez que c'est bien ce Mac",
+        "disclaimer" : "Ce rapport est un instantané établi à la date indiquée et enregistré en ligne par Aman Check. L'enregistrement montre que son contenu n'a pas été modifié depuis sa publication ; il ne dit rien de l'état du Mac aujourd'hui. Les valeurs marquées Mesuré automatiquement proviennent du système du Mac testé ; les valeurs marquées Constaté par l'utilisateur sont déclaratives. Il n'engage aucune promesse sur le fonctionnement du Mac ni sur sa durée de vie.",
+        "disclaimerLevel1" : "Ce rapport est un instantané établi à la date indiquée. Les valeurs marquées Mesuré automatiquement proviennent du système du Mac testé ; les valeurs marquées Constaté par l'utilisateur sont déclaratives. Ce document ne constitue ni une certification ni une garantie.",
+        "footerCTA" : "Contrôlez votre Mac gratuitement avec Aman Check",
+        "linkPreview" : "Rapport d'état · {model} · contrôlé le {date}",
+        "neverSentTitle" : "Jamais envoyé",
+        "pdfMatch" : "Si l'on vous a remis un PDF, vérifiez que son identifiant et sa date correspondent à cette page. Le contenu qui fait foi est celui de cette page.",
+        "provesTitle" : "Ce que ce rapport prouve et ne prouve pas",
+        "reportTitle" : "Rapport d'état",
+        "sentTitle" : "Envoyé et rendu public",
+        "simulatedWarning" : "Profil simulé (développement) : le modèle et ses capacités viennent du catalogue, les mesures d'un autre Mac. Ce rapport ne décrit pas un vrai Mac.",
+        "stateErased" : "Le contenu de ce rapport a été effacé 90 jours après sa publication. Il ne reste que son identifiant, son empreinte et ses dates.",
+        "stateNotFound" : "Aucun rapport ne correspond à ce lien. Méfiez-vous d'un PDF dont le QR code mène ici.",
+        "stateOld" : "Ce rapport date de plus de 30 jours. Demandez un nouveau contrôle.",
+        "stateReplaced" : "Un rapport plus récent existe pour ce Mac.",
+        "stateReplacedLink" : "Voir la version récente",
+        "stateValid" : "Rapport enregistré le {date}, contenu non modifié depuis.",
+        "stateWithdrawn" : "Ce rapport a été retiré par son auteur.",
+        "trustLevel1" : "Niveau 1 · Rapport d'état local",
+        "trustLevel2" : "Niveau 2 · Rapport enregistré en ligne",
+        "verifiableReport" : "Rapport vérifiable"
+      }
+    }
+  },
+  "lockIDs" : [
+    "security.activation_lock",
+    "security.apple_account",
+    "security.mdm",
+    "security.firmware_password"
+  ],
+  "metricOrder" : [
+    "security.activation_lock",
+    "security.apple_account",
+    "security.mdm",
+    "security.firmware_password",
+    "security.sip",
+    "security.filevault",
+    "security.virtual_machine",
+    "security.config_profiles",
+    "security.chip",
+    "identity.model_name",
+    "identity.model_identifier",
+    "identity.model_year",
+    "identity.chip",
+    "identity.cpu_cores",
+    "identity.gpu",
+    "identity.ram",
+    "identity.storage_capacity",
+    "identity.macos",
+    "identity.macos_max",
+    "identity.serial",
+    "identity.display",
+    "battery.health_percent",
+    "battery.cycles",
+    "battery.condition",
+    "battery.design_capacity",
+    "battery.max_capacity",
+    "battery.is_charging",
+    "battery.temperature",
+    "storage.health",
+    "storage.power_on_hours",
+    "storage.data_written",
+    "storage.percentage_used",
+    "storage.available_spare",
+    "storage.media_errors",
+    "storage.temperature",
+    "storage.model",
+    "storage.interface",
+    "connectivity.wifi",
+    "connectivity.bluetooth"
+  ],
+  "procedureVersion" : "1.0",
+  "schemaVersion" : 1,
+  "sectionOrder" : [
+    "locks",
+    "identity",
+    "battery",
+    "storage",
+    "connectivity",
+    "security"
+  ],
+  "severity" : {
+    "good" : 5,
+    "info" : 6,
+    "manualRequired" : 2,
+    "notApplicable" : 7,
+    "notTested" : 4,
+    "problem" : 0,
+    "unavailable" : 3,
+    "watch" : 1
+  },
+  "testOrder" : [
+    "screen",
+    "keyboard",
+    "touchBar",
+    "trackpad",
+    "speakers",
+    "microphone",
+    "camera",
+    "touchID",
+    "ports"
+  ]
+}
