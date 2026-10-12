@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Został opublikowany przez posiadacza klucza licencyjnego, w podanym dniu, i od tego czasu nie był zmieniany.",
 "Drive health": "Stan dysku",
 "Drive wear": "Zużycie dysku",
-"Other internal drives: {0}": "Inne dyski wewnętrzne: {0}"
+"Other internal drives: {0}": "Inne dyski wewnętrzne: {0}",
+"Built-in microphone": "Wbudowany mikrofon",
+"External microphone": "Mikrofon zewnętrzny",
+"Built-in speakers": "Wbudowane głośniki",
+"External output": "Wyjście zewnętrzne",
+"An external audio device was in use: disconnect it and run the test again.": "Używane było zewnętrzne urządzenie audio: odłącz je i uruchom test ponownie.",
+"Found: ": "Znaleziono: ",
+"serial number": "numer seryjny",
+"computer name": "nazwa komputera",
+"user name": "nazwa użytkownika",
+"full name": "imię i nazwisko"
 }

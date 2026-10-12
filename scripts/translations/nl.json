@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Het is gepubliceerd door de houder van een licentiesleutel, op de getoonde datum, en is sindsdien niet gewijzigd.",
 "Drive health": "Schijfgezondheid",
 "Drive wear": "Schijfslijtage",
-"Other internal drives: {0}": "Andere interne schijven: {0}"
+"Other internal drives: {0}": "Andere interne schijven: {0}",
+"Built-in microphone": "Ingebouwde microfoon",
+"External microphone": "Externe microfoon",
+"Built-in speakers": "Ingebouwde luidsprekers",
+"External output": "Externe uitvoer",
+"An external audio device was in use: disconnect it and run the test again.": "Er was een extern audioapparaat in gebruik: koppel het los en voer de test opnieuw uit.",
+"Found: ": "Gevonden: ",
+"serial number": "serienummer",
+"computer name": "computernaam",
+"user name": "gebruikersnaam",
+"full name": "volledige naam"
 }

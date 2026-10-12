@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Nó được công bố bởi người giữ khóa bản quyền, vào ngày hiển thị, và không bị thay đổi kể từ đó.",
 "Drive health": "Tình trạng ổ đĩa",
 "Drive wear": "Độ mòn ổ đĩa",
-"Other internal drives: {0}": "Ổ đĩa trong khác: {0}"
+"Other internal drives: {0}": "Ổ đĩa trong khác: {0}",
+"Built-in microphone": "Micrô tích hợp",
+"External microphone": "Micrô ngoài",
+"Built-in speakers": "Loa tích hợp",
+"External output": "Đầu ra ngoài",
+"An external audio device was in use: disconnect it and run the test again.": "Một thiết bị âm thanh ngoài đang được sử dụng: hãy ngắt kết nối và chạy lại bài kiểm tra.",
+"Found: ": "Đã tìm thấy: ",
+"serial number": "số sê-ri",
+"computer name": "tên máy tính",
+"user name": "tên người dùng",
+"full name": "họ tên đầy đủ"
 }

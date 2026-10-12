@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "表示された日付に、ライセンスキーの所有者によって公開され、それ以降変更されていません。",
 "Drive health": "ドライブの状態",
 "Drive wear": "ドライブの消耗",
-"Other internal drives: {0}": "その他の内蔵ドライブ: {0}"
+"Other internal drives: {0}": "その他の内蔵ドライブ: {0}",
+"Built-in microphone": "内蔵マイク",
+"External microphone": "外部マイク",
+"Built-in speakers": "内蔵スピーカー",
+"External output": "外部出力",
+"An external audio device was in use: disconnect it and run the test again.": "外部オーディオ機器が使用されていました。取り外してからテストをやり直してください。",
+"Found: ": "検出: ",
+"serial number": "シリアル番号",
+"computer name": "コンピュータ名",
+"user name": "ユーザ名",
+"full name": "フルネーム"
 }

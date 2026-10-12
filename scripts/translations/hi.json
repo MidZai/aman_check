@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "इसे लाइसेंस कुंजी के धारक ने दिखाई गई तारीख को प्रकाशित किया था, और तब से इसमें कोई बदलाव नहीं हुआ है।",
 "Drive health": "ड्राइव की स्थिति",
 "Drive wear": "ड्राइव का घिसाव",
-"Other internal drives: {0}": "अन्य आंतरिक ड्राइव: {0}"
+"Other internal drives: {0}": "अन्य आंतरिक ड्राइव: {0}",
+"Built-in microphone": "बिल्ट-इन माइक्रोफ़ोन",
+"External microphone": "बाहरी माइक्रोफ़ोन",
+"Built-in speakers": "बिल्ट-इन स्पीकर",
+"External output": "बाहरी आउटपुट",
+"An external audio device was in use: disconnect it and run the test again.": "एक बाहरी ऑडियो डिवाइस उपयोग में था: उसे डिस्कनेक्ट करें और परीक्षण दोबारा चलाएँ।",
+"Found: ": "मिला: ",
+"serial number": "सीरियल नंबर",
+"computer name": "कंप्यूटर का नाम",
+"user name": "उपयोगकर्ता नाम",
+"full name": "पूरा नाम"
 }

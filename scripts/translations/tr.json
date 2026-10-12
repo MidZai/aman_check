@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Gösterilen tarihte bir lisans anahtarı sahibi tarafından yayımlandı ve o zamandan beri değiştirilmedi.",
 "Drive health": "Sürücü sağlığı",
 "Drive wear": "Sürücü aşınması",
-"Other internal drives: {0}": "Diğer dahili sürücüler: {0}"
+"Other internal drives: {0}": "Diğer dahili sürücüler: {0}",
+"Built-in microphone": "Dahili mikrofon",
+"External microphone": "Harici mikrofon",
+"Built-in speakers": "Dahili hoparlörler",
+"External output": "Harici çıkış",
+"An external audio device was in use: disconnect it and run the test again.": "Harici bir ses aygıtı kullanılıyordu: bağlantısını kesin ve testi yeniden çalıştırın.",
+"Found: ": "Bulundu: ",
+"serial number": "seri numarası",
+"computer name": "bilgisayar adı",
+"user name": "kullanıcı adı",
+"full name": "tam ad"
 }

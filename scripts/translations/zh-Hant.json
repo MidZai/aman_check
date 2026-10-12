@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "它由授權金鑰持有人在所示日期發布，此後未被更改。",
 "Drive health": "磁碟健康",
 "Drive wear": "磁碟損耗",
-"Other internal drives: {0}": "其他內建磁碟：{0}"
+"Other internal drives: {0}": "其他內建磁碟：{0}",
+"Built-in microphone": "內建麥克風",
+"External microphone": "外接麥克風",
+"Built-in speakers": "內建揚聲器",
+"External output": "外部輸出",
+"An external audio device was in use: disconnect it and run the test again.": "當時正在使用外部音訊裝置：請中斷連接並重新執行測試。",
+"Found: ": "發現：",
+"serial number": "序號",
+"computer name": "電腦名稱",
+"user name": "使用者名稱",
+"full name": "全名"
 }

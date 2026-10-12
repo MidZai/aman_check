@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Он был опубликован владельцем лицензионного ключа в указанную дату и с тех пор не изменялся.",
 "Drive health": "Состояние диска",
 "Drive wear": "Износ диска",
-"Other internal drives: {0}": "Другие внутренние диски: {0}"
+"Other internal drives: {0}": "Другие внутренние диски: {0}",
+"Built-in microphone": "Встроенный микрофон",
+"External microphone": "Внешний микрофон",
+"Built-in speakers": "Встроенные динамики",
+"External output": "Внешний выход",
+"An external audio device was in use: disconnect it and run the test again.": "Использовалось внешнее аудиоустройство: отключите его и запустите тест снова.",
+"Found: ": "Найдено: ",
+"serial number": "серийный номер",
+"computer name": "имя компьютера",
+"user name": "имя пользователя",
+"full name": "полное имя"
 }

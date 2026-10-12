@@ -16,6 +16,8 @@ final class PublishController: ObservableObject {
     }
 
     @Published private(set) var state: State = .idle
+    /// Type d'information trouvé par le contrôle avant envoi (jamais la valeur), affiché sous l'erreur.
+    @Published private(set) var privacyIssueText: String?
     @Published var licenseKey: String
     @Published private(set) var license: PublishClient.LicenseInfo?
     @Published private(set) var licenseError: PublishError?
@@ -89,11 +91,18 @@ final class PublishController: ObservableObject {
             return
         }
         // Contrôle avant envoi : rien de la colonne « Jamais envoyé » (§10).
-        let secrets = [SystemReader.serialNumber, Host.current().localizedName, ProcessInfo.processInfo.hostName,
-                       NSUserName(), NSFullUserName()].compactMap { $0 }
+        let secrets: [PublicationSecret] = [
+            SystemReader.serialNumber.map { PublicationSecret(.serialNumber, $0) },
+            Host.current().localizedName.map { PublicationSecret(.computerName, $0) },
+            PublicationSecret(.computerName, ProcessInfo.processInfo.hostName),
+            PublicationSecret(.userName, NSUserName()),
+            PublicationSecret(.fullName, NSFullUserName())
+        ].compactMap { $0 }
         let issues = PublicationPayload.issues(in: bytes, secrets: secrets, allowed: [report.profile.displayName, report.profile.modelIdentifier])
         guard issues.isEmpty else {
             DiagnosticLog.shared.log("publication", "contrôle avant envoi : \(issues.count) problème(s)")
+            // Le type d'information trouvé est montré à l'utilisateur, jamais la valeur.
+            privacyIssueText = PublicationPayload.describe(issues: issues)
             state = .failed(.privacyCheckFailed)
             return
         }

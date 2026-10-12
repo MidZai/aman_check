@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "نُشر من قِبل حامل مفتاح ترخيص، في التاريخ المبين، ولم يتغير منذ ذلك الحين.",
 "Drive health": "حالة القرص",
 "Drive wear": "تآكل القرص",
-"Other internal drives: {0}": "أقراص داخلية أخرى: {0}"
+"Other internal drives: {0}": "أقراص داخلية أخرى: {0}",
+"Built-in microphone": "الميكروفون المدمج",
+"External microphone": "ميكروفون خارجي",
+"Built-in speakers": "مكبرات الصوت المدمجة",
+"External output": "مخرج خارجي",
+"An external audio device was in use: disconnect it and run the test again.": "كان جهاز صوت خارجي قيد الاستخدام: افصله وأعد إجراء الاختبار.",
+"Found: ": "تم العثور على: ",
+"serial number": "الرقم التسلسلي",
+"computer name": "اسم الكمبيوتر",
+"user name": "اسم المستخدم",
+"full name": "الاسم الكامل"
 }

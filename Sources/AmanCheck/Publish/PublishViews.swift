@@ -148,6 +148,9 @@ private struct ErrorCallout: View {
             Label(error.message, systemImage: "exclamationmark.triangle")
                 .foregroundStyle(.orange)
                 .fixedSize(horizontal: false, vertical: true)
+            if error == .privacyCheckFailed, let detail = publisher.privacyIssueText {
+                Text(detail).font(.caption).foregroundStyle(.secondary)
+            }
             if error.offersPurchase {
                 Button(L("Get a Key", "Obtenir une clé")) { publisher.openPurchasePage() }
             }

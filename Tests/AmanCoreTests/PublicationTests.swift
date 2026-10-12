@@ -1,6 +1,7 @@
 import Testing
 import Foundation
 @testable import AmanCore
+import DiskHealthCore
 
 /// Niveau 2 : tests unitaires AmanCore du cahier des charges (§12).
 @Suite("Niveau 2 · publication")
@@ -58,23 +59,46 @@ struct PublicationTests {
     @Test("Le JSON prêt à l'envoi ne contient aucun champ interdit")
     func payloadHasNoForbiddenField() throws {
         let data = try ReportCoding.encode(report())
-        let secrets = ["C02ZK1ABQ2XD", "MacBook-Pro-de-Karim.local", "karim", "Karim Benali"]
+        let secrets = [PublicationSecret(.serialNumber, "C02ZK1ABQ2XD"), PublicationSecret(.computerName, "MacBook-Pro-de-Karim.local"),
+                       PublicationSecret(.userName, "karim"), PublicationSecret(.fullName, "Karim Benali")]
         #expect(PublicationPayload.issues(in: data, secrets: secrets).isEmpty)
 
-        // Numéro de série complet, nom d'hôte, sortie brute : refusés.
+        // Le champ « Vendeur ou boutique » est une saisie volontaire : le nom complet y est autorisé.
         var leaked = try JSONSerialization.jsonObject(with: data) as! [String: Any]
         leaked["sellerName"] = "Karim Benali"
-        #expect(!PublicationPayload.issues(in: try JSONSerialization.data(withJSONObject: leaked), secrets: secrets).isEmpty)
+        #expect(PublicationPayload.issues(in: try JSONSerialization.data(withJSONObject: leaked), secrets: secrets).isEmpty)
         leaked = try JSONSerialization.jsonObject(with: data) as! [String: Any]
         leaked["raw"] = ["SPPowerDataType": "…"]
         #expect(PublicationPayload.issues(in: try JSONSerialization.data(withJSONObject: leaked), secrets: []).contains("$.raw"))
+        // Numéro de série complet dans une valeur de mesure : refusé, avec le type d'information trouvé.
         let withSerial = String(decoding: data, as: UTF8.self).replacingOccurrences(of: "\"Q2XD\"", with: "\"C02ZK1ABQ2XD\"")
-        #expect(PublicationPayload.issues(in: Data(withSerial.utf8), secrets: secrets) == ["secret"])
+        #expect(PublicationPayload.issues(in: Data(withSerial.utf8), secrets: secrets) == ["secret:serialNumber"])
         let withKey = String(decoding: data, as: UTF8.self).replacingOccurrences(of: "\"sellerName\"", with: "\"serial_number\" : \"x\", \"sellerName\"")
         #expect(PublicationPayload.issues(in: Data(withKey.utf8), secrets: []).contains("$.serial_number"))
 
         // Un ordinateur nommé comme le modèle ne bloque pas la publication.
-        #expect(PublicationPayload.issues(in: data, secrets: ["MacBook Pro"], allowed: [report().profile.displayName]).isEmpty)
+        #expect(PublicationPayload.issues(in: data, secrets: [PublicationSecret(.computerName, "MacBook Pro")], allowed: [report().profile.displayName]).isEmpty)
+    }
+
+    @Test("Contrôle avant envoi : mots entiers, valeurs de la machine seulement, pas les textes fixes")
+    func privacyCheckHasNoFalsePositives() throws {
+        // « admin » et « apple » apparaissent dans les textes fixes (méthodes, libellés) : pas de blocage.
+        let data = try ReportCoding.encode(report())
+        #expect(PublicationPayload.issues(in: data, secrets: [PublicationSecret(.userName, "admin"), PublicationSecret(.userName, "apple")]).isEmpty)
+        // Le nom d'utilisateur en mot entier dans une note de mesure : bloqué.
+        let withNote = ConditionReport(appVersion: "1.0.0", profile: report().profile, measurements: [
+            Measurement(id: MetricID.batteryHealth, value: .int(83), status: .good, note: "Checked by admin on this Mac")
+        ], tests: [], plannedTests: [])
+        #expect(PublicationPayload.issues(in: try ReportCoding.encode(withNote), secrets: [PublicationSecret(.userName, "admin")]) == ["secret:userName"])
+        // Sous-chaîne d'un autre mot (« administrator ») : pas un mot entier, pas de blocage.
+        let substring = ConditionReport(appVersion: "1.0.0", profile: report().profile, measurements: [
+            Measurement(id: MetricID.batteryHealth, value: .int(83), status: .good, note: "administrator check")
+        ], tests: [], plannedTests: [])
+        #expect(PublicationPayload.issues(in: try ReportCoding.encode(substring), secrets: [PublicationSecret(.userName, "admin")]).isEmpty)
+        // Message pour l'utilisateur : le type, jamais la valeur.
+        let text = PublicationPayload.describe(issues: ["secret:serialNumber", "secret:computerName"])
+        #expect(text == L("Found: serial number, computer name.", "Trouvé : numéro de série, nom de l'ordinateur."))
+        #expect(PublicationPayload.describe(issues: ["$.raw"]) == nil)
     }
 
     @Test("Chaque code d'erreur de l'API a un message bilingue, sans identifiant technique")

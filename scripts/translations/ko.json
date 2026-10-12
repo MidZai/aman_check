@@ -657,5 +657,15 @@
 "It was published by the holder of a license key, on the date shown, and has not been changed since.": "표시된 날짜에 라이선스 키 소유자가 게시했으며, 그 이후 변경되지 않았습니다.",
 "Drive health": "드라이브 상태",
 "Drive wear": "드라이브 마모",
-"Other internal drives: {0}": "기타 내장 드라이브: {0}"
+"Other internal drives: {0}": "기타 내장 드라이브: {0}",
+"Built-in microphone": "내장 마이크",
+"External microphone": "외장 마이크",
+"Built-in speakers": "내장 스피커",
+"External output": "외부 출력",
+"An external audio device was in use: disconnect it and run the test again.": "외부 오디오 기기가 사용 중이었습니다. 연결을 해제하고 테스트를 다시 실행하십시오.",
+"Found: ": "발견됨: ",
+"serial number": "일련 번호",
+"computer name": "컴퓨터 이름",
+"user name": "사용자 이름",
+"full name": "전체 이름"
 }
