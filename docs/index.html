@@ -87,7 +87,11 @@
   .top nav { display: flex; gap: 24px; font-size: 16.5px; }
   .top nav a { color: var(--muted); }
   .top nav a:hover { color: var(--text); text-decoration: none; }
-  @media (max-width: 600px) { .top nav { display: none; } }
+  @media (max-width: 600px) {
+    /* Kept on phones as one horizontally scrollable row: no hamburger, no script. */
+    .top nav { min-width: 0; flex: 1 1 auto; overflow-x: auto; white-space: nowrap; gap: 18px; font-size: 15px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .top nav::-webkit-scrollbar { display: none; }
+  }
 
   /* Hero */
   .hero { padding: 16px 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
