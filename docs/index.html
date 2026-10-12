@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aman Check: ten minutes to check a used Mac</title>
+<meta name="description" content="Free, open source macOS app. Run it on the Mac you're about to buy: locks, battery, SSD, then guided tests of the screen, keyboard, trackpad, speakers, camera and ports. A dated report in ten minutes. Nothing leaves the Mac.">
+<link rel="icon" href="site/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="site/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aman Check: ten minutes to check a used Mac">
+<meta property="og:description" content="Free, open source macOS app. Locks, battery, SSD and guided hardware tests, in a dated report anyone can read. Nothing leaves the Mac.">
+<meta property="og:image" content="https://midzai.github.io/aman_check/site/app.png">
+<meta property="og:url" content="https://midzai.github.io/aman_check/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0B2230;
+    --ink-2: #0E2A3A;
+    --ink-deep: #071A26;
+    --line: rgba(173, 203, 221, 0.16);
+    --rail: rgba(46, 159, 214, 0.35);
+    --water: #2E9FD6;
+    --water-ink: #04212F;
+    --text: #E9F1F6;
+    --muted: #A9BAC6;
+    --good: #3DD07A;
+    --watch: #E8A33D;
+    --bad: #E5534B;
+    --kofi: #FF5E5B;
+    --shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.75), 0 8px 18px -8px rgba(0, 0, 0, 0.5);
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: "Jost", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--water); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--water); outline-offset: 4px; border-radius: 6px; }
+  img { max-width: 100%; height: auto; display: block; }
+  h1, h2, h3 { font-weight: 600; line-height: 1.08; margin: 0; letter-spacing: -0.015em; text-wrap: balance; }
+  p { margin: 0; }
+  .wrap { width: min(1140px, 100% - 40px); margin-inline: auto; }
+  @media (max-width: 600px) { .wrap { width: calc(100% - 32px); } }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 22px 0; gap: 16px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 12px; color: var(--text); font-weight: 600; font-size: 21px; }
+  .brand:hover { text-decoration: none; }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .top nav { display: flex; gap: 24px; font-size: 16.5px; }
+  .top nav a { color: var(--muted); }
+  .top nav a:hover { color: var(--text); text-decoration: none; }
+  @media (max-width: 600px) { .top nav { display: none; } }
+
+  /* Hero */
+  .hero { padding: 36px 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .hero h1 { font-size: clamp(40px, 6vw, 74px); max-width: 15ch; }
+  .hero .lead { font-size: clamp(18px, 2.1vw, 22px); color: var(--muted); max-width: 48ch; margin-top: 18px; }
+  .cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 26px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 15px 26px; border-radius: 999px; font-weight: 600; font-size: 17px; line-height: 1;
+    border: 1px solid transparent; transition: transform .12s ease, background .12s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--water); color: var(--water-ink); }
+  .btn-primary:hover { background: #4DB2E4; }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.05); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .fine { color: var(--muted); font-size: 15.5px; margin-top: 16px; max-width: 60ch; }
+  .fine a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .fine a:hover { color: var(--text); }
+
+  /* The plan: time rail */
+  .plan { margin-top: 44px; padding-bottom: 40px; }
+  .step {
+    display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 0 40px;
+    position: relative; padding: 0 0 72px;
+  }
+  .step::before {
+    content: ""; position: absolute; left: 150px; top: 14px; bottom: -14px; width: 2px;
+    margin-left: 19px; background: var(--rail);
+  }
+  .step:last-of-type::before { display: none; }
+  .mark {
+    position: sticky; top: 24px; align-self: start;
+    display: flex; align-items: center; gap: 14px; justify-content: flex-end;
+    font-weight: 600; font-size: 22px; color: var(--water); letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .mark .dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--ink); flex: none;
+    border: 3px solid var(--water); position: relative; left: 32px; box-shadow: 0 0 0 6px var(--ink);
+    transition: background .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .step.is-live .mark .dot { background: var(--water); }
+  .body { min-width: 0; }
+  .body h2 { font-size: clamp(28px, 3.6vw, 44px); max-width: 22ch; }
+  .body > p { color: var(--muted); max-width: 64ch; margin-top: 16px; font-size: 19px; }
+  .body > p b { color: var(--text); font-weight: 500; }
+  .shot { margin-top: 30px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--line); overflow: hidden; }
+  .shot img { width: 100%; }
+  .shot.wide { margin-left: -190px; width: calc(100% + 190px); }
+  @media (max-width: 900px) {
+    .step { grid-template-columns: 1fr; padding-bottom: 56px; }
+    .step::before { display: none; }
+    .mark { position: static; justify-content: flex-start; margin-bottom: 14px; }
+    .mark .dot { left: 0; order: -1; }
+    .shot.wide { margin-left: 0; width: 100%; }
+  }
+
+  /* Locks list (0:30) */
+  .locks { margin: 26px 0 0; padding: 0; list-style: none; display: grid; gap: 0; max-width: 64ch; border-top: 1px solid var(--line); }
+  .locks li { display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 18px; }
+  .locks li svg { width: 22px; height: 22px; color: var(--muted); align-self: center; }
+  .locks li span { color: var(--muted); font-size: 16px; }
+  .locks .st { font-weight: 500; font-size: 16px; white-space: nowrap; font-style: normal; }
+  @media (max-width: 640px) { .locks li { grid-template-columns: 28px 1fr; } .locks .st { grid-column: 2; white-space: normal; margin-top: -4px; } }
+  .st.good { color: var(--good); } .st.watch { color: var(--watch); } .st.bad { color: var(--bad); } .st.manual { color: var(--water); }
+
+  /* Counters strip (8:00) */
+  .counters {
+    margin-top: 30px; padding: 30px 32px; border-radius: 14px;
+    background: var(--ink-deep); border: 1px solid var(--line);
+    display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: center;
+  }
+  .nums { display: flex; gap: clamp(22px, 5vw, 60px); flex-wrap: wrap; }
+  .num { display: grid; gap: 4px; }
+  .num b { font-size: clamp(46px, 7vw, 80px); font-weight: 600; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .num span { color: var(--muted); font-size: 16px; display: flex; align-items: center; gap: 8px; }
+  .num i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+  .num.good b { color: var(--good); }  .num.good i { background: var(--good); }
+  .num.watch b { color: var(--watch); } .num.watch i { background: var(--watch); }
+  .num.bad b { color: var(--bad); }    .num.bad i { background: var(--bad); }
+  .num.none b { color: var(--muted); } .num.none i { border: 2px dashed var(--muted); width: 8px; height: 8px; }
+  .counters p { color: var(--muted); max-width: 30ch; font-size: 17px; }
+  @media (max-width: 760px) { .counters { grid-template-columns: 1fr; padding: 24px 20px; } }
+
+  /* Tests list (3:00) */
+  .tests { margin: 26px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 28px; max-width: 760px; }
+  .tests li { display: grid; grid-template-columns: 18px 1fr; gap: 12px; align-items: baseline; font-weight: 500; }
+  .tests li::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 2px dashed var(--muted); align-self: center; }
+  .tests li small { display: block; color: var(--muted); font-weight: 400; font-size: 15px; line-height: 1.4; }
+  @media (max-width: 640px) { .tests { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 400px) { .tests { grid-template-columns: 1fr; } }
+
+  /* Rules (what the report refuses) */
+  .rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 44px; margin-top: 30px; max-width: 900px; }
+  .rule { display: grid; grid-template-columns: 26px 1fr; gap: 14px; align-items: start; }
+  .rule svg { width: 26px; height: 26px; color: var(--water); margin-top: 2px; }
+  .rule b { font-weight: 600; display: block; margin-bottom: 4px; }
+  .rule p { color: var(--muted); font-size: 16.5px; }
+  @media (max-width: 640px) { .rules { grid-template-columns: 1fr; } }
+
+  /* Day after: Aman Disk */
+  .after { background: var(--ink-deep); border-top: 1px solid var(--line); padding: 72px 0 80px; }
+  .after .step { padding-bottom: 0; }
+  .after .step::before { display: none; }
+  .after .mark { color: var(--muted); }
+  .after .mark .dot { border-color: var(--muted); box-shadow: 0 0 0 6px var(--ink-deep); background: var(--ink-deep); }
+  .after ul { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 58ch; color: var(--muted); font-size: 17.5px; }
+  .after li { padding-left: 24px; position: relative; }
+  .after li::before { content: ""; position: absolute; left: 0; top: 11px; width: 10px; height: 10px; border-radius: 50%; background: var(--water); }
+  .after li b { color: var(--text); font-weight: 500; }
+  .shots2 { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; margin-top: 34px; align-items: start; }
+  .shots2 .shot { margin-top: 0; }
+  @media (max-width: 760px) { .shots2 { grid-template-columns: 1fr; } }
+
+  /* Close */
+  .close { text-align: center; padding: 80px 0 64px; }
+  .close h2 { font-size: clamp(30px, 4.2vw, 50px); margin-inline: auto; max-width: 20ch; }
+  .close p { color: var(--muted); max-width: 52ch; margin: 16px auto 0; }
+  .close .cta { justify-content: center; }
+  .btn-kofi { background: var(--kofi); color: #fff; }
+  .btn-kofi:hover { background: #FF7572; }
+  footer { padding: 30px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn, .mark .dot { transition: none; }
+  }
+</style>
+</head>
+<body>
+<!--
+THESIS: A used-Mac check is a ten-minute meeting, so the page is that meeting on a time rail, minute by minute, and refuses the feature-grid landing.
+OWN-WORLD: Aman ink #0B2230 ground, water #2E9FD6 for the rail and the action, report statuses green/orange/red/dashed-gray, Jost throughout, real app windows as the only imagery.
+STORY: a buyer sees what to do with the Mac in front of them, in order, trusts that the report never rounds up, downloads Aman Check, and keeps Aman Disk for the day after.
+FIRST VIEWPORT: headline "Ten minutes with the Mac. Here's what to do with them.", one-paragraph lead, Download button, Gatekeeper line, then 0:00 on the rail with the full app window.
+FORM: the handover timeline, candidate 6 of the grounded list, seed key 327fe1d7.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+
+<header class="wrap top">
+  <a class="brand" href="#"><img src="site/icon.png" alt="" width="36" height="36">Aman Check</a>
+  <nav aria-label="Page">
+    <a href="#t0">The ten minutes</a>
+    <a href="#t8">The report</a>
+    <a href="#after">Aman Disk</a>
+    <a href="https://github.com/MidZai/aman_check">GitHub</a>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Ten minutes with the Mac. Here's what to do with them.</h1>
+      <p class="lead">Aman Check runs on the Mac you're about to buy or sell and writes a dated condition report anyone can read. Free, open source, and nothing leaves the Mac.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/MidZai/aman_check/releases/latest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+          Download for macOS
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/MidZai/aman_check">View the source</a>
+      </div>
+      <p class="fine">macOS 14 or later, Apple Silicon and Intel. The app isn't notarized by Apple, so macOS asks you to allow it once: <a href="https://github.com/MidZai/aman_check#macos-says-aman-check-cant-be-opened">here's how</a>.</p>
+    </div>
+  </div>
+
+  <div class="wrap plan">
+
+    <section class="step" id="t0">
+      <div class="mark"><span>0:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Open the app on the seller's Mac.</h2>
+        <p>Copy it from a USB stick or download it; no account, no password, no installation beyond dragging it to Applications. The analysis starts in a few seconds and <b>reads only</b>: it never changes anything on the Mac.</p>
+        <figure class="shot wide">
+          <img src="site/app.png" alt="Aman Check window on a MacBook Pro 16-inch 2019: processor, memory, storage and graphics, then battery at 82% of its original capacity, SSD health 98%, and the Locks section." width="2200" height="1288">
+        </figure>
+      </div>
+    </section>
+
+    <section class="step" id="t30">
+      <div class="mark"><span>0:30</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Read the locks first.</h2>
+        <p>A locked Mac is worth nothing, so blockers always sit at the top, in red. Aman Check reads what macOS reports and tells you what it <b>doesn't</b> prove: an Activation Lock shown as off says nothing about an Apple Account still signed in, so that line gets its own check.</p>
+        <ul class="locks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A6 6 0 0 1 18 9a4 4 0 0 1 0 9z"/></svg><div>iCloud Activation Lock<span><br>and whether an Apple Account is still signed in with Find My on</span></div><em class="st good">Lock off</em></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></svg><div>Company management (MDM)<span><br>a Mac still enrolled can be locked or wiped remotely</span></div><em class="st good">No signal detected</em></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><div>Firmware password<span><br>needs administrator rights to read, so the app tells you how to check it by hand</span></div><em class="st manual">Check manually</em></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg><div>Virtual machine, SIP, FileVault, configuration profiles<span><br>the rest of what a seller could hide behind, each with its own line</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="step" id="t1">
+      <div class="mark"><span>1:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Battery and SSD, in numbers the listing never gives.</h2>
+        <p>Charge cycles and today's full-charge capacity against the original one. S.M.A.R.T. health of the SSD, hours powered on, data written, wear and spare capacity, read with the Aman Disk engine. Then the real configuration: model and release year, chip, memory, storage, graphics, display, installed macOS and the <b>latest macOS it will ever run</b>.</p>
+        <figure class="shot">
+          <img src="site/overview.png" alt="Overview: MacBook Pro 16-inch 2019, Intel Core i9, 32 GB, 500 GB NVMe SSD, battery 82% after 511 cycles, SSD health 98%, 3,538 hours powered on, 116 TB written." width="1600" height="815" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <section class="step" id="t3">
+      <div class="mark"><span>3:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Now test what no spec sheet can tell you.</h2>
+        <p>Nine guided tests, one per screen. You do them, the app records what you observed and says so in the report. An external keyboard or mouse is detected first, so it's the built-in hardware that gets tested.</p>
+        <ul class="tests">
+          <li><div>Display<small>Solid colours full screen: dead pixels, stains, uneven backlight</small></div></li>
+          <li><div>Keyboard<small>Every key turns green when it answers</small></div></li>
+          <li><div>Touch Bar<small>Display and touch, end to end</small></div></li>
+          <li><div>Trackpad<small>Clicks, gestures, Force Touch, the whole surface</small></div></li>
+          <li><div>Speakers<small>Left, right, crackling</small></div></li>
+          <li><div>Microphone<small>Level meter and a short recording played back</small></div></li>
+          <li><div>Camera<small>Live picture, nothing saved</small></div></li>
+          <li><div>Touch ID<small>Fingerprint reader</small></div></li>
+          <li><div>Ports<small>A USB stick validates each port; charging, video, headphones, SD card</small></div></li>
+        </ul>
+        <figure class="shot">
+          <img src="site/keyboard.png" alt="Keyboard test: a drawing of the MacBook keyboard where each key turns green when pressed, 0 of 65 keys detected, with an ANSI/ISO switch." width="1600" height="1108" loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <section class="step" id="t8">
+      <div class="mark"><span>8:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Export the report. Shake hands on the same document.</h2>
+        <p>A PDF for both of you and a JSON for the record, dated to the minute. The summary is four counts, nothing else: no score, no grade, no stars, because a flattering number is exactly what a buyer pays for later.</p>
+        <div class="counters" aria-label="Example of the report summary">
+          <div class="nums">
+            <div class="num good"><b>9</b><span><i></i>good</span></div>
+            <div class="num watch"><b>1</b><span><i></i>to watch</span></div>
+            <div class="num bad"><b>0</b><span><i></i>problems</span></div>
+            <div class="num none"><b>9</b><span><i></i>not tested</span></div>
+          </div>
+          <p>Every line says whether it was measured by the app or observed by the person.</p>
+        </div>
+        <div class="rules">
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <div><b>Missing data is never green.</b><p>A value the app can't read becomes “Not available” or “Check manually”, never a quiet pass.</p></div>
+          </div>
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>
+            <div><b>Skipped means “Not tested”, not “Failed”.</b><p>Same for a refused camera or microphone permission. The report says what wasn't done.</p></div>
+          </div>
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h10"/></svg>
+            <div><b>Plain words, no sales talk.</b><p>You won't find “certified”, “warranty”, “100% working” or “Grade A” anywhere. It's a snapshot taken on the date shown, and says so on every page.</p></div>
+          </div>
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <div><b>Nothing leaves the Mac.</b><p>No network, no telemetry. The serial number shows its last four characters only. The only files written are the PDF and JSON you choose to save.</p></div>
+          </div>
+        </div>
+        <figure class="shot">
+          <img src="site/report.png" alt="Report screen: the PDF preview with locks, at-a-glance tiles and guided tests, and the export buttons for PDF and JSON." width="1600" height="897" loading="lazy">
+        </figure>
+      </div>
+    </section>
+  </div>
+
+  <section class="after" id="after">
+    <div class="wrap">
+      <div class="step">
+        <div class="mark"><span>Day after</span><span class="dot" aria-hidden="true"></span></div>
+        <div class="body">
+          <h2>Go all the way on the disk with Aman Disk.</h2>
+          <p>Aman Check tells you the SSD is healthy. Aman Disk, the sister app whose engine it already uses, shows you <b>why</b>, attribute by attribute, and keeps watching the drive once the Mac is yours. The disk check-up to run on the Mac you've just bought.</p>
+          <ul>
+            <li><b>Every S.M.A.R.T. attribute</b>, named and explained, with the raw values on request.</li>
+            <li><b>Temperature history</b>: a reading every 30 seconds, kept for 30 days, with a menu bar panel.</li>
+            <li><b>Performance test</b>: sequential and random reads and writes, test file always removed.</li>
+            <li><b>External drives too</b>: Thunderbolt and USB4 NVMe enclosures, USB SATA drives, alerts and history.</li>
+            <li><b>Same rules</b>: no network, no data sent, never changes your data, 18 languages.</li>
+          </ul>
+          <div class="cta">
+            <a class="btn btn-primary" href="https://github.com/MidZai/aman_disk/releases/latest">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+              Download Aman Disk
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/MidZai/aman_disk">Aman Disk on GitHub</a>
+          </div>
+          <div class="shots2">
+            <figure class="shot"><img src="site/aman-disk-health.png" alt="Aman Disk: internal SSD healthy, 98% remaining life, temperature history over the last hour and the S.M.A.R.T. attribute table." width="1600" height="1018" loading="lazy"></figure>
+            <figure class="shot"><img src="site/aman-disk-performance.png" alt="Aman Disk: performance test with sequential and random read and write speeds." width="1600" height="1018" loading="lazy"></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap">
+      <h2>Both apps are free and open source.</h2>
+      <p>MIT licensed, written in Swift, no account and no paid tier for the local report. If they helped you buy or sell with a clear head, a coffee keeps them going.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/MidZai/aman_check/releases/latest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+          Download Aman Check
+        </a>
+        <a class="btn btn-kofi" href="https://ko-fi.com/midzai">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.8 5c2 0 3.5 1.1 4.2 2.4C11.7 6.1 13.2 5 15.2 5c3.5 0 5.7 3.4 4.3 6.8C17.5 16.4 12 21 12 21z"/></svg>
+          Support on Ko-fi
+        </a>
+      </div>
+      <p>“Aman” is water in Kabyle, hence the drop in the icon, and safety in Arabic. Both fit an app that watches over a Mac.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 MidZai. MIT License.</span>
+    <span><a href="https://github.com/MidZai/aman_check">Aman Check on GitHub</a> &nbsp;&nbsp; <a href="https://github.com/MidZai/aman_disk">Aman Disk on GitHub</a> &nbsp;&nbsp; <a href="https://ko-fi.com/midzai">Ko-fi</a></span>
+  </div>
+</footer>
+
+<script>
+  // One authored moment: each time mark on the rail fills in as its step reaches the reader.
+  (function () {
+    var steps = document.querySelectorAll('.step');
+    if (!('IntersectionObserver' in window)) { steps.forEach(function (s) { s.classList.add('is-live'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-live'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -45% 0px' });
+    steps.forEach(function (s) { io.observe(s); });
+  })();
+</script>
+</body>
+</html>

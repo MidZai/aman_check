@@ -13,3 +13,9 @@ AmanCheck.entitlements
 server/node_modules/
 server/.wrangler/
 server/.dev.vars
+
+# Impeccable design context (local only)
+PRODUCT.md
+DESIGN.md
+.impeccable/
+.playwright-mcp/
