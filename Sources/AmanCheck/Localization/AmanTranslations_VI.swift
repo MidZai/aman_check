@@ -203,7 +203,7 @@ extension AmanTranslations {
         "Interrupted": "Bị gián đoạn",
         "Interrupted: all colors must be shown": "Bị gián đoạn: phải hiển thị tất cả các màu",
         "It concerns a Mac whose serial number ends with the 4 characters shown.": "Liên quan đến máy Mac có số sê-ri kết thúc bằng 4 ký tự hiển thị.",
-        "It was produced by the Aman Check app, on the date shown.": "Được tạo bởi ứng dụng Aman Check, vào ngày hiển thị.",
+        "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Nó được công bố bởi người giữ khóa bản quyền, vào ngày hiển thị, và không bị thay đổi kể từ đó.",
         "Its content has not been changed since it was published.": "Nội dung không bị thay đổi kể từ khi công bố.",
         "Keep two fingers (thumb and index) on the trackpad and move them in a small arc around a central point, as if turning a photo or a knob. Rotating a few degrees is enough.": "Giữ hai ngón (cái và trỏ) trên bàn di chuột và di chuyển theo một cung nhỏ quanh một điểm giữa, như xoay ảnh hoặc núm vặn. Xoay vài độ là đủ.",
         "Keyboard": "Bàn phím",

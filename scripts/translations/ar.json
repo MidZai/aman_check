@@ -427,7 +427,6 @@
 "Verifiable report": "تقرير قابل للتحقق",
 "This report is a snapshot taken on the date shown and registered online by Aman Check. The registration shows that its content has not been changed since it was published; it says nothing about the Mac's condition today. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. It makes no promise about how the Mac works or how long it will last.": "هذا التقرير لقطة أُخذت في التاريخ المبيّن وسُجّلت على الإنترنت بواسطة Aman Check. يُظهر التسجيل أن محتواه لم يتغير منذ نشره؛ ولا يقول شيئاً عن حالة الـ Mac اليوم. القيم المعلَّمة «مقاسة تلقائياً» تأتي من نظام الـ Mac المختبَر؛ والقيم المعلَّمة «لاحظها المستخدم» تصريحية. لا يقدّم أي وعد بشأن عمل الـ Mac أو مدة بقائه.",
 "What this report proves and does not prove": "ما يثبته هذا التقرير وما لا يثبته",
-"It was produced by the Aman Check app, on the date shown.": "أنتجه تطبيق Aman Check في التاريخ المبيّن.",
 "Its content has not been changed since it was published.": "لم يتغير محتواه منذ نشره.",
 "It concerns a Mac whose serial number ends with the 4 characters shown.": "يخص جهاز Mac ينتهي رقمه التسلسلي بالأحرف الأربعة المعروضة.",
 "That the Mac is in good condition today: the report dates from the day of the check.": "أن الـ Mac بحالة جيدة اليوم: يعود التقرير إلى يوم الفحص.",
@@ -654,5 +653,6 @@
 "No Activation Lock detected": "لم يتم اكتشاف قفل التنشيط",
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "في هذا الجيل من أجهزة Mac، هذه الأحرف الأربعة مشتركة بين كل أجهزة Mac ذات التكوين نفسه. إنها لا تحدد هذا الجهاز بعينه: قارن الرقم التسلسلي الكامل.",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "قارن الأحرف الأربعة الأخيرة بالرقم التسلسلي المحفور أسفل الـ Mac، أو المعروض في قائمة Apple › حول هذا الـ Mac. هذا يساعد فقط على استبعاد خطأ فادح: في بعض الأجيال، تتشاركها كل أجهزة Mac ذات التكوين نفسه.",
-"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "قارن الأحرف الأربعة من الرقم التسلسلي بتلك الموجودة على الـ Mac: يكفي لاستبعاد خطأ فادح، لا للتمييز بين جهازي Mac متطابقين."
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "قارن الأحرف الأربعة من الرقم التسلسلي بتلك الموجودة على الـ Mac: يكفي لاستبعاد خطأ فادح، لا للتمييز بين جهازي Mac متطابقين.",
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "نُشر من قِبل حامل مفتاح ترخيص، في التاريخ المبين، ولم يتغير منذ ذلك الحين."
 }

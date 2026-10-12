@@ -203,7 +203,7 @@ extension AmanTranslations {
         "Interrupted": "बाधित",
         "Interrupted: all colors must be shown": "बाधित: सभी रंग दिखाए जाने चाहिए",
         "It concerns a Mac whose serial number ends with the 4 characters shown.": "यह उस Mac के बारे में है जिसका सीरियल नंबर दिखाए गए 4 अक्षरों पर समाप्त होता है।",
-        "It was produced by the Aman Check app, on the date shown.": "इसे Aman Check ऐप ने दिखाई गई तारीख को बनाया।",
+        "It was published by the holder of a license key, on the date shown, and has not been changed since.": "इसे लाइसेंस कुंजी के धारक ने दिखाई गई तारीख को प्रकाशित किया था, और तब से इसमें कोई बदलाव नहीं हुआ है।",
         "Its content has not been changed since it was published.": "प्रकाशन के बाद इसकी सामग्री नहीं बदली।",
         "Keep two fingers (thumb and index) on the trackpad and move them in a small arc around a central point, as if turning a photo or a knob. Rotating a few degrees is enough.": "दो उंगलियाँ (अंगूठा और तर्जनी) ट्रैकपैड पर रखें और उन्हें एक केंद्र बिंदु के चारों ओर छोटे चाप में घुमाएँ, जैसे फ़ोटो या नॉब घुमाते हैं। कुछ डिग्री घुमाना काफ़ी है।",
         "Keyboard": "कीबोर्ड",

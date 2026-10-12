@@ -427,7 +427,6 @@
 "Verifiable report": "Перевірюваний звіт",
 "This report is a snapshot taken on the date shown and registered online by Aman Check. The registration shows that its content has not been changed since it was published; it says nothing about the Mac's condition today. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. It makes no promise about how the Mac works or how long it will last.": "Цей звіт — знімок на вказану дату, зареєстрований онлайн програмою Aman Check. Реєстрація показує, що його вміст не змінювався з моменту публікації; вона нічого не каже про стан Mac сьогодні. Значення з позначкою «Виміряно автоматично» отримано із системи перевірюваного Mac; значення з позначкою «Помічено користувачем» мають декларативний характер. Він не дає жодних обіцянок щодо роботи Mac або терміну його служби.",
 "What this report proves and does not prove": "Що цей звіт доводить, а що ні",
-"It was produced by the Aman Check app, on the date shown.": "Його створено програмою Aman Check у вказану дату.",
 "Its content has not been changed since it was published.": "Його вміст не змінювався з моменту публікації.",
 "It concerns a Mac whose serial number ends with the 4 characters shown.": "Він стосується Mac, серійний номер якого закінчується на показані 4 символи.",
 "That the Mac is in good condition today: the report dates from the day of the check.": "Що Mac сьогодні в доброму стані: звіт датовано днем перевірки.",
@@ -654,5 +653,6 @@
 "No Activation Lock detected": "Блокування активації не виявлено",
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "У цьому поколінні Mac ці 4 символи однакові в усіх Mac однієї конфігурації. Вони не ідентифікують саме цей Mac: порівняйте повний серійний номер.",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Порівняйте останні 4 символи із серійним номером, вигравіюваним знизу Mac або показаним у меню Apple › Про цей Mac. Це лише виключає грубу плутанину: у деяких поколіннях усі Mac однієї конфігурації мають однакові символи.",
-"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Порівняйте 4 символи серійного номера з тими, що на Mac: цього досить, щоб виключити грубу плутанину, але не щоб розрізнити два однакові Mac."
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Порівняйте 4 символи серійного номера з тими, що на Mac: цього досить, щоб виключити грубу плутанину, але не щоб розрізнити два однакові Mac.",
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Його опублікував власник ліцензійного ключа в зазначену дату, і відтоді він не змінювався."
 }

@@ -343,3 +343,13 @@ struct SerialNumberTextTests {
         #expect(Level2Text.checkThisMac.contains(L("rule out", "écarter")))
     }
 }
+
+@Suite("Niveau 2 · ce que la page prouve")
+struct Level2ProvesTests {
+    @Test("Le rapport publié ne promet pas plus que ce que le serveur vérifie")
+    func provesIsHonest() {
+        #expect(Level2Text.proves.first == L("It was published by the holder of a license key, on the date shown, and has not been changed since.",
+                                             "Il a été publié par le titulaire d'une clé de licence, à la date indiquée, et n'a pas été modifié depuis."))
+        #expect(!Level2Text.proves.contains { $0.contains(L("produced by the Aman Check app", "produit par l'app Aman Check")) })
+    }
+}

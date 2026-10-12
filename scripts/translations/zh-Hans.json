@@ -427,7 +427,6 @@
 "Verifiable report": "可验证报告",
 "This report is a snapshot taken on the date shown and registered online by Aman Check. The registration shows that its content has not been changed since it was published; it says nothing about the Mac's condition today. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. It makes no promise about how the Mac works or how long it will last.": "本报告是在所示日期生成并由 Aman Check 在线登记的快照。登记可证明其内容自发布以来未被更改；但不说明 Mac 当前的状况。标记为“自动测量”的数值来自被测 Mac 的系统；标记为“用户观察”的数值为用户自述。本报告不对 Mac 的运行情况或使用寿命作任何承诺。",
 "What this report proves and does not prove": "本报告能证明和不能证明的内容",
-"It was produced by the Aman Check app, on the date shown.": "由 Aman Check 应用在所示日期生成。",
 "Its content has not been changed since it was published.": "其内容自发布以来未被更改。",
 "It concerns a Mac whose serial number ends with the 4 characters shown.": "涉及的是序列号以所示 4 位结尾的 Mac。",
 "That the Mac is in good condition today: the report dates from the day of the check.": "Mac 今天状况良好：报告的日期是检测当天。",
@@ -654,5 +653,6 @@
 "No Activation Lock detected": "未检测到激活锁",
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "在这一代 Mac 上，这 4 个字符为相同配置的所有 Mac 共用。它们不能识别这一台 Mac：请比对完整序列号。",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "将最后 4 个字符与 Mac 底部刻印的序列号，或 Apple 菜单 › 关于本机中显示的序列号进行比对。这只能排除明显的张冠李戴：在某些代次上，相同配置的所有 Mac 共用这 4 个字符。",
-"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "将序列号的 4 个字符与 Mac 上的进行比对：足以排除明显的张冠李戴，但无法区分两台完全相同的 Mac。"
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "将序列号的 4 个字符与 Mac 上的进行比对：足以排除明显的张冠李戴，但无法区分两台完全相同的 Mac。",
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "它由许可证密钥持有人在所示日期发布，此后未被更改。"
 }

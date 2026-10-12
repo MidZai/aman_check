@@ -302,7 +302,7 @@ Le niveau 2 empêche de modifier un rapport après coup ; il n'empêche pas un v
 | Valider les tests avec un clavier ou une souris externes | Tests bloqués tant qu'un périphérique externe est branché | Partiellement |
 | Répondre « tout va bien » aux tests déclaratifs | Provenance « constaté par l'utilisateur » affichée sur chaque ligne | Oui, assumé |
 | Envoyer un JSON forgé à l'API sans passer par l'app | Clé de licence exigée, contrôles de cohérence, limites de débit | Oui, pour quelqu'un de technique |
-| Exécuter l'app dans une machine virtuelle | Bloqueur rouge déjà présent, repris en tête de page | Non |
+| Exécuter l'app dans une machine virtuelle | Bloqueur rouge déjà présent, repris en tête de page (détection par un seul `sysctl`) | Oui, pour quelqu'un de technique |
 
 Le dernier point ouvert (JSON forgé) ne se ferme vraiment qu'avec le niveau 3, où un réparateur partenaire fait le contrôle lui-même. Ne pas tenter de le masquer par de l'obscurcissement dans l'app.
 

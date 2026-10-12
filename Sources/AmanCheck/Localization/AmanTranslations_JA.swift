@@ -203,7 +203,7 @@ extension AmanTranslations {
         "Interrupted": "中断",
         "Interrupted: all colors must be shown": "中断：すべての色を表示する必要があります",
         "It concerns a Mac whose serial number ends with the 4 characters shown.": "シリアル番号が表示の4文字で終わるMacに関するものであること。",
-        "It was produced by the Aman Check app, on the date shown.": "記載の日付にAman Checkアプリによって作成されたこと。",
+        "It was published by the holder of a license key, on the date shown, and has not been changed since.": "表示された日付に、ライセンスキーの所有者によって公開され、それ以降変更されていません。",
         "Its content has not been changed since it was published.": "公開後に内容が変更されていないこと。",
         "Keep two fingers (thumb and index) on the trackpad and move them in a small arc around a central point, as if turning a photo or a knob. Rotating a few degrees is enough.": "2本の指（親指と人差し指）をトラックパッドに置き、写真やつまみを回すように中心点の周りで小さな弧を描いてください。数度回せば十分です。",
         "Keyboard": "キーボード",

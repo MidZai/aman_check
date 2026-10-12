@@ -20,7 +20,7 @@ public enum Level2Text {
     public static var provesTitle: String { L("What this report proves and does not prove", "Ce que ce rapport prouve et ne prouve pas") }
 
     public static var proves: [String] {
-        [L("It was produced by the Aman Check app, on the date shown.", "Il a été produit par l'app Aman Check, à la date indiquée."),
+        [L("It was published by the holder of a license key, on the date shown, and has not been changed since.", "Il a été publié par le titulaire d'une clé de licence, à la date indiquée, et n'a pas été modifié depuis."),
          L("Its content has not been changed since it was published.", "Son contenu n'a pas été modifié depuis sa publication."),
          L("It concerns a Mac whose serial number ends with the 4 characters shown.", "Il concerne un Mac dont le numéro de série se termine par les 4 caractères affichés.")]
     }

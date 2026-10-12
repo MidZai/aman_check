@@ -203,7 +203,7 @@ extension AmanTranslations {
         "Interrupted": "Interrumpida",
         "Interrupted: all colors must be shown": "Interrumpida: deben mostrarse todos los colores",
         "It concerns a Mac whose serial number ends with the 4 characters shown.": "Se refiere a un Mac cuyo número de serie termina con los 4 caracteres mostrados.",
-        "It was produced by the Aman Check app, on the date shown.": "Lo generó la app Aman Check, en la fecha indicada.",
+        "It was published by the holder of a license key, on the date shown, and has not been changed since.": "Fue publicado por el titular de una clave de licencia, en la fecha indicada, y no ha cambiado desde entonces.",
         "Its content has not been changed since it was published.": "Su contenido no se ha modificado desde su publicación.",
         "Keep two fingers (thumb and index) on the trackpad and move them in a small arc around a central point, as if turning a photo or a knob. Rotating a few degrees is enough.": "Mantén dos dedos (pulgar e índice) sobre el trackpad y muévelos en un pequeño arco alrededor de un punto central, como si giraras una foto o un botón. Basta con girar unos grados.",
         "Keyboard": "Teclado",
