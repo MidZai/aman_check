@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "Mẫu máy này có pin, nhưng máy Mac không báo cáo pin nào.",
 "This model has a built-in camera, but the Mac does not report one.": "Mẫu máy này có camera tích hợp, nhưng máy Mac không báo cáo camera nào.",
-"This model has a Touch ID sensor, but the Mac does not report one.": "Mẫu máy này có cảm biến Touch ID, nhưng máy Mac không báo cáo cảm biến nào."
+"This model has a Touch ID sensor, but the Mac does not report one.": "Mẫu máy này có cảm biến Touch ID, nhưng máy Mac không báo cáo cảm biến nào.",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Máy Mac này có nhiều tài khoản người dùng. Chỉ phiên hiện tại được kiểm tra: đăng nhập vào từng tài khoản, hoặc xóa máy Mac, để chắc chắn."
 }

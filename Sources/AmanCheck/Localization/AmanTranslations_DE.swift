@@ -486,6 +486,7 @@ extension AmanTranslations {
         "The values read are inconsistent ({0} / {1} mAh).": "Die gelesenen Werte sind widersprüchlich ({0} / {1} mAh).",
         "The volume is low. Raise it to about half.": "Die Lautstärke ist niedrig. Stelle sie auf etwa die Hälfte.",
         "This Mac has neither a T2 chip nor Apple silicon: macOS does not report this status.": "Dieser Mac hat weder einen T2-Chip noch Apple Silicon: macOS meldet diesen Status nicht.",
+        "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Dieser Mac hat mehrere Benutzerkonten. Nur die aktuelle Sitzung wurde geprüft: Melden Sie sich bei jedem Konto an oder löschen Sie den Mac, um sicherzugehen.",
         "This Mac is managed by an organization: ": "Dieser Mac wird von einer Organisation verwaltet: ",
         "This SSD does not expose its health data (S.M.A.R.T.) to macOS.": "Diese SSD gibt ihre Zustandsdaten (S.M.A.R.T.) nicht an macOS weiter.",
         "This is expected while the seller is still signed in to iCloud with Find My on. It must be turned off before the sale. ": "Das ist zu erwarten, solange der Verkäufer bei iCloud mit eingeschaltetem „Wo ist?“ angemeldet ist. Es muss vor dem Verkauf ausgeschaltet werden. ",

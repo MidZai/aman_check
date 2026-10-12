@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "Bu model pil ile gelir ancak Mac herhangi bir pil bildirmiyor.",
 "This model has a built-in camera, but the Mac does not report one.": "Bu modelde dahili kamera var ancak Mac herhangi bir kamera bildirmiyor.",
-"This model has a Touch ID sensor, but the Mac does not report one.": "Bu modelde Touch ID sensörü var ancak Mac herhangi bir sensör bildirmiyor."
+"This model has a Touch ID sensor, but the Mac does not report one.": "Bu modelde Touch ID sensörü var ancak Mac herhangi bir sensör bildirmiyor.",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Bu Mac'te birden fazla kullanıcı hesabı var. Yalnızca geçerli oturum denetlendi: emin olmak için her hesapta oturum açın ya da Mac'i silin."
 }

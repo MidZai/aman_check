@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "यह मॉडल बैटरी के साथ आता है, लेकिन Mac कोई बैटरी नहीं बताता।",
 "This model has a built-in camera, but the Mac does not report one.": "इस मॉडल में बिल्ट-इन कैमरा है, लेकिन Mac कोई कैमरा नहीं बताता।",
-"This model has a Touch ID sensor, but the Mac does not report one.": "इस मॉडल में Touch ID सेंसर है, लेकिन Mac कोई सेंसर नहीं बताता।"
+"This model has a Touch ID sensor, but the Mac does not report one.": "इस मॉडल में Touch ID सेंसर है, लेकिन Mac कोई सेंसर नहीं बताता।",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "इस Mac में कई उपयोगकर्ता खाते हैं। केवल वर्तमान सत्र की जाँच की गई: निश्चित होने के लिए हर खाते में साइन इन करें, या Mac को मिटा दें।"
 }

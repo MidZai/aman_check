@@ -1,6 +1,7 @@
 import Testing
 import Foundation
 @testable import AmanCore
+import DiskHealthCore
 
 @Suite("Verrouillages et sécurité")
 struct SecurityAnalysisTests {
@@ -50,7 +51,7 @@ struct SecurityAnalysisTests {
     @Test("Compte Apple connecté avec Localiser : à surveiller, sans jamais exposer l'identifiant")
     func appleAccountSignedIn() {
         let m = SecurityAnalysis.appleAccount(mobileMePlist: Self.mobileMe(accounts: 1, findMy: true), domainMissing: false,
-                                              chip: .intelT2, activationLockOff: true)
+                                              chip: .intelT2, activationLockOff: true, localUserCount: 1)
         #expect(m.status == .watch)
         #expect(m.value == .int(1))
         #expect(m.detail?.contains("Localiser") == true)
@@ -64,7 +65,7 @@ struct SecurityAnalysisTests {
     @Test("Compte Apple connecté, Localiser désactivé, puce Apple : pas d'explication T2")
     func appleAccountFindMyOff() {
         let m = SecurityAnalysis.appleAccount(mobileMePlist: Self.mobileMe(accounts: 2, findMy: false), domainMissing: false,
-                                              chip: .appleSilicon, activationLockOff: true)
+                                              chip: .appleSilicon, activationLockOff: true, localUserCount: 1)
         #expect(m.status == .watch)
         #expect(m.value == .int(2))
         #expect(m.detail?.contains("démarrage sécurisé") == false)
@@ -74,17 +75,47 @@ struct SecurityAnalysisTests {
     @Test("Aucun compte Apple : bon, que le domaine soit vide ou absent")
     func appleAccountNone() {
         let empty = SecurityAnalysis.appleAccount(mobileMePlist: Self.mobileMe(accounts: 0, findMy: nil), domainMissing: false,
-                                                  chip: .intelT2, activationLockOff: true)
+                                                  chip: .intelT2, activationLockOff: true, localUserCount: 1)
         #expect(empty.status == .good)
         #expect(empty.value == .int(0))
-        let missing = SecurityAnalysis.appleAccount(mobileMePlist: nil, domainMissing: true, chip: .appleSilicon, activationLockOff: false)
+        let missing = SecurityAnalysis.appleAccount(mobileMePlist: nil, domainMissing: true, chip: .appleSilicon, activationLockOff: false, localUserCount: 1)
         #expect(missing.status == .good)
     }
 
     @Test("Compte Apple illisible : jamais vert")
     func appleAccountUnreadable() {
-        #expect(SecurityAnalysis.appleAccount(mobileMePlist: nil, domainMissing: false, chip: nil, activationLockOff: false).status == .manualRequired)
-        #expect(SecurityAnalysis.appleAccount(mobileMePlist: Data("garbage".utf8), domainMissing: false, chip: nil, activationLockOff: false).status == .manualRequired)
+        #expect(SecurityAnalysis.appleAccount(mobileMePlist: nil, domainMissing: false, chip: nil, activationLockOff: false, localUserCount: 1).status == .manualRequired)
+        #expect(SecurityAnalysis.appleAccount(mobileMePlist: Data("garbage".utf8), domainMissing: false, chip: nil, activationLockOff: false, localUserCount: 1).status == .manualRequired)
+    }
+
+    @Test("Plist lisible mais sans clé Accounts : à vérifier, jamais vert")
+    func appleAccountPlistWithoutAccounts() {
+        let plist = Data(#"<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>Other</key><string>x</string></dict></plist>"#.utf8)
+        #expect(SecurityAnalysis.appleAccount(mobileMePlist: plist, domainMissing: false, chip: nil, activationLockOff: false, localUserCount: 1).status == .manualRequired)
+        let wrongType = Data(#"<?xml version="1.0" encoding="UTF-8"?><plist version="1.0"><dict><key>Accounts</key><string>x</string></dict></plist>"#.utf8)
+        #expect(SecurityAnalysis.appleAccount(mobileMePlist: wrongType, domainMissing: false, chip: nil, activationLockOff: false, localUserCount: 1).status == .manualRequired)
+    }
+
+    @Test("Plusieurs comptes utilisateurs locaux : seule la session en cours est vérifiée, jamais vert")
+    func appleAccountSeveralLocalUsers() {
+        let two = SecurityAnalysis.appleAccount(mobileMePlist: Self.mobileMe(accounts: 0, findMy: nil), domainMissing: false,
+                                                chip: .appleSilicon, activationLockOff: false, localUserCount: 2)
+        #expect(two.status == .manualRequired)
+        #expect(two.note?.contains(L("This Mac has several user accounts.", "Ce Mac a plusieurs comptes utilisateurs.")) == true)
+        let unreadable = SecurityAnalysis.appleAccount(mobileMePlist: nil, domainMissing: true, chip: .appleSilicon, activationLockOff: false, localUserCount: nil)
+        #expect(unreadable.status == .manualRequired)
+        let one = SecurityAnalysis.appleAccount(mobileMePlist: Self.mobileMe(accounts: 0, findMy: nil), domainMissing: false,
+                                                chip: .appleSilicon, activationLockOff: false, localUserCount: 1)
+        #expect(one.status == .good)
+    }
+
+    @Test("Comptes locaux comptés par dscl : UID ≥ 501 seulement")
+    func localUserCount() {
+        let output = "_mbsetupuser 248\nnobody -2\nroot 0\nkarim 501\nguest 502\ndaemon 1\n"
+        #expect(SecurityAnalysis.localUserCount(dsclOutput: output) == 2)
+        #expect(SecurityAnalysis.localUserCount(dsclOutput: "root 0\n") == 0)
+        #expect(SecurityAnalysis.localUserCount(dsclOutput: nil) == nil)
+        #expect(SecurityAnalysis.localUserCount(dsclOutput: "") == nil)
     }
 
     @Test("Activation Lock activé : signal rouge")

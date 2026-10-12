@@ -78,30 +78,44 @@ public enum SecurityAnalysis {
     ///
     /// Le verrouillage d'activation peut être signalé désactivé alors qu'un compte est connecté avec Localiser actif
     /// (sur Mac Intel T2, il ne s'arme qu'avec le démarrage sécurisé en « Sécurité maximale ») : la mesure le précise.
+    /// `localUserCount` : comptes utilisateurs locaux du Mac (`dscl . -list /Users UniqueID`, UID ≥ 501) ;
+    /// nil si illisible. La lecture ne couvre que la session en cours : avec plusieurs comptes, ou un
+    /// nombre illisible, « aucun compte » ne peut pas être vert.
     public static func appleAccount(mobileMePlist data: Data?, domainMissing: Bool, chip: ChipFamily?,
-                                    activationLockOff: Bool, now: Date = Date()) -> Measurement {
+                                    activationLockOff: Bool, localUserCount: Int?, now: Date = Date()) -> Measurement {
         let id = MetricID.appleAccount
-        let method = "defaults export MobileMeAccounts · Accounts, FIND_MY_MAC"
+        let method = "defaults export MobileMeAccounts · Accounts, FIND_MY_MAC · dscl . -list /Users UniqueID"
         let decisive = L("The decisive check remains Setup Assistant after erasing: it must ask for no Apple Account.",
                          "La vérification décisive reste l'assistant de configuration après effacement : il ne doit exiger aucun compte Apple.")
-        if domainMissing {
-            return Measurement(id: id, value: .int(0), status: .good, method: method, collectedAt: now,
-                               display: L("No account signed in", "Aucun compte connecté"),
+        let unreadable = Measurement(id: id, value: nil, status: .manualRequired, method: method, collectedAt: now,
+                                     display: checkYourself,
+                                     note: L("Could not be read. Open System Settings: the Apple Account appears at the top of the sidebar.",
+                                             "Lecture impossible. Ouvrez Réglages Système : le compte Apple apparaît en haut de la barre latérale."))
+        func noAccountInThisSession() -> Measurement {
+            if localUserCount == 1 {
+                return Measurement(id: id, value: .int(0), status: .good, method: method, collectedAt: now,
+                                   display: L("No account signed in", "Aucun compte connecté"),
+                                   detail: L("No Apple Account is signed in in this session.", "Aucun compte Apple n'est connecté dans cette session."),
+                                   note: decisive)
+            }
+            return Measurement(id: id, value: .int(0), status: .manualRequired, method: method, collectedAt: now,
+                               display: checkYourself,
                                detail: L("No Apple Account is signed in in this session.", "Aucun compte Apple n'est connecté dans cette session."),
-                               note: decisive)
+                               note: L("This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.",
+                                       "Ce Mac a plusieurs comptes utilisateurs. Seule la session en cours a été vérifiée : ouvrez chaque compte, ou effacez le Mac, pour être sûr.") + " " + decisive)
+        }
+        if domainMissing {
+            return noAccountInThisSession()
         }
         guard let data, let root = try? PropertyListSerialization.propertyList(from: data, format: nil) as? [String: Any] else {
-            return Measurement(id: id, value: nil, status: .manualRequired, method: method, collectedAt: now,
-                               display: checkYourself,
-                               note: L("Could not be read. Open System Settings: the Apple Account appears at the top of the sidebar.",
-                                       "Lecture impossible. Ouvrez Réglages Système : le compte Apple apparaît en haut de la barre latérale."))
+            return unreadable
         }
-        let accounts = (root["Accounts"] as? [[String: Any]]) ?? []
+        // Plist lisible mais sans la clé attendue (ou d'un autre type) : on ne sait pas, donc pas vert.
+        guard let accounts = root["Accounts"] as? [[String: Any]] else {
+            return unreadable
+        }
         if accounts.isEmpty {
-            return Measurement(id: id, value: .int(0), status: .good, method: method, collectedAt: now,
-                               display: L("No account signed in", "Aucun compte connecté"),
-                               detail: L("No Apple Account is signed in in this session.", "Aucun compte Apple n'est connecté dans cette session."),
-                               note: decisive)
+            return noAccountInThisSession()
         }
         let findMy = accounts.contains { account in
             ((account["Services"] as? [[String: Any]]) ?? []).contains { service in
@@ -121,6 +135,19 @@ public enum SecurityAnalysis {
                            detail: detail,
                            note: L("To do before handing over the Mac: sign out (System Settings › Apple Account › Sign Out), then erase it. While signed in, the Mac can be located or locked remotely. ",
                                    "À faire avant la remise : se déconnecter (Réglages Système › Compte Apple › Se déconnecter), puis effacer le Mac. Tant qu'un compte est connecté, le Mac peut être localisé ou verrouillé à distance. ") + decisive)
+    }
+
+    /// Nombre de comptes utilisateurs locaux (UID ≥ 501) dans la sortie de `dscl . -list /Users UniqueID` ;
+    /// nil si la sortie est absente ou vide.
+    public static func localUserCount(dsclOutput output: String?) -> Int? {
+        guard let output, !output.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return nil }
+        var count = 0
+        for line in output.split(whereSeparator: \.isNewline) {
+            let parts = line.split(whereSeparator: { $0 == " " || $0 == "\t" })
+            guard parts.count >= 2, let uid = Int(parts.last!) else { continue }
+            if uid >= 501 { count += 1 }
+        }
+        return count
     }
 
     private static func flag(_ value: Any?) -> Bool {

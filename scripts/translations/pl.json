@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "Ten model ma baterię, ale Mac jej nie zgłasza.",
 "This model has a built-in camera, but the Mac does not report one.": "Ten model ma wbudowaną kamerę, ale Mac jej nie zgłasza.",
-"This model has a Touch ID sensor, but the Mac does not report one.": "Ten model ma czujnik Touch ID, ale Mac go nie zgłasza."
+"This model has a Touch ID sensor, but the Mac does not report one.": "Ten model ma czujnik Touch ID, ale Mac go nie zgłasza.",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Ten Mac ma kilka kont użytkowników. Sprawdzono tylko bieżącą sesję: zaloguj się na każde konto lub wymaż Maca, aby mieć pewność."
 }

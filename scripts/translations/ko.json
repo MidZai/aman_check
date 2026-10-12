@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "이 모델에는 배터리가 있지만 Mac이 배터리를 보고하지 않습니다.",
 "This model has a built-in camera, but the Mac does not report one.": "이 모델에는 내장 카메라가 있지만 Mac이 카메라를 보고하지 않습니다.",
-"This model has a Touch ID sensor, but the Mac does not report one.": "이 모델에는 Touch ID 센서가 있지만 Mac이 센서를 보고하지 않습니다."
+"This model has a Touch ID sensor, but the Mac does not report one.": "이 모델에는 Touch ID 센서가 있지만 Mac이 센서를 보고하지 않습니다.",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "이 Mac에는 여러 사용자 계정이 있습니다. 현재 세션만 확인했습니다. 확실히 하려면 각 계정에 로그인하거나 Mac을 지우십시오."
 }

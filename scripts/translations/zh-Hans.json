@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "此型号配有电池，但 Mac 未报告电池。",
 "This model has a built-in camera, but the Mac does not report one.": "此型号有内置摄像头，但 Mac 未报告摄像头。",
-"This model has a Touch ID sensor, but the Mac does not report one.": "此型号有 Touch ID 传感器，但 Mac 未报告传感器。"
+"This model has a Touch ID sensor, but the Mac does not report one.": "此型号有 Touch ID 传感器，但 Mac 未报告传感器。",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "这台 Mac 有多个用户账户。仅检查了当前会话：请登录每个账户，或抹掉 Mac，以确保无误。"
 }

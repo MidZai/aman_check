@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "Ця модель постачається з акумулятором, але Mac його не повідомляє.",
 "This model has a built-in camera, but the Mac does not report one.": "Ця модель має вбудовану камеру, але Mac її не повідомляє.",
-"This model has a Touch ID sensor, but the Mac does not report one.": "Ця модель має сенсор Touch ID, але Mac його не повідомляє."
+"This model has a Touch ID sensor, but the Mac does not report one.": "Ця модель має сенсор Touch ID, але Mac його не повідомляє.",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "На цьому Mac кілька облікових записів. Перевірено лише поточний сеанс: увійдіть у кожен обліковий запис або зітріть Mac, щоб переконатися."
 }

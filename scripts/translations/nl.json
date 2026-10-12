@@ -652,5 +652,6 @@
 "Touch ID": "Touch ID",
 "This model ships with a battery, but the Mac does not report one.": "Dit model heeft een batterij, maar de Mac meldt er geen.",
 "This model has a built-in camera, but the Mac does not report one.": "Dit model heeft een ingebouwde camera, maar de Mac meldt er geen.",
-"This model has a Touch ID sensor, but the Mac does not report one.": "Dit model heeft een Touch ID-sensor, maar de Mac meldt er geen."
+"This model has a Touch ID sensor, but the Mac does not report one.": "Dit model heeft een Touch ID-sensor, maar de Mac meldt er geen.",
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Deze Mac heeft meerdere gebruikersaccounts. Alleen de huidige sessie is gecontroleerd: log in op elk account, of wis de Mac, om zeker te zijn."
 }

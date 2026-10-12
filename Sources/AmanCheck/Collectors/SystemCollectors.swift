@@ -30,7 +30,9 @@ enum SecurityCollector {
         // Compte Apple connecté : export plist du domaine MobileMeAccounts. Sa sortie contient l'identifiant du compte :
         // elle n'est ni journalisée ni conservée, seuls le nombre de comptes et l'état de Localiser en sont tirés.
         async let mobileMe = Shell.run("/usr/bin/defaults", ["export", "MobileMeAccounts", "-"])
-        let (hw, enr, list, csr, fde, mm) = await (hardware, enrollment, profilesList, csrutil, fdesetup, mobileMe)
+        // Comptes utilisateurs locaux : la lecture du compte Apple ne couvre que la session en cours.
+        async let users = Shell.run("/usr/bin/dscl", [".", "-list", "/Users", "UniqueID"])
+        let (hw, enr, list, csr, fde, mm, dscl) = await (hardware, enrollment, profilesList, csrutil, fdesetup, mobileMe, users)
 
         // Le numéro de série n'entre jamais dans le journal de diagnostic (masqué par `DiagnosticLog.record`).
         if let hw { DiagnosticLog.shared.record("SPHardwareDataType", hw.stdout) }
@@ -41,7 +43,8 @@ enum SecurityCollector {
         let domainMissing = mm.map { $0.exitCode != 0 && $0.stderr.lowercased().contains("does not exist") } ?? false
         let account = SecurityAnalysis.appleAccount(mobileMePlist: mm.flatMap { $0.exitCode == 0 ? Data($0.stdout.utf8) : nil },
                                                     domainMissing: domainMissing, chip: profile.chip,
-                                                    activationLockOff: lock.status == .good)
+                                                    activationLockOff: lock.status == .good,
+                                                    localUserCount: SecurityAnalysis.localUserCount(dsclOutput: dscl.flatMap { $0.exitCode == 0 ? $0.stdout : nil }))
         DiagnosticLog.shared.log("compte apple", "\(account.displayText) [\(account.status.rawValue)]")
 
         return [
