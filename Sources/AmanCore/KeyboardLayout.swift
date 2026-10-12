@@ -2,12 +2,13 @@ import Foundation
 
 /// Type physique du clavier (forme de la touche Entrée, touche en plus à côté de Maj gauche).
 public enum PhysicalKeyboard: String, Codable, Sendable, CaseIterable {
-    case ansi, iso
+    case ansi, iso, jis
 
     public var label: String {
         switch self {
         case .ansi: return "ANSI"
         case .iso: return "ISO"
+        case .jis: return "JIS"
         }
     }
 }
@@ -77,8 +78,9 @@ public struct KeyboardLayout: Sendable {
     static let keyGap = 0.14
     static let rowWidth = 14.5
 
-    /// Clavier de MacBook (Air ou Pro, 2018 et plus).
-    public static func macBook(physical: PhysicalKeyboard, topRow: KeyboardTopRow) -> KeyboardLayout {
+    /// Clavier de MacBook (Air ou Pro, 2018 et plus). `hasPhysicalEscape` : sur un modèle à Touch Bar sans
+    /// touche Échap physique (2016–2017), la touche esc n'est pas attendue.
+    public static func macBook(physical: PhysicalKeyboard, topRow: KeyboardTopRow, hasPhysicalEscape: Bool = true) -> KeyboardLayout {
         var keys: [KeyboardKey] = []
         var decorations: [KeyboardDecoration] = []
         var y = 0.0
@@ -113,19 +115,25 @@ public struct KeyboardLayout: Sendable {
             }
             decorations.append(KeyboardDecoration(kind: .touchID, x: x, y: y, w: 1, h: topHeight))
         case .touchBar:
-            add(53, "esc", w: 1, h: topHeight)
+            if hasPhysicalEscape { add(53, "esc", w: 1, h: topHeight) } else { x += 1 }
             decorations.append(KeyboardDecoration(kind: .touchBar, x: x, y: y, w: rowWidth - 2, h: topHeight))
             decorations.append(KeyboardDecoration(kind: .touchID, x: rowWidth - 1, y: y, w: 1, h: topHeight))
         }
         nextRow(height: topHeight)
 
-        // Rangée des chiffres. ISO : touche « § / @ » = kVK_ISO_Section (10) ; ANSI : « ` » = kVK_ANSI_Grave (50).
-        if physical == .iso { add(10, "§", char: true) } else { add(50, "`", char: true) }
+        // Rangée des chiffres. ISO : touche « § / @ » = kVK_ISO_Section (10) ; ANSI : « ` » = kVK_ANSI_Grave (50) ;
+        // JIS : pas de touche à gauche du 1, « ^ » puis « ¥ » (kVK_JIS_Yen, 93) avant ⌫.
+        switch physical {
+        case .iso: add(10, "§", char: true)
+        case .ansi: add(50, "`", char: true)
+        case .jis: break
+        }
         for (code, label) in [(18, "1"), (19, "2"), (20, "3"), (21, "4"), (23, "5"), (22, "6"), (26, "7"),
-                              (28, "8"), (25, "9"), (29, "0"), (27, "-"), (24, "=")] as [(UInt16, String)] {
+                              (28, "8"), (25, "9"), (29, "0"), (27, "-"), (24, physical == .jis ? "^" : "=")] as [(UInt16, String)] {
             add(code, label, char: true)
         }
-        add(51, "⌫", w: 1.5)
+        if physical == .jis { add(93, "¥", char: true) }
+        add(51, "⌫", w: physical == .jis ? 1 : 1.5)
         nextRow(height: 1)
 
         // Rangée QWERTY.
@@ -137,7 +145,7 @@ public struct KeyboardLayout: Sendable {
         if physical == .ansi {
             add(42, "\\", w: 1, char: true)
         } else {
-            // Entrée ISO : sur deux rangées.
+            // Entrée ISO et JIS : en L inversé, sur deux rangées.
             add(36, "↩", w: 1, h: 2 + rowGap)
         }
         nextRow(height: 1)
@@ -148,21 +156,23 @@ public struct KeyboardLayout: Sendable {
                               (40, "K"), (37, "L"), (41, ";"), (39, "'")] as [(UInt16, String)] {
             add(code, label, char: true)
         }
-        if physical == .ansi {
-            add(36, "↩", w: 1.75)
-        } else {
-            add(42, "\\", w: 1, char: true)
+        switch physical {
+        case .ansi: add(36, "↩", w: 1.75)
+        case .iso: add(42, "\\", w: 1, char: true)
+        case .jis: add(42, "]", w: 1, char: true)
         }
         nextRow(height: 1)
 
         // Rangée ZXCV. ISO : touche en plus à droite de Maj gauche = kVK_ANSI_Grave (50) sur les claviers Apple ISO.
-        add(56, "⇧", w: physical == .ansi ? 2.25 : 1.25, modifier: true)
+        add(56, "⇧", w: physical == .iso ? 1.25 : 2.25, modifier: true)
         if physical == .iso { add(50, "<", char: true) }
         for (code, label) in [(6, "Z"), (7, "X"), (8, "C"), (9, "V"), (11, "B"), (45, "N"), (46, "M"),
                               (43, ","), (47, "."), (44, "/")] as [(UInt16, String)] {
             add(code, label, char: true)
         }
-        add(60, "⇧", w: 2.25, modifier: true)
+        // JIS : « _ » (kVK_JIS_Underscore, 94) entre « / » et Maj droite.
+        if physical == .jis { add(94, "_", char: true) }
+        add(60, "⇧", w: physical == .jis ? 1.25 : 2.25, modifier: true)
         nextRow(height: 1)
 
         // Rangée du bas : fn, ⌃, ⌥, ⌘, espace, ⌘, ⌥, flèches en T inversé.
@@ -170,7 +180,14 @@ public struct KeyboardLayout: Sendable {
         add(59, "⌃", modifier: true)
         add(58, "⌥", modifier: true)
         add(55, "⌘", w: 1.25, modifier: true)
-        add(49, "", w: 5)
+        if physical == .jis {
+            // JIS : 英数 (kVK_JIS_Eisu, 102) et かな (kVK_JIS_Kana, 104) de part et d'autre d'une barre d'espace courte.
+            add(102, "英数")
+            add(49, "", w: 3)
+            add(104, "かな")
+        } else {
+            add(49, "", w: 5)
+        }
         add(54, "⌘", w: 1.25, modifier: true)
         add(61, "⌥", modifier: true)
         let half = (1 - rowGap / 2) / 2

@@ -15,7 +15,7 @@ enum KeyboardInfo {
         DiagnosticLog.shared.log("clavier", "LMGetKbdType=\(LMGetKbdType()) KBGetLayoutType=\(type)")
         switch type {
         case OSType(kKeyboardISO): return (.iso, false)
-        case OSType(kKeyboardJIS): return (.ansi, true)
+        case OSType(kKeyboardJIS): return (.jis, true)
         default: return (.ansi, false)
         }
     }
@@ -58,6 +58,8 @@ final class KeyboardTestModel: ObservableObject {
     @Published private(set) var labels: [UInt16: String] = [:]
     let detectedPhysical: PhysicalKeyboard
     let isJIS: Bool
+    /// Touch Bar sans touche Échap physique (2016–2017) : esc n'est pas attendue.
+    let hasPhysicalEscape: Bool
     private var monitor: Any?
 
     init(profile: DeviceProfile) {
@@ -66,10 +68,11 @@ final class KeyboardTestModel: ObservableObject {
         isJIS = jis
         physical = type
         topRow = profile.hasTouchBar ? .touchBar : .functionKeys
+        hasPhysicalEscape = profile.hasPhysicalEscape
         refreshLabels()
     }
 
-    var layout: KeyboardLayout { KeyboardLayout.macBook(physical: physical, topRow: topRow) }
+    var layout: KeyboardLayout { KeyboardLayout.macBook(physical: physical, topRow: topRow, hasPhysicalEscape: hasPhysicalEscape) }
 
     var missingKeys: [KeyboardKey] { layout.keys.filter { !detected.contains($0.code) } }
 
@@ -190,7 +193,8 @@ struct KeyboardTestView: View {
             model.stop()
         }
         .onChange(of: gate.isBlocked) { _, blocked in
-            if blocked { model.stop() } else { model.start() }
+            // Clavier externe détecté : les touches déjà validées sont remises à zéro (comme le trackpad).
+            if blocked { model.stop(); model.reset() } else { model.start() }
         }
     }
 
@@ -252,7 +256,7 @@ struct KeyboardTestView: View {
             }
             .pickerStyle(.segmented)
             .labelsHidden()
-            .frame(width: 120)
+            .frame(width: 180)
             InfoButton(L("ISO (most of Europe): tall Return key over two rows and an extra key next to left Shift. ANSI (United States): wide Return key on one row. The drawing switches to ISO by itself when the ISO-only key is pressed.",
                          "ISO (la plupart des claviers européens, AZERTY compris) : touche Entrée haute sur deux rangées et touche en plus à côté de Maj gauche. ANSI (États-Unis) : touche Entrée large sur une rangée. Le dessin passe tout seul en ISO dès que la touche propre à l'ISO est pressée."))
             if !profile.isRecognized {
@@ -292,7 +296,8 @@ struct KeyboardTestView: View {
         } else if model.detected.isEmpty {
             finish(TestResult.notTested(.keyboard, reason: L("No key pressed", "Aucune touche pressée"), aborted: true))
         } else {
-            finish(TestResult(test: .keyboard, outcome: .failed, status: .watch, provenance: .measuredAuto, summary: summary,
+            // Des touches manquantes sont un problème, pas un simple point à surveiller.
+            finish(TestResult(test: .keyboard, outcome: .failed, status: .problem, provenance: .measuredAuto, summary: summary,
                               details: [L("Not detected: ", "Non détectées : ") + missing.map { missingName($0) }.joined(separator: ", "), layoutText]))
         }
     }
