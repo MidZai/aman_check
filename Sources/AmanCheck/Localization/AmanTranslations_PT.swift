@@ -32,6 +32,7 @@ extension AmanTranslations {
         "Advanced details": "Detalhes avançados",
         "Also look at the bar itself: lines, dead areas or uneven light are defects even if every zone reacts.": "Observe também a própria barra: linhas, áreas mortas ou luz irregular são defeitos mesmo que todas as zonas reajam.",
         "Aman Check condition report of {0}, available here: {1}": "Relatório de estado Aman Check de {0}, disponível aqui: {1}",
+        "Aman Check on GitHub (source code)…": "Aman Check no GitHub (código-fonte)…",
         "Aman Disk checks the health and speed of a disk in depth (S.M.A.R.T., benchmarks). Opens GitHub in your browser.": "O Aman Disk verifica a fundo a integridade e a velocidade de um disco (S.M.A.R.T., testes de desempenho). Abre o GitHub no navegador.",
         "Aman Disk on GitHub": "Aman Disk no GitHub",
         "Aman Disk on GitHub (in-depth disk tests)…": "Aman Disk no GitHub (testes aprofundados do disco)…",

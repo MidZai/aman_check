@@ -32,6 +32,7 @@ extension AmanTranslations {
         "Advanced details": "고급 세부 정보",
         "Also look at the bar itself: lines, dead areas or uneven light are defects even if every zone reacts.": "바 자체도 살펴보십시오. 모든 영역이 반응하더라도 줄, 죽은 영역, 고르지 않은 빛은 결함입니다.",
         "Aman Check condition report of {0}, available here: {1}": "{0}의 Aman Check 상태 보고서, 여기에서 확인: {1}",
+        "Aman Check on GitHub (source code)…": "GitHub의 Aman Check (소스 코드)…",
         "Aman Disk checks the health and speed of a disk in depth (S.M.A.R.T., benchmarks). Opens GitHub in your browser.": "Aman Disk는 디스크의 상태와 속도를 심층 점검합니다 (S.M.A.R.T., 벤치마크). GitHub를 브라우저에서 엽니다.",
         "Aman Disk on GitHub": "GitHub의 Aman Disk",
         "Aman Disk on GitHub (in-depth disk tests)…": "GitHub의 Aman Disk (심층 디스크 테스트)…",

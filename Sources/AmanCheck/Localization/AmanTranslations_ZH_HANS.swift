@@ -32,6 +32,7 @@ extension AmanTranslations {
         "Advanced details": "高级详情",
         "Also look at the bar itself: lines, dead areas or uneven light are defects even if every zone reacts.": "也请观察 Touch Bar 本身：即使每个区域都有响应，条纹、失效区域或亮度不均也属于缺陷。",
         "Aman Check condition report of {0}, available here: {1}": "{0} 的 Aman Check 状况报告，可在此查看：{1}",
+        "Aman Check on GitHub (source code)…": "GitHub 上的 Aman Check（源代码）…",
         "Aman Disk checks the health and speed of a disk in depth (S.M.A.R.T., benchmarks). Opens GitHub in your browser.": "Aman Disk 深度检查磁盘的健康状况和速度（S.M.A.R.T.、基准测试）。在浏览器中打开 GitHub。",
         "Aman Disk on GitHub": "GitHub 上的 Aman Disk",
         "Aman Disk on GitHub (in-depth disk tests)…": "GitHub 上的 Aman Disk（深度磁盘测试）…",
