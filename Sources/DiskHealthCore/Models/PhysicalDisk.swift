@@ -223,6 +223,33 @@ public struct PhysicalDisk: Codable, Identifiable, Hashable {
         )
     }
 
+    /// Same disk with another serial number (nil to drop it, e.g. before an export).
+    public func withSerialNumber(_ serial: String?) -> PhysicalDisk {
+        PhysicalDisk(
+            bsdName: bsdName,
+            model: model,
+            sizeBytes: sizeBytes,
+            isInternal: isInternal,
+            connection: connection,
+            driveConnection: driveConnection,
+            volumeNames: volumeNames,
+            usbVendorID: usbVendorID,
+            usbProductID: usbProductID,
+            usbVendorName: usbVendorName,
+            usbProductName: usbProductName,
+            usbLinkSpeedBps: usbLinkSpeedBps,
+            usbBcdUSB: usbBcdUSB,
+            usbIsUAS: usbIsUAS,
+            protocolType: protocolType,
+            mediumType: mediumType,
+            healthCapability: healthCapability,
+            smartAvailability: smartAvailability,
+            serialNumber: serial,
+            isVirtual: isVirtual,
+            isDiskImage: isDiskImage
+        )
+    }
+
     public func withSmartAvailability(_ availability: SmartAvailability) -> PhysicalDisk {
         PhysicalDisk(
             bsdName: bsdName,

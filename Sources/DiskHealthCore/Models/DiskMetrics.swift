@@ -20,6 +20,9 @@ public struct DiskMetrics: Equatable, Codable {
     /// ATA: reallocated sectors + sectors pending reallocation.
     public let badSectors: UInt64?
 
+    /// ATA attribute identifiers that can carry the remaining-life role, most trustworthy first.
+    static let lifeAttributePriority: [UInt8] = [0xE7, 0xB1, 0xE9]
+
     public init(snapshot: DiskHealthSnapshot) {
         switch snapshot {
         case .nvme(let log, _):
@@ -45,7 +48,10 @@ public struct DiskMetrics: Equatable, Codable {
             var written: UInt64?
             var read: UInt64?
             var life: Int?
+            var lifeRank = Int.max
             var sectors: UInt64?
+            // Remaining life is meaningless on a hard drive with platters (rotation rate in rpm).
+            let isRotational = ata.rotationRate > 1
             for attr in ata.attributes {
                 let role = ATACatalog.attributeInfo(id: attr.id, profile: profile).role
                 switch role {
@@ -61,7 +67,14 @@ public struct DiskMetrics: Equatable, Codable {
                 case .unsafeShutdowns: unsafe = attr.value(for: role)
                 case .hostWritesBytes: written = attr.value(for: role)
                 case .hostReadsBytes: read = attr.value(for: role)
-                case .lifeRemainingPercentNormalized: life = max(0, min(100, Int(attr.current)))
+                case .lifeRemainingPercentNormalized:
+                    // Several attributes can carry this role. Fixed priority: 231 (0xE7, SSD life left)
+                    // first, then 177 (0xB1) when the profile declares it, then 233 (0xE9, media wearout),
+                    // which is a wear indicator only on some drives. A lower priority never overwrites
+                    // a higher one already read.
+                    guard !isRotational, let rank = Self.lifeAttributePriority.firstIndex(of: attr.id), rank < lifeRank else { break }
+                    lifeRank = rank
+                    life = max(0, min(100, Int(attr.current)))
                 case .reallocated, .pending:
                     let (sum, overflow) = (sectors ?? 0).addingReportingOverflow(attr.rawValue)
                     sectors = overflow ? UInt64.max : sum

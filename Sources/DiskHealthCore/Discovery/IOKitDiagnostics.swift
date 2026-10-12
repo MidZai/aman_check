@@ -12,11 +12,14 @@ public enum IOKitDiagnostics {
             || k.contains("hostname") || k.contains("computer name")
     }
 
+    /// Placeholder written in place of a masked value.
+    public static var maskedPlaceholder: String { L("<hidden>", "<masqué>") }
+
     /// Readable, masked value. Recursive: IOKit stores the serial number in nested
     /// dictionaries (“Device Characteristics” › “Serial Number”), which used to be copied as is.
     public static func maskValue(key: String, value: Any) -> String {
         if isSensitive(key) {
-            return "<masqué>"
+            return maskedPlaceholder
         }
         if let dict = value as? [String: Any] {
             let inner = dict.keys.sorted().compactMap { k -> String? in
@@ -31,10 +34,10 @@ public enum IOKitDiagnostics {
         if let s = value as? String {
             // UUID format (8-4-4-4-12 hexadecimal).
             if s.count == 36 && s.filter({ $0 == "-" }).count == 4 {
-                return "<masqué>"
+                return maskedPlaceholder
             }
             if s.contains("/Users/") {
-                return "<masqué>"
+                return maskedPlaceholder
             }
             return s
         }

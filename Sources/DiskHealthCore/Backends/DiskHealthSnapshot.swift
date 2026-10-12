@@ -18,6 +18,13 @@ public struct ATASmartAttribute: Codable, Equatable, Hashable, Identifiable {
         self.raw = raw
         self.rawValue = rawValue
     }
+
+    /// Bit 0 of the flags: the attribute predicts an imminent failure when it drops below its threshold.
+    public var isPreFail: Bool { flags & 0x01 != 0 }
+    /// Current normalized value at or below a non-zero threshold.
+    public var isBelowThreshold: Bool { threshold > 0 && current <= threshold }
+    /// The worst value recorded is at or below the threshold: it was crossed at some point.
+    public var hasCrossedThreshold: Bool { threshold > 0 && worst <= threshold }
 }
 
 public struct ATASmartSnapshot: Codable, Equatable, Hashable {

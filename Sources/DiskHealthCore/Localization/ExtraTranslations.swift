@@ -132,6 +132,29 @@ public struct ExtraTranslations {
             }
         }
         
+        if english.starts(with: "The “") && english.hasSuffix("” attribute has dropped below its threshold.") {
+            let name = String(english.dropFirst("The “".count).dropLast("” attribute has dropped below its threshold.".count))
+            switch language {
+            case .zhHans: return "“\(name)”属性已低于其阈值。"
+            case .zhHant: return "「\(name)」屬性已低於其閾值。"
+            case .korean: return "“\(name)” 속성이 임계값 아래로 떨어졌습니다."
+            case .arabic: return "انخفضت السمة «\(name)» إلى ما دون عتبتها."
+            case .portuguese: return "O atributo “\(name)” caiu abaixo do seu limite."
+            case .spanish: return "El atributo “\(name)” ha caído por debajo de su umbral."
+            case .german: return "Das Attribut „\(name)“ ist unter seinen Schwellenwert gefallen."
+            case .italian: return "L'attributo “\(name)” è sceso sotto la sua soglia."
+            case .japanese: return "属性「\(name)」がしきい値を下回りました。"
+            case .russian: return "Атрибут «\(name)» опустился ниже порогового значения."
+            case .turkish: return "“\(name)” özniteliği eşiğinin altına düştü."
+            case .dutch: return "Het attribuut “\(name)” is onder zijn drempelwaarde gezakt."
+            case .polish: return "Atrybut „\(name)” spadł poniżej swojego progu."
+            case .hindi: return "“\(name)” विशेषता अपनी सीमा से नीचे चली गई है।"
+            case .vietnamese: return "Thuộc tính “\(name)” đã giảm xuống dưới ngưỡng của nó."
+            case .ukrainian: return "Атрибут «\(name)» опустився нижче порогового значення."
+            default: return nil
+            }
+        }
+
         return nil
     }
 }

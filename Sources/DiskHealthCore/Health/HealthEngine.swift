@@ -6,7 +6,21 @@ public enum HealthEngine {
     /// ring next to “Healthy” would be contradictory.
     public static let lowLifeThreshold = 25
 
+    /// Reason shown when the drive answered with nothing usable (empty block, bad checksum).
+    public static var unverifiedDataReason: String {
+        L("The drive returned empty or unverified data; its health can't be assessed.", "Le disque a renvoyé des données vides ou non vérifiées ; son état ne peut pas être évalué.")
+    }
+    /// Reason shown when the ATA thresholds block failed its checksum: a “good” verdict can't be confirmed.
+    public static var unverifiedThresholdsReason: String {
+        L("The drive's failure thresholds could not be verified; its health can't be confirmed.", "Les seuils de défaillance du disque n'ont pas pu être vérifiés ; son état ne peut pas être confirmé.")
+    }
+
     public static func evaluate(smart: NVMeSmartLog, identify: NVMeIdentify) -> HealthAssessment {
+        // A log that is entirely zero is not a healthy drive, it is no answer at all.
+        if smart.compositeTemperatureKelvin == 0 && smart.powerOnHours == 0 && smart.powerCycles == 0 && smart.dataUnitsWritten == 0 {
+            return HealthAssessment(status: .unknown, healthPercent: nil, reasons: [unverifiedDataReason])
+        }
+
         var reasons: [String] = []
         var status: HealthStatus = .good
 

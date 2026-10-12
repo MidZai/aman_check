@@ -132,7 +132,7 @@ public struct CompatibilityReport: Codable, Equatable, Sendable {
         ]
         let devChars = IOKitDiagnostics.collectDeviceCharacteristics(bsdName: physical.bsdName) ?? [
             "Product Name": physical.model,
-            "Serial Number": "<masqué>"
+            "Serial Number": IOKitDiagnostics.maskedPlaceholder
         ]
         let parentChain = IOKitDiagnostics.collectParentChain(bsdName: physical.bsdName)
 
@@ -237,6 +237,16 @@ public struct CompatibilityReport: Codable, Equatable, Sendable {
         )
     }
 
+    /// Serial numbers that must never appear in the report: the one read by S.M.A.R.T. (snapshot) and the
+    /// one IOKit reports for the physical disk. An unsupported drive has no snapshot, only the latter.
+    public static func serialsToMask(physical: PhysicalDisk, snapshot: DiskHealthSnapshot?) -> [String] {
+        var serials: [String] = []
+        for serial in [snapshot?.serialNumber, physical.serialNumber] {
+            if let serial, !serial.isEmpty, !serials.contains(serial) { serials.append(serial) }
+        }
+        return serials
+    }
+
     public static func generateJSON(report: CompatibilityReport, knownSerials: [String] = []) throws -> Data {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
@@ -267,7 +277,7 @@ public struct CompatibilityReport: Codable, Equatable, Sendable {
             if let str = value as? String {
                 var maskedStr = str
                 for mask in toMask {
-                    maskedStr = maskedStr.replacingOccurrences(of: mask, with: "<masqué>")
+                    maskedStr = maskedStr.replacingOccurrences(of: mask, with: IOKitDiagnostics.maskedPlaceholder)
                 }
                 return maskedStr
             } else if let dict = value as? [String: Any] {

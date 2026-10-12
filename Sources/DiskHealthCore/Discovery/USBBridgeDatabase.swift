@@ -72,9 +72,7 @@ public final class USBBridgeDatabase: Sendable {
 
         // 2. Try file system paths relative to current working directory
         let searchPaths = [
-            "Resources/usb-bridges.json",
-            "Sources/DiskHealthCore/Resources/usb-bridges.json",
-            "../Resources/usb-bridges.json"
+            "Sources/DiskHealthCore/Resources/usb-bridges.json"
         ]
         for path in searchPaths {
             let url = URL(fileURLWithPath: path)
