@@ -24,7 +24,7 @@
       },
       "lists" : {
         "buyerChecks" : [
-          "Compare the 4 characters of the serial number with the ones on the Mac.",
+          "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.",
           "Compare the date of the report with the date of the listing.",
           "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in."
         ],
@@ -43,7 +43,7 @@
           "Diagnostic log and raw command output"
         ],
         "proves" : [
-          "It was produced by the Aman Check app, on the date shown.",
+          "It was published by the holder of a license key, on the date shown, and has not been changed since.",
           "Its content has not been changed since it was published.",
           "It concerns a Mac whose serial number ends with the 4 characters shown."
         ],
@@ -95,6 +95,13 @@
           "level" : "advanced",
           "section" : "battery"
         },
+        "battery.presence" : {
+          "help" : "This model ships with a battery, but the Mac does not report one.",
+          "isJudged" : true,
+          "label" : "Battery",
+          "level" : "essential",
+          "section" : "battery"
+        },
         "battery.temperature" : {
           "isJudged" : false,
           "label" : "Battery temperature",
@@ -112,6 +119,20 @@
           "label" : "Wi-Fi",
           "level" : "essential",
           "section" : "connectivity"
+        },
+        "hardware.camera_presence" : {
+          "help" : "This model has a built-in camera, but the Mac does not report one.",
+          "isJudged" : true,
+          "label" : "Built-in camera",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "hardware.touch_id_presence" : {
+          "help" : "This model has a Touch ID sensor, but the Mac does not report one.",
+          "isJudged" : true,
+          "label" : "Touch ID",
+          "level" : "essential",
+          "section" : "identity"
         },
         "identity.chip" : {
           "isJudged" : false,
@@ -401,7 +422,7 @@
         }
       },
       "text" : {
-        "checkThisMac" : "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.",
+        "checkThisMac" : "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.",
         "checkThisMacTitle" : "Check that it is this Mac",
         "disclaimer" : "This report is a snapshot taken on the date shown and registered online by Aman Check. The registration shows that its content has not been changed since it was published; it says nothing about the Mac's condition today. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. It makes no promise about how the Mac works or how long it will last.",
         "disclaimerLevel1" : "This report is a snapshot taken on the date shown. Values marked Measured automatically come from the tested Mac's system; values marked Observed by the user are declarative. This document is neither a certification nor a warranty.",
@@ -443,7 +464,7 @@
       },
       "lists" : {
         "buyerChecks" : [
-          "Comparez les 4 caractères du numéro de série avec ceux du Mac.",
+          "Comparez les 4 caractères du numéro de série avec ceux du Mac : cela suffit à écarter une erreur grossière, pas à distinguer deux Mac identiques.",
           "Comparez la date du rapport avec celle de l'annonce.",
           "Faites effacer le Mac devant vous, et vérifiez que l'assistant de configuration ne demande aucun identifiant Apple ni d'entreprise."
         ],
@@ -462,7 +483,7 @@
           "Journal de diagnostic et sorties brutes des commandes"
         ],
         "proves" : [
-          "Il a été produit par l'app Aman Check, à la date indiquée.",
+          "Il a été publié par le titulaire d'une clé de licence, à la date indiquée, et n'a pas été modifié depuis.",
           "Son contenu n'a pas été modifié depuis sa publication.",
           "Il concerne un Mac dont le numéro de série se termine par les 4 caractères affichés."
         ],
@@ -514,6 +535,13 @@
           "level" : "advanced",
           "section" : "battery"
         },
+        "battery.presence" : {
+          "help" : "Ce modèle est livré avec une batterie, mais le Mac n'en signale aucune.",
+          "isJudged" : true,
+          "label" : "Batterie",
+          "level" : "essential",
+          "section" : "battery"
+        },
         "battery.temperature" : {
           "isJudged" : false,
           "label" : "Température de la batterie",
@@ -531,6 +559,20 @@
           "label" : "Wi-Fi",
           "level" : "essential",
           "section" : "connectivity"
+        },
+        "hardware.camera_presence" : {
+          "help" : "Ce modèle a une caméra intégrée, mais le Mac n'en signale aucune.",
+          "isJudged" : true,
+          "label" : "Caméra intégrée",
+          "level" : "essential",
+          "section" : "identity"
+        },
+        "hardware.touch_id_presence" : {
+          "help" : "Ce modèle a un capteur Touch ID, mais le Mac n'en signale aucun.",
+          "isJudged" : true,
+          "label" : "Touch ID",
+          "level" : "essential",
+          "section" : "identity"
         },
         "identity.chip" : {
           "isJudged" : false,
@@ -820,7 +862,7 @@
         }
       },
       "text" : {
-        "checkThisMac" : "Comparez les 4 derniers caractères avec le numéro de série gravé sous la machine, ou affiché dans le menu Pomme › À propos de ce Mac.",
+        "checkThisMac" : "Comparez les 4 derniers caractères avec le numéro de série gravé sous la machine, ou affiché dans le menu Pomme › À propos de ce Mac. Cela permet seulement d'écarter une erreur grossière : sur certaines générations, tous les Mac de même configuration les partagent.",
         "checkThisMacTitle" : "Vérifiez que c'est bien ce Mac",
         "disclaimer" : "Ce rapport est un instantané établi à la date indiquée et enregistré en ligne par Aman Check. L'enregistrement montre que son contenu n'a pas été modifié depuis sa publication ; il ne dit rien de l'état du Mac aujourd'hui. Les valeurs marquées Mesuré automatiquement proviennent du système du Mac testé ; les valeurs marquées Constaté par l'utilisateur sont déclaratives. Il n'engage aucune promesse sur le fonctionnement du Mac ni sur sa durée de vie.",
         "disclaimerLevel1" : "Ce rapport est un instantané établi à la date indiquée. Les valeurs marquées Mesuré automatiquement proviennent du système du Mac testé ; les valeurs marquées Constaté par l'utilisateur sont déclaratives. Ce document ne constitue ni une certification ni une garantie.",
@@ -876,6 +918,9 @@
     "battery.health_percent",
     "battery.cycles",
     "battery.condition",
+    "battery.presence",
+    "hardware.camera_presence",
+    "hardware.touch_id_presence",
     "battery.design_capacity",
     "battery.max_capacity",
     "battery.is_charging",
