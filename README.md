@@ -73,7 +73,7 @@ Aman Check is deliberately careful with words, because a flattering report can c
 ## Privacy
 
 - **No network connection** at level 1. Aman Check never connects to the Internet by itself: no telemetry, no update check. The links in the app (GitHub, Ko-fi) open in your browser when you click them.
-- **Nothing is changed** on the Mac being checked. The app only reads; the only files it writes are the reports you choose to save. No administrator password is ever asked.
+- **Nothing is changed** on the Mac being checked. The app only reads; the only files it writes are the reports you choose to save and its own preferences (language, display options). No administrator password is ever asked.
 - **Camera and microphone** are only used during the tests you start, and nothing is kept.
 - The optional online publication (see below) only happens after an explicit click, and the screen before it lists exactly what will be sent.
 
