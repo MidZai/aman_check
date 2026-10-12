@@ -178,11 +178,14 @@ public enum SecurityAnalysis {
         }
         let dep = answer("Enrolled via DEP")
         let enrolled = answer("MDM enrollment")
+        // Valeur normalisée construite par le code : la sortie brute peut contenir l'adresse du serveur MDM.
+        func yesNo(_ b: Bool?) -> String { b.map { $0 ? "yes" : "no" } ?? "unknown" }
+        let normalized = "dep=\(yesNo(dep)); mdm=\(yesNo(enrolled))"
         if dep == true || enrolled == true {
             var parts: [String] = []
             if dep == true { parts.append(L("automated enrollment (Apple Business / School Manager)", "inscription automatique (Apple Business / School Manager)")) }
             if enrolled == true { parts.append(L("MDM enrollment", "inscription MDM")) }
-            return Measurement(id: id, value: .text(output.trimmingCharacters(in: .whitespacesAndNewlines)), status: .problem,
+            return Measurement(id: id, value: .text(normalized), status: .problem,
                                method: method, collectedAt: now, display: signalDetected,
                                detail: L("This Mac is managed by an organization: ", "Ce Mac est géré par une organisation : ") + parts.joined(separator: ", ") + ".",
                                note: L("Ask for proof that the organization has released the Mac.", "Demandez la preuve que l'organisation a libéré le Mac.") + " " + mdmLimit)
@@ -190,7 +193,7 @@ public enum SecurityAnalysis {
         if dep == false && enrolled == false {
             // « Aucun signal » : `profiles` dit l'inscription actuelle, pas l'assignation du numéro de série
             // à une organisation. Une information neutre, pas un point fort.
-            return Measurement(id: id, value: .text(output.trimmingCharacters(in: .whitespacesAndNewlines)), status: .info,
+            return Measurement(id: id, value: .text(normalized), status: .info,
                                method: method, collectedAt: now, display: noSignal,
                                detail: L("No company management in this session.", "Aucune gestion d'entreprise dans cette session."),
                                note: mdmLimit)
@@ -228,17 +231,17 @@ public enum SecurityAnalysis {
         }
         let lower = line.lowercased()
         if lower.contains("custom configuration") || lower.contains("unknown") {
-            return Measurement(id: id, value: .text(String(line)), status: .watch, method: method, collectedAt: now,
+            return Measurement(id: id, value: .text("custom"), status: .watch, method: method, collectedAt: now,
                                display: L("Partly disabled", "Partiellement désactivée"),
                                note: L("A sign that the system has been modified.", "Signe que le système a été modifié."))
         }
         if lower.contains("disabled") {
-            return Measurement(id: id, value: .text(String(line)), status: .watch, method: method, collectedAt: now,
+            return Measurement(id: id, value: .text("disabled"), status: .watch, method: method, collectedAt: now,
                                display: L("Disabled", "Désactivée"),
                                note: L("A sign that the system has been modified.", "Signe que le système a été modifié."))
         }
         if lower.contains("enabled") {
-            return Measurement(id: id, value: .text(String(line)), status: .good, method: method, collectedAt: now,
+            return Measurement(id: id, value: .text("enabled"), status: .good, method: method, collectedAt: now,
                                display: L("Enabled", "Activée"))
         }
         return .unavailable(id, note: L("Unexpected answer from macOS.", "Réponse inattendue de macOS."), method: method)

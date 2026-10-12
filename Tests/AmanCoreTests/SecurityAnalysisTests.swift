@@ -192,3 +192,26 @@ struct SecurityAnalysisTests {
         #expect(SecurityAnalysis.virtualMachine(hvVmmPresent: nil).status == .unavailable)
     }
 }
+
+@Suite("Vie privée · sorties de commandes")
+struct RawOutputPrivacyTests {
+    @Test("La sortie de profiles (adresse du serveur MDM) ne va jamais dans le rapport")
+    func mdmOutputIsNormalized() throws {
+        let output = "Enrolled via DEP: Yes\nMDM enrollment: Yes (User Approved)\nMDM server: https://mdm.example.com/devicemanagement/\n"
+        let m = SecurityAnalysis.mdm(enrollmentOutput: output, exitCode: 0)
+        #expect(m.status == .problem)
+        #expect(m.value == .text("dep=yes; mdm=yes"))
+        let profile = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true))
+        let report = ConditionReport(appVersion: "test", profile: profile, measurements: [m], tests: [], plannedTests: [])
+        let json = String(decoding: try ReportCoding.encode(report), as: UTF8.self)
+        #expect(!json.contains("mdm.example.com"))
+        #expect(SecurityAnalysis.mdm(enrollmentOutput: "Enrolled via DEP: No\nMDM enrollment: No\n", exitCode: 0).value == .text("dep=no; mdm=no"))
+    }
+
+    @Test("csrutil : valeur normalisée, pas la ligne brute")
+    func sipValueIsNormalized() {
+        #expect(SecurityAnalysis.sip(csrutilOutput: "System Integrity Protection status: enabled.\n").value == .text("enabled"))
+        #expect(SecurityAnalysis.sip(csrutilOutput: "System Integrity Protection status: disabled.\n").value == .text("disabled"))
+        #expect(SecurityAnalysis.sip(csrutilOutput: "System Integrity Protection status: unknown (Custom Configuration).\n").value == .text("custom"))
+    }
+}
