@@ -50,10 +50,9 @@ public final class USBBridgeDatabase: Sendable {
 
     /// Loads the database looking in bundle resources or local path, falling back gracefully without crash.
     public static func loadDefault() -> USBBridgeDatabase {
-        // CORRECTIF Aman Check (à reporter dans Aman Disk) : `Bundle.module` appelle fatalError
-        // quand le bundle de ressources SwiftPM n'est ni à la racine du .app ni dans le dossier .build
-        // de la machine de compilation — donc sur tout autre Mac, dès qu'un disque USB est analysé.
-        // On cherche le bundle de ressources sans jamais planter.
+        // `Bundle.module` calls fatalError when the SwiftPM resource bundle is neither next to the
+        // executable nor in the build machine's .build folder, which crashed the app on any other Mac
+        // as soon as a USB drive was analyzed. Look for the resource bundle without ever crashing.
         let candidates = [Bundle.main.resourceURL, Bundle.main.bundleURL, Bundle.main.executableURL?.deletingLastPathComponent()]
         for directory in candidates.compactMap({ $0 }) {
             let items = (try? FileManager.default.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)) ?? []

@@ -43,7 +43,7 @@ public final class DiskEventLog: @unchecked Sendable {
     }
 
     public func append(_ event: DiskEvent, for key: String) {
-        queue.async {
+        queue.sync {
             try? FileManager.default.createDirectory(at: self.folderURL, withIntermediateDirectories: true)
             let encoder = JSONEncoder()
             encoder.dateEncodingStrategy = .iso8601
