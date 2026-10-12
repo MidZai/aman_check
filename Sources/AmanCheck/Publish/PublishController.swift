@@ -32,6 +32,11 @@ final class PublishController: ObservableObject {
     private let client = PublishClient(appVersion: AppInfo.version)
 
     init() {
+        // Fonction masquée (domaine non renseigné) : ni lecture du trousseau, ni fichier.
+        guard PublishClient.isAvailable else {
+            licenseKey = ""
+            return
+        }
         licenseKey = Keychain.read(Keychain.licenseAccount) ?? ""
         entries = Self.loadEntries()
     }

@@ -154,3 +154,15 @@ struct PublicationTests {
         #expect(Level2Text.publishedAsIs(untested: 3, blockers: 0)?.contains("3") == true)
     }
 }
+
+@Suite("Niveau 2 · disponibilité")
+struct PublicationAvailabilityTests {
+    @Test("La publication n'existe que si l'hôte n'est pas un domaine .invalid")
+    func availability() {
+        #expect(!PublicationAvailability.isAvailable(host: "aman-check.invalid"))
+        #expect(!PublicationAvailability.isAvailable(host: nil))
+        #expect(PublicationAvailability.isAvailable(host: "127.0.0.1"))
+        #expect(PublicationAvailability.isAvailable(host: "localhost"))
+        #expect(PublicationAvailability.isAvailable(host: "aman-check.example"))
+    }
+}

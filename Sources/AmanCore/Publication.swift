@@ -231,3 +231,12 @@ public struct PublicationSecret: Sendable, Equatable {
         self.value = value
     }
 }
+
+/// La publication en ligne n'est proposée que lorsque le vrai domaine est renseigné : un hôte `.invalid`
+/// (réservé, jamais résolu) masque toute la fonction sans supprimer de code.
+public enum PublicationAvailability {
+    public static func isAvailable(host: String?) -> Bool {
+        guard let host, !host.isEmpty else { return false }
+        return !host.lowercased().hasSuffix(".invalid")
+    }
+}

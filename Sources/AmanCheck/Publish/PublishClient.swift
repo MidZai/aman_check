@@ -18,6 +18,10 @@ struct PublishClient: Sendable {
         return productionBaseURL
     }
 
+    /// Vrai seulement si l'hôte n'est pas un domaine `.invalid` : tant que le domaine définitif n'est pas
+    /// renseigné, la fonction de publication n'apparaît nulle part (le mode `--publish-server` local reste possible).
+    static var isAvailable: Bool { PublicationAvailability.isAvailable(host: baseURL.host) }
+
     /// Domaine affiché à l'utilisateur, pour qu'il le reconnaisse sur le PDF et la page.
     static var displayHost: String { baseURL.host.map { $0 + (baseURL.port.map { ":\($0)" } ?? "") } ?? "" }
 

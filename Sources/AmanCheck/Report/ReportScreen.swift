@@ -109,8 +109,10 @@ struct ReportScreen: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-            VerifiableReportSection(report: report, detailed: detailed)
-            PreviousPublicationsSection(currentReportID: report.reportID)
+            if PublishClient.isAvailable {
+                VerifiableReportSection(report: report, detailed: detailed)
+                PreviousPublicationsSection(currentReportID: report.reportID)
+            }
         }
         .formStyle(.grouped)
     }
