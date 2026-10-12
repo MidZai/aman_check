@@ -354,7 +354,7 @@ private struct KeyLockRow: View {
         VStack(alignment: .leading, spacing: 3) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Image(systemName: symbol).foregroundStyle(.secondary).frame(width: 18).accessibilityHidden(true)
-                Text(info.label).font(.body.weight(.medium))
+                Text(measurement.label).font(.body.weight(.medium))
                 StatusLabel(measurement.status, text: measurement.displayText)
                     .foregroundStyle(measurement.status.isJudgement ? measurement.status.color : Color.secondary)
                 Spacer(minLength: 0)
@@ -425,7 +425,7 @@ private struct MetricSectionView: View {
                 AdaptiveRow(minItemWidth: 200) {
                     ForEach(items) { m in
                         let info = MetricCatalog.info(for: m.id)
-                        StatTile(label: info.label,
+                        StatTile(label: m.label,
                                  value: m.value == nil ? nil : m.displayText,
                                  detail: m.detail ?? (m.status == .manualRequired ? m.note : nil),
                                  status: info.isJudged ? m.status : nil,
@@ -473,7 +473,7 @@ private struct AdvancedRow: View {
     var body: some View {
         let info = MetricCatalog.info(for: measurement.id)
         HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Text(info.label)
+            Text(measurement.label)
                 .frame(width: 240, alignment: .leading)
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {

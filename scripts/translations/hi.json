@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Mac की इस पीढ़ी में, ये 4 अक्षर एक ही कॉन्फ़िगरेशन वाले हर Mac में समान होते हैं। ये इसी Mac की पहचान नहीं करते: पूरा सीरियल नंबर मिलाएँ।",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "अंतिम 4 अक्षरों की तुलना Mac के नीचे उकेरे गए या Apple मेनू › इस Mac के बारे में में दिखाए गए सीरियल नंबर से करें। यह केवल एक स्पष्ट गड़बड़ी को खारिज करने में मदद करता है: कुछ पीढ़ियों में, एक ही कॉन्फ़िगरेशन वाले हर Mac में ये समान होते हैं।",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "सीरियल नंबर के 4 अक्षरों की तुलना Mac पर मौजूद अक्षरों से करें: यह स्पष्ट गड़बड़ी खारिज करने के लिए काफ़ी है, दो एक जैसे Mac में फ़र्क़ करने के लिए नहीं।",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "इसे लाइसेंस कुंजी के धारक ने दिखाई गई तारीख को प्रकाशित किया था, और तब से इसमें कोई बदलाव नहीं हुआ है।"
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "इसे लाइसेंस कुंजी के धारक ने दिखाई गई तारीख को प्रकाशित किया था, और तब से इसमें कोई बदलाव नहीं हुआ है।",
+"Drive health": "ड्राइव की स्थिति",
+"Drive wear": "ड्राइव का घिसाव",
+"Other internal drives: {0}": "अन्य आंतरिक ड्राइव: {0}"
 }

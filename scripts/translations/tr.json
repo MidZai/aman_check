@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Bu nesil Mac'lerde bu 4 karakter aynı yapılandırmaya sahip tüm Mac'lerde ortaktır. Tam olarak bu Mac'i tanımlamazlar: tam seri numarasını karşılaştırın.",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Son 4 karakteri Mac'in altına kazınmış ya da Apple menüsü › Bu Mac Hakkında'da gösterilen seri numarasıyla karşılaştırın. Bu yalnızca bariz bir karışıklığı elemeye yarar: bazı nesillerde aynı yapılandırmaya sahip tüm Mac'ler bu karakterleri paylaşır.",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Seri numarasının 4 karakterini Mac üzerindekilerle karşılaştırın: bariz bir karışıklığı elemeye yeter, iki özdeş Mac'i ayırt etmeye yetmez.",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Gösterilen tarihte bir lisans anahtarı sahibi tarafından yayımlandı ve o zamandan beri değiştirilmedi."
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Gösterilen tarihte bir lisans anahtarı sahibi tarafından yayımlandı ve o zamandan beri değiştirilmedi.",
+"Drive health": "Sürücü sağlığı",
+"Drive wear": "Sürücü aşınması",
+"Other internal drives: {0}": "Diğer dahili sürücüler: {0}"
 }

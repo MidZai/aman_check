@@ -144,7 +144,7 @@ struct KeyFigures: View {
             if let ssd = controller.measurement(MetricID.storageHealth) {
                 let wear = controller.measurement(MetricID.storagePercentageUsed)
                 let remaining = wear?.value?.intValue.map { Double(max(0, 100 - Int($0))) / 100 }
-                Figure(title: L("SSD health", "Santé du SSD"),
+                Figure(title: ssd.label,
                        visual: .ring(AmanRing(fraction: remaining, color: AmanRing.color(for: ssd.status))),
                        // Durée de vie restante en grand (comme l'anneau d'Aman Disk), l'état en texte dessous.
                        value: remaining.map { "\(Int(($0 * 100).rounded()))\(Formatters.unitSpace)%" } ?? (ssd.value == nil ? nil : ssd.displayText),

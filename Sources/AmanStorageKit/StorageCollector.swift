@@ -14,14 +14,26 @@ public enum StorageCollector {
         public let snapshot: DiskHealthSnapshot?
         public let health: HealthAssessment?
         public let error: String?
+        /// Autres disques internes, non décrits par le rapport.
+        public var otherInternalDisks: [PhysicalDisk] = []
     }
 
-    /// Disque de démarrage interne (ou, à défaut, le premier disque interne).
+    /// Le disque physique qui porte le volume de démarrage (« / »), via la résolution IOKit du moteur ;
+    /// à défaut le premier NVMe, puis le premier disque. Les autres disques internes sont renvoyés à part.
+    static func bootDisk(among disks: [PhysicalDisk], volumes: [Volume]) -> (disk: PhysicalDisk, others: [PhysicalDisk])? {
+        let rootNames = volumes.first(where: { $0.mountPoint == "/" })?.physicalDiskBSDNames ?? []
+        guard let disk = disks.first(where: { rootNames.contains($0.bsdName) })
+            ?? disks.first(where: { $0.protocolType == .nvme })
+            ?? disks.first else { return nil }
+        return (disk, disks.filter { $0.bsdName != disk.bsdName })
+    }
+
+    /// Disque interne qui porte le volume de démarrage (ou, à défaut, le premier disque interne).
     public static func readInternalDisk() -> Reading? {
         let disks = DiskDiscovery.listPhysicalDisks().filter { $0.isInternal && !$0.isVirtual && !$0.isDiskImage }
-        guard let disk = disks.first(where: { $0.protocolType == .nvme }) ?? disks.first else { return nil }
+        guard let (disk, others) = bootDisk(among: disks, volumes: VolumeDiscovery.listVolumes()) else { return nil }
         guard disk.healthCapability == .supported else {
-            return Reading(disk: disk, snapshot: nil, health: nil, error: "healthCapability: \(disk.healthCapability)")
+            return Reading(disk: disk, snapshot: nil, health: nil, error: "healthCapability: \(disk.healthCapability)", otherInternalDisks: others)
         }
         do {
             let snapshot: DiskHealthSnapshot
@@ -29,12 +41,20 @@ public enum StorageCollector {
             case .nvme: snapshot = try NVMeBackend.read(bsdName: disk.bsdName)
             case .ata, .pcieAhci: snapshot = try ATABackend.read(bsdName: disk.bsdName)
             default:
-                return Reading(disk: disk, snapshot: nil, health: nil, error: "protocol: \(disk.protocolType.rawValue)")
+                return Reading(disk: disk, snapshot: nil, health: nil, error: "protocol: \(disk.protocolType.rawValue)", otherInternalDisks: others)
             }
-            return Reading(disk: disk, snapshot: snapshot, health: evaluate(snapshot), error: nil)
+            return Reading(disk: disk, snapshot: snapshot, health: evaluate(snapshot), error: nil, otherInternalDisks: others)
         } catch {
-            return Reading(disk: disk, snapshot: nil, health: nil, error: "\(error)")
+            return Reading(disk: disk, snapshot: nil, health: nil, error: "\(error)", otherInternalDisks: others)
         }
+    }
+
+    /// « SSD health » / « SSD wear » deviennent « État du disque » / « Usure du disque » sur un disque à plateaux.
+    static func healthTitle(_ disk: PhysicalDisk) -> String? {
+        disk.mediumType == .rotational ? L("Drive health", "État du disque") : nil
+    }
+    static func wearTitle(_ disk: PhysicalDisk) -> String? {
+        disk.mediumType == .rotational ? L("Drive wear", "Usure du disque") : nil
     }
 
     static func evaluate(_ snapshot: DiskHealthSnapshot) -> HealthAssessment {
@@ -61,8 +81,11 @@ public enum StorageCollector {
         }
         var result: [Measurement] = []
         let disk = reading.disk
+        let othersNote: String? = reading.otherInternalDisks.isEmpty ? nil
+            : L("Other internal drives: \(reading.otherInternalDisks.map(\.model).joined(separator: ", "))",
+                "Autres disques internes : \(reading.otherInternalDisks.map(\.model).joined(separator: ", "))")
         result.append(Measurement(id: MetricID.storageModel, value: .text(disk.model), status: .info,
-                                  method: "IOKit", collectedAt: now, display: disk.model))
+                                  method: "IOKit", collectedAt: now, display: disk.model, note: othersNote))
         result.append(Measurement(id: MetricID.storageInterface, value: .text(interfaceLabel(disk)), status: .info,
                                   method: "IOKit", collectedAt: now, display: interfaceLabel(disk)))
 
@@ -70,7 +93,7 @@ public enum StorageCollector {
             let note = L("This SSD does not expose its health data (S.M.A.R.T.) to macOS.",
                          "Ce SSD ne fournit pas ses données de santé (S.M.A.R.T.) à macOS.")
             result.insert(Measurement(id: MetricID.storageHealth, value: nil, status: .unavailable,
-                                      method: reading.error, collectedAt: now, note: note), at: 0)
+                                      method: reading.error, collectedAt: now, note: note, title: healthTitle(disk)), at: 0)
             for id in [MetricID.storagePowerOnHours, MetricID.storageDataWritten, MetricID.storagePercentageUsed] {
                 result.append(.unavailable(id, note: note))
             }
@@ -91,7 +114,8 @@ public enum StorageCollector {
         }
         result.insert(Measurement(id: MetricID.storageHealth, value: .text(health.status.rawValue), status: status,
                                   method: protocolName + " · Aman Disk HealthEngine", collectedAt: now, display: statusText,
-                                  detail: health.reasons.first, note: health.reasons.count > 1 ? health.reasons.joined(separator: " ") : nil), at: 0)
+                                  detail: health.reasons.first, note: health.reasons.count > 1 ? health.reasons.joined(separator: " ") : nil,
+                                  title: healthTitle(disk)), at: 0)
 
         // Données vides ou non vérifiées (statut inconnu du moteur) : rien n'est lisible, donc rien n'est vert.
         if health.status == .unknown {
@@ -126,9 +150,11 @@ public enum StorageCollector {
             result.append(Measurement(id: MetricID.storagePercentageUsed, value: .int(Int64(used)), unit: "%", status: wearStatus,
                                       method: protocolName + " · Percentage Used", collectedAt: now,
                                       display: "\(used)\(Formatters.unitSpace)%",
-                                      detail: L("Remaining life: \(remaining)\(Formatters.unitSpace)%", "Durée de vie restante : \(remaining)\(Formatters.unitSpace)%")))
+                                      detail: L("Remaining life: \(remaining)\(Formatters.unitSpace)%", "Durée de vie restante : \(remaining)\(Formatters.unitSpace)%"),
+                                      title: wearTitle(disk)))
         } else {
-            result.append(.unavailable(MetricID.storagePercentageUsed, note: notReported))
+            result.append(Measurement(id: MetricID.storagePercentageUsed, value: nil, status: .unavailable, collectedAt: now,
+                                      note: notReported, title: wearTitle(disk)))
         }
 
         if case .nvme(let log, _) = snapshot {

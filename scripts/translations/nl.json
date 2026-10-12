@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Bij deze generatie Macs delen alle Macs met dezelfde configuratie deze 4 tekens. Ze identificeren niet precies deze Mac: vergelijk het volledige serienummer.",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Vergelijk de laatste 4 tekens met het serienummer dat onder op de Mac is gegraveerd of in het Apple-menu › Over deze Mac wordt getoond. Dit sluit alleen een duidelijke verwisseling uit: bij sommige generaties delen alle Macs met dezelfde configuratie deze tekens.",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Vergelijk de 4 tekens van het serienummer met die op de Mac: genoeg om een duidelijke verwisseling uit te sluiten, niet om twee identieke Macs uit elkaar te houden.",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Het is gepubliceerd door de houder van een licentiesleutel, op de getoonde datum, en is sindsdien niet gewijzigd."
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Het is gepubliceerd door de houder van een licentiesleutel, op de getoonde datum, en is sindsdien niet gewijzigd.",
+"Drive health": "Schijfgezondheid",
+"Drive wear": "Schijfslijtage",
+"Other internal drives: {0}": "Andere interne schijven: {0}"
 }

@@ -386,7 +386,7 @@ struct ReportPage: View {
         for section in MetricSection.allCases {
             let rows = report.measurements.filter { MetricCatalog.info(for: $0.id).section == section }.map { m -> DetailRow in
                 let info = MetricCatalog.info(for: m.id)
-                return DetailRow(id: m.id, label: info.label, value: m.displayText,
+                return DetailRow(id: m.id, label: m.label, value: m.displayText,
                                  status: info.isJudged || m.value == nil || m.status == .manualRequired ? m.status : nil,
                                  provenance: m.value == nil ? L("Not measured", "Non mesuré") : m.provenance.label, method: m.method,
                                  note: sentence(m.detail, m.note))

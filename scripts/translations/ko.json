@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "이 세대의 Mac에서는 이 4자가 같은 구성의 모든 Mac에 공통입니다. 이 Mac 자체를 식별하지 않습니다. 전체 일련 번호를 비교하십시오.",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "마지막 4자를 Mac 밑면에 새겨진 일련 번호나 Apple 메뉴 › 이 Mac에 관하여에 표시된 일련 번호와 비교하십시오. 이는 명백한 착오를 배제하는 데만 도움이 됩니다. 일부 세대에서는 같은 구성의 모든 Mac이 이 4자를 공유합니다.",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "일련 번호의 4자를 Mac에 적힌 것과 비교하십시오. 명백한 착오를 배제하기에는 충분하지만, 동일한 두 Mac을 구별하기에는 충분하지 않습니다.",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "표시된 날짜에 라이선스 키 소유자가 게시했으며, 그 이후 변경되지 않았습니다."
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "표시된 날짜에 라이선스 키 소유자가 게시했으며, 그 이후 변경되지 않았습니다.",
+"Drive health": "드라이브 상태",
+"Drive wear": "드라이브 마모",
+"Other internal drives: {0}": "기타 내장 드라이브: {0}"
 }

@@ -48,6 +48,9 @@ public struct Measurement: Codable, Hashable, Sendable, Identifiable {
     public let detail: String?
     /// Explication (« pourquoi non disponible », limite d'un contrôle…).
     public let note: String?
+    /// Libellé qui remplace celui du catalogue quand il dépend de la machine (« État du disque » sur un
+    /// disque à plateaux). Optionnel pour relire les rapports enregistrés avant son ajout.
+    public let title: String?
 
     public init(id: String,
                 value: MeasuredValue?,
@@ -58,7 +61,8 @@ public struct Measurement: Codable, Hashable, Sendable, Identifiable {
                 collectedAt: Date = Date(),
                 display: String? = nil,
                 detail: String? = nil,
-                note: String? = nil) {
+                note: String? = nil,
+                title: String? = nil) {
         self.id = id
         self.value = value
         self.unit = unit
@@ -74,10 +78,11 @@ public struct Measurement: Codable, Hashable, Sendable, Identifiable {
         self.display = display
         self.detail = detail
         self.note = note
+        self.title = title
     }
 
     /// Libellé humain tiré du catalogue.
-    public var label: String { MetricCatalog.info(for: id).label }
+    public var label: String { title ?? MetricCatalog.info(for: id).label }
 
     /// Texte de la valeur, ou le libellé de statut quand il n'y a pas de valeur.
     public var displayText: String {

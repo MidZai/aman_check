@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "W tej generacji Maców te 4 znaki są wspólne dla wszystkich Maców o tej samej konfiguracji. Nie identyfikują tego konkretnego Maca: porównaj pełny numer seryjny.",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Porównaj ostatnie 4 znaki z numerem seryjnym wygrawerowanym pod Makiem lub pokazanym w menu Apple › Ten Mac. To pozwala tylko wykluczyć oczywistą pomyłkę: w niektórych generacjach wszystkie Maki o tej samej konfiguracji mają te same znaki.",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Porównaj 4 znaki numeru seryjnego z tymi na Macu: to wystarczy, by wykluczyć oczywistą pomyłkę, ale nie by odróżnić dwa identyczne Maki.",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Został opublikowany przez posiadacza klucza licencyjnego, w podanym dniu, i od tego czasu nie był zmieniany."
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "Został opublikowany przez posiadacza klucza licencyjnego, w podanym dniu, i od tego czasu nie był zmieniany.",
+"Drive health": "Stan dysku",
+"Drive wear": "Zużycie dysku",
+"Other internal drives: {0}": "Inne dyski wewnętrzne: {0}"
 }

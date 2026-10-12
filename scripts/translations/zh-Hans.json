@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "在这一代 Mac 上，这 4 个字符为相同配置的所有 Mac 共用。它们不能识别这一台 Mac：请比对完整序列号。",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "将最后 4 个字符与 Mac 底部刻印的序列号，或 Apple 菜单 › 关于本机中显示的序列号进行比对。这只能排除明显的张冠李戴：在某些代次上，相同配置的所有 Mac 共用这 4 个字符。",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "将序列号的 4 个字符与 Mac 上的进行比对：足以排除明显的张冠李戴，但无法区分两台完全相同的 Mac。",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "它由许可证密钥持有人在所示日期发布，此后未被更改。"
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "它由许可证密钥持有人在所示日期发布，此后未被更改。",
+"Drive health": "磁盘健康",
+"Drive wear": "磁盘损耗",
+"Other internal drives: {0}": "其他内置磁盘：{0}"
 }

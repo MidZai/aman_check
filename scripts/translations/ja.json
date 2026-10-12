@@ -654,5 +654,8 @@
 "On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "この世代の Mac では、この 4 文字は同じ構成のすべての Mac で共通です。この個体を特定するものではありません。完全なシリアル番号を比較してください。",
 "Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "最後の 4 文字を、Mac の底面に刻印されているシリアル番号、または Apple メニュー › この Mac について に表示されるシリアル番号と比較してください。これは明らかな取り違えを除外するためだけのものです。一部の世代では、同じ構成のすべての Mac がこの 4 文字を共有します。",
 "Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "シリアル番号の 4 文字を Mac に記載されたものと比較してください。明らかな取り違えを除外するには十分ですが、同一構成の 2 台の Mac を区別することはできません。",
-"It was published by the holder of a license key, on the date shown, and has not been changed since.": "表示された日付に、ライセンスキーの所有者によって公開され、それ以降変更されていません。"
+"It was published by the holder of a license key, on the date shown, and has not been changed since.": "表示された日付に、ライセンスキーの所有者によって公開され、それ以降変更されていません。",
+"Drive health": "ドライブの状態",
+"Drive wear": "ドライブの消耗",
+"Other internal drives: {0}": "その他の内蔵ドライブ: {0}"
 }

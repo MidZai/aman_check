@@ -206,7 +206,7 @@ public enum ReportInsights {
             let info = MetricCatalog.info(for: m.id)
             // Détails avancés non disponibles : pas de quoi alerter l'acheteur.
             if info.level == .advanced && (m.status == .unavailable || m.status == .notTested) { continue }
-            points.append(ReportPoint(key: m.id, status: m.status, title: info.label + L(": ", " : ") + m.displayText,
+            points.append(ReportPoint(key: m.id, status: m.status, title: m.label + L(": ", " : ") + m.displayText,
                                       detail: m.note ?? m.detail))
         }
         var untested: [TestID] = []
