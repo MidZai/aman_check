@@ -667,5 +667,9 @@
 "serial number": "seri numarası",
 "computer name": "bilgisayar adı",
 "user name": "kullanıcı adı",
-"full name": "tam ad"
+"full name": "tam ad",
+"{0} of {1} ports tested.": "{1} bağlantı noktasından {0} tanesi test edildi.",
+"Plug the device directly into the Mac, without a hub.": "Aygıtı hub olmadan doğrudan Mac'e takın.",
+"The camera was found but sends no image.": "Kamera bulundu ancak görüntü göndermiyor.",
+"Ran {0} when this version of Aman Check was released.": "Aman Check'in bu sürümü yayımlandığında {0} çalıştırıyordu."
 }

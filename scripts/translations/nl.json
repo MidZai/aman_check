@@ -667,5 +667,9 @@
 "serial number": "serienummer",
 "computer name": "computernaam",
 "user name": "gebruikersnaam",
-"full name": "volledige naam"
+"full name": "volledige naam",
+"{0} of {1} ports tested.": "{0} van {1} poorten getest.",
+"Plug the device directly into the Mac, without a hub.": "Sluit het apparaat rechtstreeks op de Mac aan, zonder hub.",
+"The camera was found but sends no image.": "De camera is gevonden, maar stuurt geen beeld.",
+"Ran {0} when this version of Aman Check was released.": "Draaide {0} toen deze versie van Aman Check uitkwam."
 }

@@ -667,5 +667,9 @@
 "serial number": "序號",
 "computer name": "電腦名稱",
 "user name": "使用者名稱",
-"full name": "全名"
+"full name": "全名",
+"{0} of {1} ports tested.": "已測試 {1} 個連接埠中的 {0} 個。",
+"Plug the device directly into the Mac, without a hub.": "請將裝置直接插入 Mac，不要經過集線器。",
+"The camera was found but sends no image.": "已找到相機，但沒有傳送影像。",
+"Ran {0} when this version of Aman Check was released.": "在此版本 Aman Check 發布時執行 {0}。"
 }

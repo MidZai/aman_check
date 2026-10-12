@@ -667,5 +667,9 @@
 "serial number": "الرقم التسلسلي",
 "computer name": "اسم الكمبيوتر",
 "user name": "اسم المستخدم",
-"full name": "الاسم الكامل"
+"full name": "الاسم الكامل",
+"{0} of {1} ports tested.": "تم اختبار {0} من أصل {1} منافذ.",
+"Plug the device directly into the Mac, without a hub.": "وصّل الجهاز مباشرة بالـ Mac، دون موزّع.",
+"The camera was found but sends no image.": "تم العثور على الكاميرا لكنها لا ترسل أي صورة.",
+"Ran {0} when this version of Aman Check was released.": "كان يعمل بنظام {0} عند صدور هذا الإصدار من Aman Check."
 }

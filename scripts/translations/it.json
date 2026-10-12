@@ -667,5 +667,9 @@
 "serial number": "numero di serie",
 "computer name": "nome del computer",
 "user name": "nome utente",
-"full name": "nome completo"
+"full name": "nome completo",
+"{0} of {1} ports tested.": "{0} porte su {1} testate.",
+"Plug the device directly into the Mac, without a hub.": "Collega il dispositivo direttamente al Mac, senza hub.",
+"The camera was found but sends no image.": "La fotocamera è stata rilevata ma non invia alcuna immagine.",
+"Ran {0} when this version of Aman Check was released.": "Eseguiva {0} quando è uscita questa versione di Aman Check."
 }

@@ -667,5 +667,9 @@
 "serial number": "серийный номер",
 "computer name": "имя компьютера",
 "user name": "имя пользователя",
-"full name": "полное имя"
+"full name": "полное имя",
+"{0} of {1} ports tested.": "Проверено портов: {0} из {1}.",
+"Plug the device directly into the Mac, without a hub.": "Подключите устройство напрямую к Mac, без концентратора.",
+"The camera was found but sends no image.": "Камера найдена, но не передаёт изображение.",
+"Ran {0} when this version of Aman Check was released.": "Работал на {0} на момент выхода этой версии Aman Check."
 }

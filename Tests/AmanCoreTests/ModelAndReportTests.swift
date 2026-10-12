@@ -85,7 +85,7 @@ struct DeviceProfileTests {
         #expect(!tests.contains(.microphone))
         #expect(!tests.contains(.touchID))
         #expect(!tests.contains(.touchBar))
-        #expect(tests.contains(.screen))
+        #expect(!tests.contains(.screen)) // pas d'écran intégré : le test d'écran n'est pas planifié (B4.4)
         #expect(tests.contains(.speakers))
         #expect(p.thunderboltPorts == nil) // pas de total affiché
     }
@@ -364,5 +364,97 @@ struct AudioDeviceTextTests {
         #expect(AudioDeviceText.category(isBuiltIn: false, input: false) == L("External output", "Sortie externe"))
         #expect(AudioDeviceText.externalDeviceReason == L("An external audio device was in use: disconnect it and run the test again.",
                                                            "Un périphérique audio externe était utilisé : débranchez-le et relancez le test."))
+    }
+}
+
+@Suite("Ports · comptage")
+struct PortsTallyTests {
+    @Test("Seuls les connecteurs du Mac (numéro de port USB-C) remplissent une case ; un hub n'en remplit aucune")
+    func numberedPortsOnly() {
+        #expect(PortsTally.filledSlots(portNumbers: [1, nil, 3, 3, 9], total: 4) == [1, 3])
+        #expect(PortsTally.hubHint == L("Plug the device directly into the Mac, without a hub.", "Branchez l'appareil directement sur le Mac, sans concentrateur."))
+    }
+
+    @Test("Réussi seulement si tous les ports attendus ont été vus ; partiel sans port mort = à surveiller")
+    func verdict() {
+        #expect(PortsTally.verdict(portNumbers: [1, 2, 3, 4], total: 4, anyDead: false) == .complete)
+        #expect(PortsTally.verdict(portNumbers: [1, 2], total: 4, anyDead: false) == .partial(seen: 2, total: 4))
+        #expect(PortsTally.verdict(portNumbers: [1, nil, nil], total: 2, anyDead: false) == .partial(seen: 1, total: 2))
+        #expect(PortsTally.verdict(portNumbers: [1, 2], total: 4, anyDead: true) == .failed)
+        #expect(PortsTally.verdict(portNumbers: [], total: 4, anyDead: false) == .none)
+        #expect(PortsTally.partialText(seen: 2, total: 4) == L("2 of 4 ports tested.", "2 ports testés sur 4."))
+    }
+}
+
+@Suite("Clavier · JIS et Échap")
+struct KeyboardLayoutRulesTests {
+    @Test("La disposition JIS contient ¥, _, 英数 et かな")
+    func jisKeys() {
+        let layout = KeyboardLayout.macBook(physical: .jis, topRow: .functionKeys)
+        let labels = Set(layout.keys.map(\.label))
+        #expect(labels.isSuperset(of: ["¥", "_", "英数", "かな"]))
+        #expect(PhysicalKeyboard.allCases.map(\.label) == ["ANSI", "ISO", "JIS"])
+        #expect(layout.physical == .jis)
+    }
+
+    @Test("Touch Bar sans Échap physique : la touche esc n'est pas attendue")
+    func noPhysicalEscape() {
+        let withEsc = KeyboardLayout.macBook(physical: .ansi, topRow: .touchBar, hasPhysicalEscape: true)
+        let without = KeyboardLayout.macBook(physical: .ansi, topRow: .touchBar, hasPhysicalEscape: false)
+        #expect(withEsc.keys.contains { $0.code == 53 })
+        #expect(!without.keys.contains { $0.code == 53 })
+        #expect(without.keyCount == withEsc.keyCount - 1)
+    }
+}
+
+@Suite("Écran intégré")
+struct BuiltInDisplayTests {
+    @Test("Le test d'écran n'est planifié que sur un Mac à écran intégré")
+    func screenTestOnlyWithBuiltInDisplay() {
+        let laptop = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true))
+        let mini = DeviceProfile.make(modelIdentifier: "Macmini9,1", simulated: true)
+        let imac = DeviceProfile.make(modelIdentifier: "iMac21,1", simulated: true)
+        #expect(laptop.hasBuiltInDisplay && imac.hasBuiltInDisplay && !mini.hasBuiltInDisplay)
+        #expect(TestID.applicable(to: laptop).contains(.screen))
+        #expect(!TestID.applicable(to: mini).contains(.screen))
+    }
+}
+
+@Suite("Analyse · tests guidés déjà faits")
+struct AnalysisStartTests {
+    @Test("Les tests faits avant la première analyse sont rattachés à cette analyse")
+    func existingResultsAreKept() {
+        let earlier = Date(timeIntervalSince1970: 1_800_000_000)
+        let now = earlier.addingTimeInterval(600)
+        let done = TestResult(test: .keyboard, outcome: .passed, provenance: .measuredAuto, summary: "ok", completedAt: earlier)
+        #expect(TestResult.analysisStart(keeping: [done], now: now) == earlier)
+        #expect(TestResult.analysisStart(keeping: [], now: now) == now)
+        #expect(TestResult.belonging(toAnalysisStartedAt: TestResult.analysisStart(keeping: [done], now: now), [done]).count == 1)
+    }
+}
+
+@Suite("Point fort macOS")
+struct LatestMacOSTests {
+    private func report() -> ConditionReport {
+        let profile = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true))
+        return ConditionReport(appVersion: "test", profile: profile, measurements: [], tests: [], plannedTests: [])
+    }
+
+    @Test("Une version de macOS plus récente que celle connue devient la référence")
+    func runningMajorBeyondKnown() {
+        #expect(MacOSRelease.reference(runningMajor: 27) == 27)
+        #expect(MacOSRelease.reference(runningMajor: 15) == MacOSRelease.latestKnown)
+    }
+
+    @Test("Le point fort n'existe que si l'app a moins de 18 mois ; au-delà, texte neutre")
+    func strengthAgesOut() {
+        let built = Date(timeIntervalSince1970: 1_800_000_000)
+        let fresh = ReportInsights.strengths(report(), builtAt: built, now: built.addingTimeInterval(30 * 86_400))
+        #expect(fresh.first { $0.key == "macos" }?.title.contains(L("Runs", "Reçoit")) == true || fresh.first { $0.key == "macos" }?.title.contains(L("latest", "dernier")) == true)
+        let stale = ReportInsights.strengths(report(), builtAt: built, now: built.addingTimeInterval(19 * 30 * 86_400))
+        #expect(stale.first { $0.key == "macos" }?.title == L("Ran \(MacOSRelease.name(MacOSRelease.latestKnown)) when this version of Aman Check was released.",
+                                                              "Faisait tourner \(MacOSRelease.name(MacOSRelease.latestKnown)) à la sortie de cette version d'Aman Check."))
+        #expect(stale.first { $0.key == "macos" }?.status == .info)
+        #expect(ReportInsights.strengths(report(), builtAt: nil, now: built).first { $0.key == "macos" }?.status == .info)
     }
 }

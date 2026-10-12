@@ -667,5 +667,9 @@
 "serial number": "सीरियल नंबर",
 "computer name": "कंप्यूटर का नाम",
 "user name": "उपयोगकर्ता नाम",
-"full name": "पूरा नाम"
+"full name": "पूरा नाम",
+"{0} of {1} ports tested.": "{1} में से {0} पोर्ट परीक्षित।",
+"Plug the device directly into the Mac, without a hub.": "डिवाइस को बिना हब के सीधे Mac में लगाएँ।",
+"The camera was found but sends no image.": "कैमरा मिला, लेकिन कोई तस्वीर नहीं भेज रहा।",
+"Ran {0} when this version of Aman Check was released.": "जब Aman Check का यह संस्करण जारी हुआ, तब {0} चला रहा था।"
 }

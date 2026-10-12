@@ -166,8 +166,11 @@ final class PortsMonitor: ObservableObject {
     // MARK: Charge, casque, vidéo, SD
 
     /// Adaptateur secteur branché : IOPSCopyExternalPowerAdapterDetails renvoie nil sans adaptateur.
+    /// Le dictionnaire renvoyé est une copie (Copy rule) : libéré ici, sinon une fuite par seconde.
     nonisolated static func isOnAC() -> Bool? {
-        IOPSCopyExternalPowerAdapterDetails() != nil
+        guard let details = IOPSCopyExternalPowerAdapterDetails() else { return false }
+        _ = details.takeRetainedValue()
+        return true
     }
 
     private func poll() {
@@ -245,7 +248,7 @@ struct PortsTestView: View {
                                  "N'importe quel périphérique USB convient (clé, souris, câble de téléphone…), avec un adaptateur si besoin. Chaque port est reconnu par sa position : la même clé branchée dans un autre port valide cet autre port."))
                     Spacer()
                     if let total = profile.thunderboltPorts {
-                        Text(L("\(min(monitor.ports.count, total)) of \(total) tested", "\(min(monitor.ports.count, total)) sur \(total) testés"))
+                        Text(L("\(min(seenPortCount, total)) of \(total) tested", "\(min(seenPortCount, total)) sur \(total) testés"))
                             .monospacedDigit()
                             .foregroundStyle(.secondary)
                     } else {
@@ -272,9 +275,15 @@ struct PortsTestView: View {
                 }
                 ForEach(monitor.ports) { hit in
                     HStack(spacing: 8) {
-                        Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
-                        Text(hit.label + L(": ", " : ") + hit.device)
-                        if let speed = hit.speed { Text(speed).foregroundStyle(.secondary) }
+                        if Self.portNumber(hit) != nil {
+                            Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                            Text(hit.label + L(": ", " : ") + hit.device)
+                            if let speed = hit.speed { Text(speed).foregroundStyle(.secondary) }
+                        } else {
+                            // Sans numéro de port : derrière un concentrateur, ne valide aucun connecteur du Mac.
+                            Image(systemName: "exclamationmark.circle").foregroundStyle(.orange)
+                            Text(hit.device + L(": ", " : ") + PortsTally.hubHint)
+                        }
                     }
                     .font(.callout)
                 }
@@ -292,21 +301,25 @@ struct PortsTestView: View {
         }
     }
 
-    /// Port n° N (UsbCPortNumber) allumé à sa place ; les ports sans numéro remplissent les cases libres.
+    /// Port n° N (UsbCPortNumber) allumé à sa place. Un périphérique sans numéro de port (derrière un
+    /// concentrateur) ne remplit aucune case : seuls les connecteurs du Mac comptent (B4.1).
     private func slotAssignment(total: Int) -> [PortsMonitor.PortHit?] {
         var slots = [PortsMonitor.PortHit?](repeating: nil, count: total)
-        var unnumbered: [PortsMonitor.PortHit] = []
         for hit in monitor.ports {
-            if hit.id.hasPrefix("usbc-"), let n = Int(hit.id.dropFirst(5)), (1...total).contains(n), slots[n - 1] == nil {
+            if let n = Self.portNumber(hit), (1...total).contains(n), slots[n - 1] == nil {
                 slots[n - 1] = hit
-            } else {
-                unnumbered.append(hit)
             }
         }
-        for hit in unnumbered {
-            if let free = slots.firstIndex(where: { $0 == nil }) { slots[free] = hit }
-        }
         return slots
+    }
+
+    private static func portNumber(_ hit: PortsMonitor.PortHit) -> Int? {
+        hit.id.hasPrefix("usbc-") ? Int(hit.id.dropFirst(5)) : nil
+    }
+
+    /// Connecteurs du Mac effectivement vus.
+    private var seenPortCount: Int {
+        PortsTally.filledSlots(portNumbers: monitor.ports.map(Self.portNumber), total: profile.thunderboltPorts ?? monitor.ports.count).count
     }
 
     private func itemRow(_ item: PortsMonitor.Item) -> some View {
@@ -402,8 +415,9 @@ struct PortsTestView: View {
             }
         }
         if monitor.portsNotWorking { notWorking.append(L("A USB-C port", "Un port USB-C")) }
-        if let total = profile.thunderboltPorts, monitor.ports.count < total, !monitor.portsNotWorking {
-            let missing = total - monitor.ports.count
+        let portNumbers = monitor.ports.map(Self.portNumber)
+        if let total = profile.thunderboltPorts, seenPortCount < total, !monitor.portsNotWorking {
+            let missing = total - seenPortCount
             // Case « Je n'ai pas de périphérique USB » : la raison figure dans le rapport, le verdict reste le même
             // (un port non testé n'est pas défectueux).
             untested.append(monitor.portsSkipped
@@ -413,9 +427,9 @@ struct PortsTestView: View {
 
         let portsText: String = {
             if let total = profile.thunderboltPorts {
-                return L("\(min(monitor.ports.count, total)) of \(total) USB-C ports tested", "\(min(monitor.ports.count, total)) ports USB-C sur \(total) testés")
+                return L("\(min(seenPortCount, total)) of \(total) USB-C ports tested", "\(min(seenPortCount, total)) ports USB-C sur \(total) testés")
             }
-            return L("\(monitor.ports.count) port(s) tested", "\(monitor.ports.count) port(s) testé(s)")
+            return L("\(seenPortCount) port(s) tested", "\(seenPortCount) port(s) testé(s)")
         }()
         let okItems = monitor.items.values.filter { if case .ok = $0 { return true } else { return false } }.count
         let summary = portsText + (okItems > 0 ? " · " + L("\(okItems) other connector(s)", "\(okItems) autre(s) connecteur(s)") : "")
@@ -429,6 +443,11 @@ struct PortsTestView: View {
             finish(.notTested(.ports, reason: monitor.portsSkipped
                               ? L("No USB device available", "Aucun périphérique USB disponible")
                               : L("No connector tested", "Aucun connecteur testé")))
+        } else if let total = profile.thunderboltPorts,
+                  case .partial(let seen, let expected) = PortsTally.verdict(portNumbers: portNumbers, total: total, anyDead: false) {
+            // Une partie seulement des ports du Mac a été vue : pas de vert avec un test partiel (B4.1).
+            finish(TestResult(test: .ports, outcome: .passed, status: .watch, provenance: .measuredAuto,
+                              summary: PortsTally.partialText(seen: seen, total: expected) + " " + summary, details: details))
         } else {
             // Un connecteur non testé n'est pas défectueux : il figure dans les détails, pas dans le verdict.
             finish(TestResult(test: .ports, outcome: .passed, provenance: .measuredAuto, summary: summary, details: details))
