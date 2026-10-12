@@ -18,7 +18,7 @@ Locks, battery, SSD, configuration, then guided tests of the screen, keyboard, t
 </p>
 
 <p align="center">
-  <sub>Free and open source · macOS 14 or later · Apple Silicon and Intel · <a href="https://github.com/MidZai/aman_check/releases/latest">Latest version</a> · Sister project: <a href="https://github.com/MidZai/aman_disk">Aman Disk</a></sub>
+  <sub>Free and open source · macOS 14 or later · Apple Silicon and Intel · <a href="https://github.com/MidZai/aman_check/releases/latest">Latest version</a> · <a href="https://midzai.github.io/aman_check/">Website</a> · Sister project: <a href="https://github.com/MidZai/aman_disk">Aman Disk</a></sub>
 </p>
 
 <p align="center">
