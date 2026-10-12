@@ -22,14 +22,14 @@ Locks, battery, SSD, configuration, then guided tests of the screen, keyboard, t
 </p>
 
 <p align="center">
-  <img src="docs/screenshots/report.png" alt="Aman Check: condition report of a Mac, ready to export as PDF" width="900">
+  <img src="docs/screenshots/overview.png" alt="Aman Check: overview of the checked Mac, battery and SSD" width="900">
 </p>
 
 ## Screenshots
 
-| Overview: configuration, battery and SSD | Locks, counters and what to check before buying |
+| Locks, counters and what to check before buying | Report, ready to export as PDF |
 |---|---|
-| <img src="docs/screenshots/overview.png" alt="Overview of the checked Mac" width="520"> | <img src="docs/screenshots/locks.png" alt="Locks and summary" width="520"> |
+| <img src="docs/screenshots/locks.png" alt="Locks and summary" width="520"> | <img src="docs/screenshots/report.png" alt="Report screen" width="520"> |
 
 ## What it is for
 
