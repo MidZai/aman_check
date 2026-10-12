@@ -155,12 +155,13 @@ public enum ReportInsights {
     public static func strengths(_ r: ConditionReport) -> [ReportPoint] {
         var points: [ReportPoint] = []
         let lock = r.measurement(MetricID.activationLock)
-        let mdm = r.measurement(MetricID.mdm)
-        if lock?.status == .good && mdm?.status == .good {
+        // Le point fort ne dépend que du verrouillage d'activation : « aucun signal » MDM ne prouve pas
+        // que le Mac n'est pas assigné à une organisation.
+        if lock?.status == .good {
             // Un compte Apple encore connecté est signalé dans « À vérifier » : le point fort le rappelle en une ligne.
             let account = r.measurement(MetricID.appleAccount)
             points.append(ReportPoint(key: "locks", status: .good,
-                                      title: L("No Activation Lock or company management detected", "Aucun verrouillage d'activation ni gestion d'entreprise détectés"),
+                                      title: L("No Activation Lock detected", "Aucun verrouillage d'activation détecté"),
                                       detail: account?.status == .watch
                                           ? L("In the current session. An Apple Account is still signed in: see below.", "Dans la session actuelle. Un compte Apple reste connecté : voir ci-dessous.")
                                           : L("In the current session.", "Dans la session actuelle.")))

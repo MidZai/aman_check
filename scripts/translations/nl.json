@@ -491,7 +491,6 @@
 "{0} not tested": "{0} niet getest",
 "{0} to check manually": "{0} handmatig te controleren",
 "{0} of {1} tests done": "{0} van {1} tests gedaan",
-"No Activation Lock or company management detected": "Geen activeringsslot of bedrijfsbeheer gedetecteerd",
 "In the current session. An Apple Account is still signed in: see below.": "In de huidige sessie. Er is nog een Apple Account ingelogd: zie hieronder.",
 "In the current session.": "In de huidige sessie.",
 "Battery at {0}% after {1} cycles": "Batterij op {0}% na {1} cycli",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "Dit model heeft een batterij, maar de Mac meldt er geen.",
 "This model has a built-in camera, but the Mac does not report one.": "Dit model heeft een ingebouwde camera, maar de Mac meldt er geen.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Dit model heeft een Touch ID-sensor, maar de Mac meldt er geen.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Deze Mac heeft meerdere gebruikersaccounts. Alleen de huidige sessie is gecontroleerd: log in op elk account, of wis de Mac, om zeker te zijn."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Deze Mac heeft meerdere gebruikersaccounts. Alleen de huidige sessie is gecontroleerd: log in op elk account, of wis de Mac, om zeker te zijn.",
+"No Activation Lock detected": "Geen activeringsslot gedetecteerd"
 }

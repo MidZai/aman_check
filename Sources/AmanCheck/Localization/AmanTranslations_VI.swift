@@ -255,7 +255,7 @@ extension AmanTranslations {
         "Needs attention": "Cần chú ý",
         "Never sent": "Không bao giờ gửi",
         "No": "Không",
-        "No Activation Lock or company management detected": "Không phát hiện Khóa kích hoạt hay quản lý doanh nghiệp",
+        "No Activation Lock detected": "Không phát hiện Khóa kích hoạt",
         "No Apple Account is signed in in this session.": "Không có Tài khoản Apple nào đăng nhập trong phiên này.",
         "No Bluetooth controller found.": "Không tìm thấy bộ điều khiển Bluetooth.",
         "No USB device available": "Không có thiết bị USB",

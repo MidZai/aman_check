@@ -491,7 +491,6 @@
 "{0} not tested": "{0} не тестировалось",
 "{0} to check manually": "{0} проверить вручную",
 "{0} of {1} tests done": "Выполнено тестов: {0} из {1}",
-"No Activation Lock or company management detected": "Блокировка активации и корпоративное управление не обнаружены",
 "In the current session. An Apple Account is still signed in: see below.": "В текущем сеансе. Учётная запись Apple всё ещё выполнила вход: см. ниже.",
 "In the current session.": "В текущем сеансе.",
 "Battery at {0}% after {1} cycles": "Аккумулятор на {0}% после {1} циклов",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "Эта модель поставляется с аккумулятором, но Mac его не сообщает.",
 "This model has a built-in camera, but the Mac does not report one.": "Эта модель имеет встроенную камеру, но Mac её не сообщает.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Эта модель имеет датчик Touch ID, но Mac его не сообщает.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "На этом Mac несколько учётных записей. Проверена только текущая сессия: войдите в каждую учётную запись или сотрите Mac, чтобы убедиться."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "На этом Mac несколько учётных записей. Проверена только текущая сессия: войдите в каждую учётную запись или сотрите Mac, чтобы убедиться.",
+"No Activation Lock detected": "Блокировка активации не обнаружена"
 }

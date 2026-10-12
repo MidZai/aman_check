@@ -135,10 +135,17 @@ struct SecurityAnalysisTests {
         #expect(SecurityAnalysis.activationLock(hardwareJSON: Data(odd.utf8), chip: .intelT2).status == .manualRequired)
     }
 
-    @Test("MDM réel : DEP non, MDM non → aucun signal")
+    @Test("MDM réel : DEP non, MDM non → aucun signal, information neutre (pas un point fort)")
     func mdmNone() {
         let m = SecurityAnalysis.mdm(enrollmentOutput: Fixture.text("profiles-enrollment-none.txt"), exitCode: 0)
-        #expect(m.status == .good)
+        #expect(m.status == .info)
+        #expect(m.displayText == SecurityAnalysis.noSignal)
+        #expect(m.note == SecurityAnalysis.mdmLimit)
+        // Le compteur du résumé traite « information » comme neutre.
+        let profile = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true))
+        let report = ConditionReport(appVersion: "test", profile: profile, measurements: [m], tests: [], plannedTests: [])
+        let summary = ReportSummary(report: report)
+        #expect(summary.good == 0 && summary.watch == 0 && summary.problem == 0 && summary.toCheck == 0)
     }
 
     @Test("MDM : une réponse « Yes » suffit à remonter un signal")

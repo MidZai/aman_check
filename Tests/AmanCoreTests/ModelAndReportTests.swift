@@ -242,13 +242,20 @@ struct ReportTests {
         #expect(empty.allSatisfy { $0.key == "macos" })
         let r = report(measurements: [
             Measurement(id: MetricID.activationLock, value: .text("d"), status: .good),
-            Measurement(id: MetricID.mdm, value: .text("n"), status: .good),
+            Measurement(id: MetricID.mdm, value: .text("n"), status: .info),
             Measurement(id: MetricID.batteryHealth, value: .int(83), status: .good),
             Measurement(id: MetricID.batteryCycles, value: .int(510), status: .good)
         ])
-        let keys = ReportInsights.strengths(r).map(\.key)
+        let strengths = ReportInsights.strengths(r)
+        let keys = strengths.map(\.key)
         #expect(keys.contains("locks"))
         #expect(keys.contains("battery"))
+        // Le point fort ne dépend que du verrouillage d'activation et ne parle plus de gestion d'entreprise.
+        let locks = strengths.first { $0.key == "locks" }
+        #expect(locks?.title == L("No Activation Lock detected", "Aucun verrouillage d'activation détecté"))
+        #expect(strengths.allSatisfy { !$0.title.lowercased().contains("company management") })
+        let withoutMDM = report(measurements: [Measurement(id: MetricID.activationLock, value: .text("d"), status: .good)])
+        #expect(ReportInsights.strengths(withoutMDM).contains { $0.key == "locks" })
     }
 
     @Test("Identifiant de rapport : format AC-XXXX-XXXX, non répété")

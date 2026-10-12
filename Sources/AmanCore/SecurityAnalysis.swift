@@ -188,7 +188,9 @@ public enum SecurityAnalysis {
                                note: L("Ask for proof that the organization has released the Mac.", "Demandez la preuve que l'organisation a libéré le Mac.") + " " + mdmLimit)
         }
         if dep == false && enrolled == false {
-            return Measurement(id: id, value: .text(output.trimmingCharacters(in: .whitespacesAndNewlines)), status: .good,
+            // « Aucun signal » : `profiles` dit l'inscription actuelle, pas l'assignation du numéro de série
+            // à une organisation. Une information neutre, pas un point fort.
+            return Measurement(id: id, value: .text(output.trimmingCharacters(in: .whitespacesAndNewlines)), status: .info,
                                method: method, collectedAt: now, display: noSignal,
                                detail: L("No company management in this session.", "Aucune gestion d'entreprise dans cette session."),
                                note: mdmLimit)

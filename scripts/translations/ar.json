@@ -491,7 +491,6 @@
 "{0} not tested": "{0} لم يُختبر",
 "{0} to check manually": "{0} يُتحقق منه يدوياً",
 "{0} of {1} tests done": "تم {0} من {1} اختباراً",
-"No Activation Lock or company management detected": "لم يُرصد قفل التنشيط أو إدارة شركة",
 "In the current session. An Apple Account is still signed in: see below.": "في الجلسة الحالية. لا يزال حساب Apple مسجَّل الدخول: انظر أدناه.",
 "In the current session.": "في الجلسة الحالية.",
 "Battery at {0}% after {1} cycles": "البطارية عند {0}% بعد {1} دورة",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "يأتي هذا الطراز ببطارية، لكن الـ Mac لا يبلغ عن وجودها.",
 "This model has a built-in camera, but the Mac does not report one.": "يحتوي هذا الطراز على كاميرا مدمجة، لكن الـ Mac لا يبلغ عن وجودها.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "يحتوي هذا الطراز على مستشعر Touch ID، لكن الـ Mac لا يبلغ عن وجوده.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "يحتوي هذا الـ Mac على عدة حسابات مستخدمين. تم التحقق من الجلسة الحالية فقط: سجّل الدخول إلى كل حساب، أو امسح الـ Mac، للتأكد."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "يحتوي هذا الـ Mac على عدة حسابات مستخدمين. تم التحقق من الجلسة الحالية فقط: سجّل الدخول إلى كل حساب، أو امسح الـ Mac، للتأكد.",
+"No Activation Lock detected": "لم يتم اكتشاف قفل التنشيط"
 }

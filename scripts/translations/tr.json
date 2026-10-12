@@ -491,7 +491,6 @@
 "{0} not tested": "{0} test edilmedi",
 "{0} to check manually": "{0} elle kontrol edilmeli",
 "{0} of {1} tests done": "{1} testten {0} tanesi tamamlandı",
-"No Activation Lock or company management detected": "Etkinleştirme Kilidi veya kurumsal yönetim algılanmadı",
 "In the current session. An Apple Account is still signed in: see below.": "Geçerli oturumda. Bir Apple Hesabı hâlâ oturum açmış durumda: aşağıya bakın.",
 "In the current session.": "Geçerli oturumda.",
 "Battery at {0}% after {1} cycles": "{1} döngüden sonra pil %{0}",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "Bu model pil ile gelir ancak Mac herhangi bir pil bildirmiyor.",
 "This model has a built-in camera, but the Mac does not report one.": "Bu modelde dahili kamera var ancak Mac herhangi bir kamera bildirmiyor.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Bu modelde Touch ID sensörü var ancak Mac herhangi bir sensör bildirmiyor.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Bu Mac'te birden fazla kullanıcı hesabı var. Yalnızca geçerli oturum denetlendi: emin olmak için her hesapta oturum açın ya da Mac'i silin."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Bu Mac'te birden fazla kullanıcı hesabı var. Yalnızca geçerli oturum denetlendi: emin olmak için her hesapta oturum açın ya da Mac'i silin.",
+"No Activation Lock detected": "Etkinleştirme Kilidi algılanmadı"
 }

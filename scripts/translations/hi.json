@@ -491,7 +491,6 @@
 "{0} not tested": "{0} परीक्षण नहीं हुए",
 "{0} to check manually": "{0} हाथ से जाँचें",
 "{0} of {1} tests done": "{1} में से {0} परीक्षण पूर्ण",
-"No Activation Lock or company management detected": "कोई Activation Lock या कंपनी प्रबंधन नहीं मिला",
 "In the current session. An Apple Account is still signed in: see below.": "वर्तमान सत्र में। एक Apple Account अभी भी साइन इन है: नीचे देखें।",
 "In the current session.": "वर्तमान सत्र में।",
 "Battery at {0}% after {1} cycles": "{1} साइकिल के बाद बैटरी {0}%",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "यह मॉडल बैटरी के साथ आता है, लेकिन Mac कोई बैटरी नहीं बताता।",
 "This model has a built-in camera, but the Mac does not report one.": "इस मॉडल में बिल्ट-इन कैमरा है, लेकिन Mac कोई कैमरा नहीं बताता।",
 "This model has a Touch ID sensor, but the Mac does not report one.": "इस मॉडल में Touch ID सेंसर है, लेकिन Mac कोई सेंसर नहीं बताता।",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "इस Mac में कई उपयोगकर्ता खाते हैं। केवल वर्तमान सत्र की जाँच की गई: निश्चित होने के लिए हर खाते में साइन इन करें, या Mac को मिटा दें।"
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "इस Mac में कई उपयोगकर्ता खाते हैं। केवल वर्तमान सत्र की जाँच की गई: निश्चित होने के लिए हर खाते में साइन इन करें, या Mac को मिटा दें।",
+"No Activation Lock detected": "कोई एक्टिवेशन लॉक नहीं मिला"
 }

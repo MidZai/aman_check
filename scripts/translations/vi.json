@@ -491,7 +491,6 @@
 "{0} not tested": "{0} chưa kiểm tra",
 "{0} to check manually": "{0} cần kiểm tra thủ công",
 "{0} of {1} tests done": "Đã xong {0}/{1} bài kiểm tra",
-"No Activation Lock or company management detected": "Không phát hiện Khóa kích hoạt hay quản lý doanh nghiệp",
 "In the current session. An Apple Account is still signed in: see below.": "Trong phiên hiện tại. Vẫn còn một Tài khoản Apple đang đăng nhập: xem bên dưới.",
 "In the current session.": "Trong phiên hiện tại.",
 "Battery at {0}% after {1} cycles": "Pin {0}% sau {1} chu kỳ",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "Mẫu máy này có pin, nhưng máy Mac không báo cáo pin nào.",
 "This model has a built-in camera, but the Mac does not report one.": "Mẫu máy này có camera tích hợp, nhưng máy Mac không báo cáo camera nào.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Mẫu máy này có cảm biến Touch ID, nhưng máy Mac không báo cáo cảm biến nào.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Máy Mac này có nhiều tài khoản người dùng. Chỉ phiên hiện tại được kiểm tra: đăng nhập vào từng tài khoản, hoặc xóa máy Mac, để chắc chắn."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Máy Mac này có nhiều tài khoản người dùng. Chỉ phiên hiện tại được kiểm tra: đăng nhập vào từng tài khoản, hoặc xóa máy Mac, để chắc chắn.",
+"No Activation Lock detected": "Không phát hiện Khóa kích hoạt"
 }

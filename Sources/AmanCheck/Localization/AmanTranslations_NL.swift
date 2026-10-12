@@ -255,7 +255,7 @@ extension AmanTranslations {
         "Needs attention": "Aandacht nodig",
         "Never sent": "Nooit verzonden",
         "No": "Nee",
-        "No Activation Lock or company management detected": "Geen activeringsslot of bedrijfsbeheer gedetecteerd",
+        "No Activation Lock detected": "Geen activeringsslot gedetecteerd",
         "No Apple Account is signed in in this session.": "Er is geen Apple Account ingelogd in deze sessie.",
         "No Bluetooth controller found.": "Geen Bluetooth-controller gevonden.",
         "No USB device available": "Geen USB-apparaat beschikbaar",

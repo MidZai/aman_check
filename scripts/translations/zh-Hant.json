@@ -491,7 +491,6 @@
 "{0} not tested": "{0} 項未測試",
 "{0} to check manually": "{0} 項需手動檢查",
 "{0} of {1} tests done": "已完成 {0}/{1} 項測試",
-"No Activation Lock or company management detected": "未偵測到啟用鎖定或企業管理",
 "In the current session. An Apple Account is still signed in: see below.": "目前工作階段中。仍有 Apple 帳號處於登入狀態：見下文。",
 "In the current session.": "目前工作階段中。",
 "Battery at {0}% after {1} cycles": "{1} 次循環後電池健康度 {0}%",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "此機型配有電池，但 Mac 未回報電池。",
 "This model has a built-in camera, but the Mac does not report one.": "此機型有內建相機，但 Mac 未回報相機。",
 "This model has a Touch ID sensor, but the Mac does not report one.": "此機型有 Touch ID 感測器，但 Mac 未回報感測器。",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "這台 Mac 有多個使用者帳號。僅檢查了目前的工作階段：請登入每個帳號，或清除 Mac，以確保無誤。"
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "這台 Mac 有多個使用者帳號。僅檢查了目前的工作階段：請登入每個帳號，或清除 Mac，以確保無誤。",
+"No Activation Lock detected": "未偵測到啟用鎖定"
 }

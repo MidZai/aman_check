@@ -491,7 +491,6 @@
 "{0} not tested": "{0} не тестувалося",
 "{0} to check manually": "{0} перевірити вручну",
 "{0} of {1} tests done": "Виконано тестів: {0} з {1}",
-"No Activation Lock or company management detected": "Блокування активації та корпоративне керування не виявлено",
 "In the current session. An Apple Account is still signed in: see below.": "У поточному сеансі. Обліковий запис Apple досі виконав вхід: див. нижче.",
 "In the current session.": "У поточному сеансі.",
 "Battery at {0}% after {1} cycles": "Акумулятор на {0}% після {1} циклів",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "Ця модель постачається з акумулятором, але Mac його не повідомляє.",
 "This model has a built-in camera, but the Mac does not report one.": "Ця модель має вбудовану камеру, але Mac її не повідомляє.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Ця модель має сенсор Touch ID, але Mac його не повідомляє.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "На цьому Mac кілька облікових записів. Перевірено лише поточний сеанс: увійдіть у кожен обліковий запис або зітріть Mac, щоб переконатися."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "На цьому Mac кілька облікових записів. Перевірено лише поточний сеанс: увійдіть у кожен обліковий запис або зітріть Mac, щоб переконатися.",
+"No Activation Lock detected": "Блокування активації не виявлено"
 }

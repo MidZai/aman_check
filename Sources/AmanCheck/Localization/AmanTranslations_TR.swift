@@ -255,7 +255,7 @@ extension AmanTranslations {
         "Needs attention": "Dikkat gerektiriyor",
         "Never sent": "Asla gönderilmez",
         "No": "Hayır",
-        "No Activation Lock or company management detected": "Etkinleştirme Kilidi veya kurumsal yönetim algılanmadı",
+        "No Activation Lock detected": "Etkinleştirme Kilidi algılanmadı",
         "No Apple Account is signed in in this session.": "Bu oturumda oturum açmış Apple Hesabı yok.",
         "No Bluetooth controller found.": "Bluetooth denetleyicisi bulunamadı.",
         "No USB device available": "USB aygıtı yok",

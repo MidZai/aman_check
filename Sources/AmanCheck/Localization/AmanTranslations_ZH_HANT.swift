@@ -255,7 +255,7 @@ extension AmanTranslations {
         "Needs attention": "需注意",
         "Never sent": "絕不傳送",
         "No": "否",
-        "No Activation Lock or company management detected": "未偵測到啟用鎖定或企業管理",
+        "No Activation Lock detected": "未偵測到啟用鎖定",
         "No Apple Account is signed in in this session.": "本次工作階段中沒有登入的 Apple 帳號。",
         "No Bluetooth controller found.": "找不到藍牙控制器。",
         "No USB device available": "無可用 USB 裝置",

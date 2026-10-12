@@ -491,7 +491,6 @@
 "{0} not tested": "未テスト {0}",
 "{0} to check manually": "手動確認 {0}",
 "{0} of {1} tests done": "{1}テスト中{0}完了",
-"No Activation Lock or company management detected": "アクティベーションロックや企業管理は検出されませんでした",
 "In the current session. An Apple Account is still signed in: see below.": "現在のセッションにて。Appleアカウントはまだサインインしています：下記参照。",
 "In the current session.": "現在のセッションにて。",
 "Battery at {0}% after {1} cycles": "{1}サイクル後のバッテリー{0}%",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "このモデルにはバッテリーが搭載されていますが、Mac はバッテリーを報告していません。",
 "This model has a built-in camera, but the Mac does not report one.": "このモデルには内蔵カメラがありますが、Mac はカメラを報告していません。",
 "This model has a Touch ID sensor, but the Mac does not report one.": "このモデルには Touch ID センサーがありますが、Mac はセンサーを報告していません。",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "この Mac には複数のユーザアカウントがあります。現在のセッションのみを確認しました。確実にするには、各アカウントにサインインするか、Mac を消去してください。"
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "この Mac には複数のユーザアカウントがあります。現在のセッションのみを確認しました。確実にするには、各アカウントにサインインするか、Mac を消去してください。",
+"No Activation Lock detected": "アクティベーションロックは検出されませんでした"
 }

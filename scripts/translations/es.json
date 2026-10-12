@@ -491,7 +491,6 @@
 "{0} not tested": "{0} sin probar",
 "{0} to check manually": "{0} a comprobar manualmente",
 "{0} of {1} tests done": "{0} de {1} pruebas realizadas",
-"No Activation Lock or company management detected": "No se detectó Bloqueo de activación ni gestión de empresa",
 "In the current session. An Apple Account is still signed in: see below.": "En la sesión actual. Sigue habiendo una Cuenta de Apple con la sesión iniciada: ver más abajo.",
 "In the current session.": "En la sesión actual.",
 "Battery at {0}% after {1} cycles": "Batería al {0}% tras {1} ciclos",
@@ -653,5 +652,6 @@
 "This model ships with a battery, but the Mac does not report one.": "Este modelo viene con batería, pero el Mac no la detecta.",
 "This model has a built-in camera, but the Mac does not report one.": "Este modelo tiene cámara integrada, pero el Mac no la detecta.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Este modelo tiene sensor Touch ID, pero el Mac no lo detecta.",
-"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Este Mac tiene varias cuentas de usuario. Solo se comprobó la sesión actual: inicie sesión en cada cuenta, o borre el Mac, para estar seguro."
+"This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Este Mac tiene varias cuentas de usuario. Solo se comprobó la sesión actual: inicie sesión en cada cuenta, o borre el Mac, para estar seguro.",
+"No Activation Lock detected": "No se detectó bloqueo de activación"
 }
