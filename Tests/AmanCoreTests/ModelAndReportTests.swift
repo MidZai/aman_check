@@ -353,3 +353,16 @@ struct Level2ProvesTests {
         #expect(!Level2Text.proves.contains { $0.contains(L("produced by the Aman Check app", "produit par l'app Aman Check")) })
     }
 }
+
+@Suite("Tests audio · provenance")
+struct AudioDeviceTextTests {
+    @Test("Seule la catégorie du périphérique est enregistrée, jamais son nom")
+    func categoryOnly() {
+        #expect(AudioDeviceText.category(isBuiltIn: true, input: true) == L("Built-in microphone", "Micro intégré"))
+        #expect(AudioDeviceText.category(isBuiltIn: false, input: true) == L("External microphone", "Micro externe"))
+        #expect(AudioDeviceText.category(isBuiltIn: true, input: false) == L("Built-in speakers", "Haut-parleurs intégrés"))
+        #expect(AudioDeviceText.category(isBuiltIn: false, input: false) == L("External output", "Sortie externe"))
+        #expect(AudioDeviceText.externalDeviceReason == L("An external audio device was in use: disconnect it and run the test again.",
+                                                           "Un périphérique audio externe était utilisé : débranchez-le et relancez le test."))
+    }
+}

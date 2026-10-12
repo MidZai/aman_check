@@ -189,11 +189,18 @@ struct MicrophoneTestView: View {
 
     private func complete(heard: Bool) {
         model.stop()
+        // Un micro externe ne dit rien de celui du Mac : non testé, à refaire sans le périphérique.
+        if let input = model.input, !input.isBuiltIn {
+            finish(TestResult.notTested(.microphone, reason: AudioDeviceText.externalDeviceReason))
+            return
+        }
         let measured = model.signalDetected
         let peak = Int(model.peakDB.rounded())
         let summary = (measured ? L("Sound picked up", "Son capté") : L("No sound picked up", "Aucun son capté"))
             + " · " + (heard ? L("playback clear", "relecture nette") : L("playback not heard", "relecture non entendue"))
-        let details = [L("Peak level: \(peak) dBFS", "Niveau maximal : \(peak) dBFS"), model.input.map { L("Input: \($0.name)", "Entrée : \($0.name)") } ?? ""]
+        // Catégorie du périphérique seulement, jamais son nom.
+        let details = [L("Peak level: \(peak) dBFS", "Niveau maximal : \(peak) dBFS"),
+                       model.input.map { L("Input: \(AudioDeviceText.category(isBuiltIn: $0.isBuiltIn, input: true))", "Entrée : \(AudioDeviceText.category(isBuiltIn: $0.isBuiltIn, input: true))") } ?? ""]
             .filter { !$0.isEmpty }
         if measured && heard {
             finish(TestResult(test: .microphone, outcome: .passed, provenance: .measuredAuto, summary: summary, details: details))

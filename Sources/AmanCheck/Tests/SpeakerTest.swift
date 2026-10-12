@@ -183,11 +183,17 @@ struct SpeakerTestView: View {
 
     private func complete(clean: Bool) {
         generator.stop()
+        // Une sortie externe ne dit rien des haut-parleurs du Mac : non testé, à refaire sans le périphérique.
+        if let output, !output.isBuiltIn {
+            finish(TestResult.notTested(.speakers, reason: AudioDeviceText.externalDeviceReason))
+            return
+        }
         let correct = answers.filter { $0 }.count
         let summary = L("Side identified \(correct) times out of \(Self.rounds)", "Côté identifié \(correct) fois sur \(Self.rounds)")
             + " · " + (clean ? L("clear sound", "son net") : L("crackling reported", "grésillement signalé"))
         var details = [summary]
-        if let output { details.append(L("Output: \(output.name)", "Sortie : \(output.name)")) }
+        // Catégorie du périphérique seulement, jamais son nom.
+        if let output { details.append(L("Output: \(AudioDeviceText.category(isBuiltIn: output.isBuiltIn, input: false))", "Sortie : \(AudioDeviceText.category(isBuiltIn: output.isBuiltIn, input: false))")) }
         details.append(L("Left/right is an approximation on Macs with several speakers.", "Gauche/droite est une approximation sur les Mac à plusieurs haut-parleurs."))
         if correct == Self.rounds && clean {
             finish(TestResult(test: .speakers, outcome: .passed, provenance: .userObserved, summary: summary, details: details))
