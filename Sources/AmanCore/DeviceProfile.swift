@@ -34,6 +34,8 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
     public var missingComponents: [MissingComponent]? = nil
 
     public var isRecognized: Bool { model != nil }
+    /// Portables et iMac ; Mac mini, Mac Studio et Mac Pro n'ont pas d'écran intégré.
+    public var hasBuiltInDisplay: Bool { isLaptop || kind == .iMac }
 
     public enum MissingComponent: String, Codable, Sendable, CaseIterable {
         case battery, camera, touchID

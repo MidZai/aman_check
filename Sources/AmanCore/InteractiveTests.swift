@@ -53,7 +53,7 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
     public static func applicable(to profile: DeviceProfile) -> [TestID] {
         allCases.filter { test in
             switch test {
-            case .screen: return true
+            case .screen: return profile.hasBuiltInDisplay
             case .keyboard: return profile.hasBuiltInKeyboard
             case .touchBar: return profile.hasTouchBar
             case .trackpad: return profile.hasBuiltInTrackpad
@@ -118,6 +118,12 @@ public struct TestResult: Codable, Sendable, Equatable, Identifiable {
 }
 
 public extension TestResult {
+    /// Début d'analyse qui garde les tests guidés déjà faits : ils ne disparaissent pas en silence, ils
+    /// sont rattachés à cette analyse (le début recule jusqu'au plus ancien d'entre eux).
+    static func analysisStart(keeping results: [TestResult], now: Date = Date()) -> Date {
+        results.map(\.completedAt).reduce(now) { min($0, $1) }
+    }
+
     /// Tests rattachés à un contrôle : seuls ceux terminés depuis son lancement.
     /// Un rapport (surtout publié) ne doit jamais porter des tests antérieurs au contrôle.
     static func belonging(toAnalysisStartedAt start: Date?, _ results: [TestResult]) -> [TestResult] {

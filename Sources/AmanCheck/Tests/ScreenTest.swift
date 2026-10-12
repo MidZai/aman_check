@@ -76,13 +76,12 @@ final class ScreenTestRunner {
     private var previousOptions: NSApplication.PresentationOptions = []
     private var completion: ((_ allShown: Bool) -> Void)?
 
-    /// Écran intégré par défaut (spec §7.1), sinon l'écran de la fenêtre de l'app.
+    /// Écran intégré uniquement (spec §7.1) : jamais de repli sur un écran externe, qui ne dirait rien du Mac.
     static func targetScreen() -> NSScreen? {
-        let builtIn = NSScreen.screens.first { screen in
+        NSScreen.screens.first { screen in
             guard let number = screen.deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber else { return false }
             return CGDisplayIsBuiltin(CGDirectDisplayID(number.uint32Value)) != 0
         }
-        return builtIn ?? NSApp.keyWindow?.screen ?? NSScreen.main
     }
 
     func start(completion: @escaping (_ allShown: Bool) -> Void) {
