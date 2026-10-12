@@ -81,6 +81,11 @@ public enum MacOSRelease {
     /// Dernière version majeure annoncée par Apple pour les Mac Intel (WWDC 2025).
     public static let lastForIntel = 26
 
+    /// Référence « dernier macOS » : la version en cours d'exécution si elle dépasse celle connue de l'app.
+    public static func reference(runningMajor: Int) -> Int {
+        max(latestKnown, runningMajor)
+    }
+
     public static func name(_ major: Int) -> String {
         switch major {
         case 14: return "macOS 14 Sonoma"

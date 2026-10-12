@@ -152,7 +152,8 @@ public struct ReportPoint: Sendable, Equatable, Identifiable {
 /// Points forts et points à vérifier, générés à partir des mesures (correctifs §4.3).
 /// Aucune promesse : un point fort n'existe que si la mesure a été faite et jugée bonne.
 public enum ReportInsights {
-    public static func strengths(_ r: ConditionReport) -> [ReportPoint] {
+    public static func strengths(_ r: ConditionReport, builtAt: Date? = AppBuild.date, now: Date = Date(),
+                                 runningMajor: Int = ProcessInfo.processInfo.operatingSystemVersion.majorVersion) -> [ReportPoint] {
         var points: [ReportPoint] = []
         let lock = r.measurement(MetricID.activationLock)
         // Le point fort ne dépend que du verrouillage d'activation : « aucun signal » MDM ne prouve pas
@@ -179,16 +180,27 @@ public enum ReportInsights {
                                       title: L("SSD in good health", "SSD en bonne santé"),
                                       detail: wear.map { L("\($0)% of its rated endurance used", "\($0) % de son endurance prévue utilisée") }))
         }
-        if let model = r.profile.model, model.lastMacOS == nil || model.lastMacOS == MacOSRelease.latestKnown {
-            let name = MacOSRelease.name(MacOSRelease.latestKnown)
-            // Mac Intel : macOS 26 est la dernière version annoncée pour eux. Dire « compatible avec le dernier macOS »
-            // sans cette précision flatterait le Mac.
-            let isIntel = r.profile.chip == .intel || r.profile.chip == .intelT2
-            points.append(ReportPoint(key: "macos", status: .good,
-                                      title: isIntel && MacOSRelease.latestKnown == MacOSRelease.lastForIntel
-                                          ? L("Runs \(name), the last version planned for Intel Macs", "Reçoit \(name), dernière version prévue pour les Mac Intel")
-                                          : L("Runs the latest macOS (\(name))", "Compatible avec le dernier macOS (\(name))"),
-                                      detail: nil))
+        // « Dernier macOS » : la version en cours si elle dépasse celle connue de l'app. Le point fort n'est
+        // affirmé que si cette version de l'app a moins de 18 mois ; au-delà, la liste a pu vieillir et le
+        // texte devient neutre.
+        let reference = MacOSRelease.reference(runningMajor: runningMajor)
+        if let model = r.profile.model, model.lastMacOS == nil || model.lastMacOS == reference {
+            let name = MacOSRelease.name(reference)
+            let isFresh = builtAt.map { now.timeIntervalSince($0) < AppBuild.freshnessLimit } ?? false
+            if isFresh {
+                // Mac Intel : macOS 26 est la dernière version annoncée pour eux. Dire « compatible avec le dernier macOS »
+                // sans cette précision flatterait le Mac.
+                let isIntel = r.profile.chip == .intel || r.profile.chip == .intelT2
+                points.append(ReportPoint(key: "macos", status: .good,
+                                          title: isIntel && reference == MacOSRelease.lastForIntel
+                                              ? L("Runs \(name), the last version planned for Intel Macs", "Reçoit \(name), dernière version prévue pour les Mac Intel")
+                                              : L("Runs the latest macOS (\(name))", "Compatible avec le dernier macOS (\(name))"),
+                                          detail: nil))
+            } else {
+                points.append(ReportPoint(key: "macos", status: .info,
+                                          title: L("Ran \(name) when this version of Aman Check was released.", "Faisait tourner \(name) à la sortie de cette version d'Aman Check."),
+                                          detail: nil))
+            }
         }
         let passed = r.tests.filter { $0.outcome == .passed && $0.status == .good }
         if !passed.isEmpty {
