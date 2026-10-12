@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Aman Check: ten minutes to check a used Mac</title>
 <meta name="description" content="Free, open source macOS app. Run it on the Mac you're about to buy: locks, battery, SSD, then guided tests of the screen, keyboard, trackpad, speakers, camera and ports. A dated report in ten minutes. Nothing leaves the Mac.">
 <link rel="icon" href="site/favicon.svg" type="image/svg+xml">
@@ -38,6 +39,24 @@
     --bad: #E5534B;
     --kofi: #FF5E5B;
     --shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.75), 0 8px 18px -8px rgba(0, 0, 0, 0.5);
+  }
+  /* Dark displays: the same tokens, tuned (deeper ink, brighter secondary text: 10.3:1 on the background). */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #071A26;
+      --ink-deep: #04121B;
+      --line: rgba(173, 203, 221, 0.2);
+      --rail: rgba(46, 159, 214, 0.4);
+      --water: #3AA9DF;
+      --water-ink: #04212F;
+      --text: #EEF4F8;
+      --muted: #B8C8D3;
+      --good: #3DD07A;
+      --watch: #E8A33D;
+      --bad: #E5534B;
+      --kofi: #FF5E5B;
+      --shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.9), 0 8px 18px -8px rgba(0, 0, 0, 0.6);
+    }
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
