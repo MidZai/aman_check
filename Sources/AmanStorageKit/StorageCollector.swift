@@ -93,6 +93,15 @@ public enum StorageCollector {
                                   method: protocolName + " · Aman Disk HealthEngine", collectedAt: now, display: statusText,
                                   detail: health.reasons.first, note: health.reasons.count > 1 ? health.reasons.joined(separator: " ") : nil), at: 0)
 
+        // Données vides ou non vérifiées (statut inconnu du moteur) : rien n'est lisible, donc rien n'est vert.
+        if health.status == .unknown {
+            let note = health.reasons.first ?? notReported
+            for id in [MetricID.storagePowerOnHours, MetricID.storageDataWritten, MetricID.storagePercentageUsed] {
+                result.append(.unavailable(id, note: note))
+            }
+            return result
+        }
+
         if let hours = metrics.powerOnHours {
             result.append(Measurement(id: MetricID.storagePowerOnHours, value: .int(Int64(clamping: hours)), unit: "h", status: .info,
                                       method: protocolName + " · Power On Hours", collectedAt: now, display: Formatters.hours(hours),

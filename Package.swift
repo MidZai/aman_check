@@ -77,7 +77,7 @@ let package = Package(
         // Swift Testing. Sans Xcode : scripts/test.sh.
         .testTarget(
             name: "AmanCoreTests",
-            dependencies: ["AmanCore"],
+            dependencies: ["AmanCore", "AmanStorageKit", "DiskHealthCore"],
             resources: [
                 .copy("Fixtures")
             ]
