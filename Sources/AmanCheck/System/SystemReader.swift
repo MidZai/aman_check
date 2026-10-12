@@ -43,6 +43,9 @@ enum Shell {
         process.terminationHandler = { _ in finished.signal() }
         do { try process.run() } catch {
             DiagnosticLog.shared.log("shell", "échec du lancement de \(path) : \(error)")
+            // Ferme les tubes pour libérer les deux lecteurs en attente de fin de fichier.
+            try? out.fileHandleForWriting.close()
+            try? err.fileHandleForWriting.close()
             return nil
         }
         let deadline = DispatchTime.now() + timeout

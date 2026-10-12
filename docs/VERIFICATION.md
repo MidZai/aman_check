@@ -1,6 +1,6 @@
 # Aman Check — à vérifier à la main sur le MacBookPro16,1
 
-Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (39 tests).
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (85 tests).
 Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
 
 | Test | Ce qu'il faut constater | Critère |
@@ -26,7 +26,7 @@ Profils simulés (sans ces Mac) : `Aman Check.app/Contents/MacOS/AmanCheck --sim
 
 ## Niveau 2 — rapport vérifiable en ligne
 
-Tests automatiques : `./scripts/test.sh` (52 tests Swift) et `cd server && npm test` (36 tests du serveur, base D1 locale).
+Tests automatiques : `./scripts/test.sh` (85 tests Swift) et `cd server && npm test` (36 tests du serveur, base D1 locale).
 
 Serveur local pour les essais :
 ```

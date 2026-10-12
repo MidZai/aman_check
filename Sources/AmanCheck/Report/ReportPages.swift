@@ -8,6 +8,14 @@ import DiskHealthCore
 /// lisibles en noir et blanc : chaque statut a une icône ET un texte (spec §8.3).
 /// Même méthode qu'Aman Disk (ReportPageView + ImageRenderer).
 struct ReportPage: View {
+    /// Horodatage imprimé avec son fuseau horaire : « 2026-10-12 16:25 UTC+01:00 ».
+    static func stamp(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd HH:mm 'UTC'xxx"
+        return formatter.string(from: date)
+    }
+
     static let size = CGSize(width: 595, height: 842)
 
     enum Content {
@@ -92,7 +100,7 @@ struct ReportPage: View {
             }
             Spacer()
             VStack(alignment: .trailing, spacing: 2) {
-                Text(L("Condition report as of \(Formatters.longDate(report.generatedAt))", "Rapport d'état au \(Formatters.longDate(report.generatedAt))"))
+                Text(L("Condition report as of \(Self.stamp(report.generatedAt))", "Rapport d'état au \(Self.stamp(report.generatedAt))"))
                     .font(.system(size: 9, weight: .semibold))
                 Text(L("Report \(report.reportID) · Procedure \(report.procedureVersion) · App \(report.appVersion)",
                        "Rapport \(report.reportID) · Procédure \(report.procedureVersion) · App \(report.appVersion)"))

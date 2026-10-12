@@ -119,9 +119,15 @@ enum IdentityCollector {
             if let bridge { DiagnosticLog.shared.record("SPiBridgeDataType", bridge.stdout) }
             let name = DisplaysParser.bridgeModelName(bridge?.stdout)
             hasT2 = name.map { $0.contains("T2") }
-            result.append(Measurement(id: MetricID.securityChip, value: .text(name ?? "none"), status: .info,
-                                      method: "system_profiler SPiBridgeDataType", collectedAt: now,
-                                      display: hasT2 == true ? L("Apple T2 chip", "Puce Apple T2") : L("None", "Aucune")))
+            if let name {
+                result.append(Measurement(id: MetricID.securityChip, value: .text(name), status: .info,
+                                          method: "system_profiler SPiBridgeDataType", collectedAt: now,
+                                          display: hasT2 == true ? L("Apple T2 chip", "Puce Apple T2") : L("None", "Aucune")))
+            } else {
+                // Lecture impossible ≠ « Aucune » : on ne sait pas.
+                result.append(.unavailable(MetricID.securityChip, note: L("Could not be read.", "Lecture impossible."),
+                                           method: "system_profiler SPiBridgeDataType"))
+            }
         }
         return Output(measurements: result, hasT2: hasT2)
     }

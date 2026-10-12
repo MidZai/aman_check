@@ -204,7 +204,7 @@ public enum PublicationPayload {
     public static func describe(issues: [String]) -> String? {
         let kinds = issues.compactMap { $0.hasPrefix("secret:") ? PublicationSecret.Kind(rawValue: String($0.dropFirst("secret:".count))) : nil }
         guard !kinds.isEmpty else { return nil }
-        return L("Found: ", "Trouvé : ") + kinds.map(\.label).joined(separator: L(", ", ", ")) + "."
+        return L("Found: ", "Trouvé : ") + kinds.map(\.label).joined(separator: ", ") + "."
     }
 }
 

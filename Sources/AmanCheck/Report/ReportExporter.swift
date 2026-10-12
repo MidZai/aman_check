@@ -15,11 +15,24 @@ enum ReportExporter {
         do {
             try writePDF(report, detailed: detailed, publication: archive?.publication, logo: logo, to: url)
             // Archive locale à côté du PDF (spec §8.3) : le rapport, et le bloc `publication` s'il a été publié.
-            try? archiveData(report, archive: archive).write(to: url.deletingPathExtension().appendingPathExtension("json"))
+            // Un fichier .json déjà présent n'est jamais écrasé : suffixe numérique.
+            try? archiveData(report, archive: archive).write(to: Self.freeJSONURL(nextTo: url))
             NSWorkspace.shared.activateFileViewerSelecting([url])
         } catch {
             showError(error)
         }
+    }
+
+    /// `nom.json`, ou `nom-2.json`, `nom-3.json`… si le fichier existe déjà.
+    static func freeJSONURL(nextTo pdf: URL) -> URL {
+        let base = pdf.deletingPathExtension()
+        var candidate = base.appendingPathExtension("json")
+        var n = 2
+        while FileManager.default.fileExists(atPath: candidate.path) {
+            candidate = base.deletingLastPathComponent().appendingPathComponent("\(base.lastPathComponent)-\(n)").appendingPathExtension("json")
+            n += 1
+        }
+        return candidate
     }
 
     private static func archiveData(_ report: ConditionReport, archive: PublishedReportArchive?) throws -> Data {
