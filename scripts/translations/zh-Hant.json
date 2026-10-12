@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Mac 不是失竊的，清除後也不會被鎖定。",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "賣家沒有在自己的 Mac 上製作誤導性報告：登記只能防止事後竄改，無法防範蓄意的賣家。",
 "Check that it is this Mac": "確認就是這台 Mac",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "將末 4 碼與 Mac 底部刻印的序號，或蘋果選單 › 關於這台 Mac 中顯示的序號核對。",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "將序號的 4 碼與 Mac 上的序號核對。",
 "Compare the date of the report with the date of the listing.": "將報告日期與刊登日期核對。",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "要求當面清除 Mac，並確認設定過程中不要求登入 Apple 帳號或企業帳號。",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "如果你收到的是 PDF，請核對其識別碼和日期與本頁一致。以本頁內容為準。",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "此機型有內建相機，但 Mac 未回報相機。",
 "This model has a Touch ID sensor, but the Mac does not report one.": "此機型有 Touch ID 感測器，但 Mac 未回報感測器。",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "這台 Mac 有多個使用者帳號。僅檢查了目前的工作階段：請登入每個帳號，或清除 Mac，以確保無誤。",
-"No Activation Lock detected": "未偵測到啟用鎖定"
+"No Activation Lock detected": "未偵測到啟用鎖定",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "在這一代 Mac 上，這 4 個字元為相同配置的所有 Mac 共用。它們無法識別這一台 Mac：請比對完整序號。",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "將最後 4 個字元與 Mac 底部刻印的序號，或 Apple 選單 › 關於這台 Mac 中顯示的序號進行比對。這只能排除明顯的張冠李戴：在某些世代，相同配置的所有 Mac 共用這 4 個字元。",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "將序號的 4 個字元與 Mac 上的進行比對：足以排除明顯的張冠李戴，但無法區分兩台完全相同的 Mac。"
 }

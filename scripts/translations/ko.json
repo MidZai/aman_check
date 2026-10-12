@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Mac이 도난품이 아니며 지운 후에 잠기지 않는다는 것.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "판매자가 자신의 Mac에서 오해를 일으키는 보고서를 만들지 않았다는 것: 등록은 사후 변경을 막을 뿐, 작정한 판매자를 막지는 못합니다.",
 "Check that it is this Mac": "이 Mac이 맞는지 확인",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "마지막 4자를 Mac 바닥면에 새겨진 일련번호 또는 Apple 메뉴 › 이 Mac에 관하여에 표시된 번호와 비교하십시오.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "일련번호의 4자를 Mac에 있는 번호와 비교하십시오.",
 "Compare the date of the report with the date of the listing.": "보고서 날짜와 판매 글 날짜를 비교하십시오.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "눈앞에서 Mac을 지우도록 요청하고, 설정 시 Apple 계정이나 기업 로그인을 요구하지 않는지 확인하십시오.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "PDF를 받았다면 식별자와 날짜가 이 페이지와 일치하는지 확인하십시오. 유효한 것은 이 페이지의 내용입니다.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "이 모델에는 내장 카메라가 있지만 Mac이 카메라를 보고하지 않습니다.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "이 모델에는 Touch ID 센서가 있지만 Mac이 센서를 보고하지 않습니다.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "이 Mac에는 여러 사용자 계정이 있습니다. 현재 세션만 확인했습니다. 확실히 하려면 각 계정에 로그인하거나 Mac을 지우십시오.",
-"No Activation Lock detected": "활성화 잠금이 감지되지 않음"
+"No Activation Lock detected": "활성화 잠금이 감지되지 않음",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "이 세대의 Mac에서는 이 4자가 같은 구성의 모든 Mac에 공통입니다. 이 Mac 자체를 식별하지 않습니다. 전체 일련 번호를 비교하십시오.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "마지막 4자를 Mac 밑면에 새겨진 일련 번호나 Apple 메뉴 › 이 Mac에 관하여에 표시된 일련 번호와 비교하십시오. 이는 명백한 착오를 배제하는 데만 도움이 됩니다. 일부 세대에서는 같은 구성의 모든 Mac이 이 4자를 공유합니다.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "일련 번호의 4자를 Mac에 적힌 것과 비교하십시오. 명백한 착오를 배제하기에는 충분하지만, 동일한 두 Mac을 구별하기에는 충분하지 않습니다."
 }

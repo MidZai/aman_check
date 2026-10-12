@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "أن الـ Mac ليس مسروقاً ولا مقفلاً بعد مسحه.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "أن البائع لم يُنتج تقريراً مضلّلاً على جهازه: يمنع التسجيل التعديلات اللاحقة، لا البائع المصمّم.",
 "Check that it is this Mac": "تحقق من أنه هذا الـ Mac",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "قارن آخر 4 أحرف بالرقم التسلسلي المحفور أسفل الـ Mac، أو المعروض في قائمة Apple › حول هذا الـ Mac.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "قارن الأحرف الأربعة من الرقم التسلسلي بتلك الموجودة على الـ Mac.",
 "Compare the date of the report with the date of the listing.": "قارن تاريخ التقرير بتاريخ الإعلان.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "اطلب مسح الـ Mac أمامك، وتحقق من أن الإعداد لا يطلب أي حساب Apple أو تسجيل دخول شركة.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "إذا أُعطيت ملف PDF، فتحقق من تطابق معرّفه وتاريخه مع هذه الصفحة. محتوى هذه الصفحة هو المعتمد.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "يحتوي هذا الطراز على كاميرا مدمجة، لكن الـ Mac لا يبلغ عن وجودها.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "يحتوي هذا الطراز على مستشعر Touch ID، لكن الـ Mac لا يبلغ عن وجوده.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "يحتوي هذا الـ Mac على عدة حسابات مستخدمين. تم التحقق من الجلسة الحالية فقط: سجّل الدخول إلى كل حساب، أو امسح الـ Mac، للتأكد.",
-"No Activation Lock detected": "لم يتم اكتشاف قفل التنشيط"
+"No Activation Lock detected": "لم يتم اكتشاف قفل التنشيط",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "في هذا الجيل من أجهزة Mac، هذه الأحرف الأربعة مشتركة بين كل أجهزة Mac ذات التكوين نفسه. إنها لا تحدد هذا الجهاز بعينه: قارن الرقم التسلسلي الكامل.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "قارن الأحرف الأربعة الأخيرة بالرقم التسلسلي المحفور أسفل الـ Mac، أو المعروض في قائمة Apple › حول هذا الـ Mac. هذا يساعد فقط على استبعاد خطأ فادح: في بعض الأجيال، تتشاركها كل أجهزة Mac ذات التكوين نفسه.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "قارن الأحرف الأربعة من الرقم التسلسلي بتلك الموجودة على الـ Mac: يكفي لاستبعاد خطأ فادح، لا للتمييز بين جهازي Mac متطابقين."
 }

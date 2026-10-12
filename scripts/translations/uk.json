@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Що Mac не вкрадено й він не заблокується після стирання.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "Що продавець не склав оманливий звіт на своєму Mac: реєстрація запобігає подальшим правкам, але не зупинить рішучого продавця.",
 "Check that it is this Mac": "Переконайтеся, що це той самий Mac",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "Порівняйте останні 4 символи із серійним номером, вигравіруваним на нижній панелі Mac або показаним у меню Apple › Про цей Mac.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "Порівняйте 4 символи серійного номера з тими, що на Mac.",
 "Compare the date of the report with the date of the listing.": "Порівняйте дату звіту з датою оголошення.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Попросіть стерти Mac при вас і переконайтеся, що налаштування не запитує Обліковий запис Apple або корпоративний вхід.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "Якщо вам дали PDF, переконайтеся, що його ідентифікатор і дата збігаються з цією сторінкою. Значення має вміст цієї сторінки.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "Ця модель має вбудовану камеру, але Mac її не повідомляє.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Ця модель має сенсор Touch ID, але Mac його не повідомляє.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "На цьому Mac кілька облікових записів. Перевірено лише поточний сеанс: увійдіть у кожен обліковий запис або зітріть Mac, щоб переконатися.",
-"No Activation Lock detected": "Блокування активації не виявлено"
+"No Activation Lock detected": "Блокування активації не виявлено",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "У цьому поколінні Mac ці 4 символи однакові в усіх Mac однієї конфігурації. Вони не ідентифікують саме цей Mac: порівняйте повний серійний номер.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Порівняйте останні 4 символи із серійним номером, вигравіюваним знизу Mac або показаним у меню Apple › Про цей Mac. Це лише виключає грубу плутанину: у деяких поколіннях усі Mac однієї конфігурації мають однакові символи.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Порівняйте 4 символи серійного номера з тими, що на Mac: цього досить, щоб виключити грубу плутанину, але не щоб розрізнити два однакові Mac."
 }

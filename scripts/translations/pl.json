@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Że Mac nie jest kradziony ani zablokowany po wymazaniu.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "Że sprzedawca nie sporządził mylącego raportu na własnym Macu: rejestracja zapobiega zmianom po fakcie, a nie zdeterminowanemu sprzedawcy.",
 "Check that it is this Mac": "Sprawdź, czy to ten Mac",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "Porównaj ostatnie 4 znaki z numerem seryjnym wygrawerowanym pod spodem Maca lub pokazanym w menu Apple › Ten Mac.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "Porównaj 4 znaki numeru seryjnego z tymi na Macu.",
 "Compare the date of the report with the date of the listing.": "Porównaj datę raportu z datą ogłoszenia.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Poproś o wymazanie Maca w Twojej obecności i sprawdź, czy konfiguracja nie wymaga konta Apple ani logowania firmowego.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "Jeśli otrzymano PDF, sprawdź, czy jego identyfikator i data zgadzają się z tą stroną. Liczy się treść tej strony.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "Ten model ma wbudowaną kamerę, ale Mac jej nie zgłasza.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Ten model ma czujnik Touch ID, ale Mac go nie zgłasza.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Ten Mac ma kilka kont użytkowników. Sprawdzono tylko bieżącą sesję: zaloguj się na każde konto lub wymaż Maca, aby mieć pewność.",
-"No Activation Lock detected": "Nie wykryto blokady aktywacji"
+"No Activation Lock detected": "Nie wykryto blokady aktywacji",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "W tej generacji Maców te 4 znaki są wspólne dla wszystkich Maców o tej samej konfiguracji. Nie identyfikują tego konkretnego Maca: porównaj pełny numer seryjny.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Porównaj ostatnie 4 znaki z numerem seryjnym wygrawerowanym pod Makiem lub pokazanym w menu Apple › Ten Mac. To pozwala tylko wykluczyć oczywistą pomyłkę: w niektórych generacjach wszystkie Maki o tej samej konfiguracji mają te same znaki.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Porównaj 4 znaki numeru seryjnego z tymi na Macu: to wystarczy, by wykluczyć oczywistą pomyłkę, ale nie by odróżnić dwa identyczne Maki."
 }

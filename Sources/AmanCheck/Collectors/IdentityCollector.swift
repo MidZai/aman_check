@@ -86,8 +86,9 @@ enum IdentityCollector {
             result.append(Measurement(id: MetricID.serial, value: .text(last4), status: .info, method: "IOPlatformSerialNumber",
                                       collectedAt: now, display: "••••\(last4)",
                                       detail: L("Last 4 characters", "4 derniers caractères"),
-                                      note: L("The buyer can check the full number on checkcoverage.apple.com.",
-                                              "L'acheteur peut vérifier le numéro complet sur checkcoverage.apple.com.")))
+                                      note: [L("The buyer can check the full number on checkcoverage.apple.com.",
+                                               "L'acheteur peut vérifier le numéro complet sur checkcoverage.apple.com."),
+                                             SerialNumberText.configurationNote(serialLength: serial.count)].compactMap { $0 }.joined(separator: " ")))
         } else {
             result.append(.unavailable(MetricID.serial, note: L("Could not be read.", "Lecture impossible.")))
         }

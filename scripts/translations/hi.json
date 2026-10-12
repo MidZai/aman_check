@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "कि Mac चोरी का नहीं है और मिटाने के बाद लॉक नहीं होगा।",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "कि विक्रेता ने अपने Mac पर भ्रामक रिपोर्ट नहीं बनाई: पंजीकरण बाद के बदलाव रोकता है, दृढ़ विक्रेता को नहीं।",
 "Check that it is this Mac": "जाँचें कि यह वही Mac है",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "अंतिम 4 अक्षरों की तुलना Mac के नीचे उकेरे गए सीरियल नंबर, या Apple मेनू › इस Mac के बारे में में दिखाए गए नंबर से करें।",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "सीरियल नंबर के 4 अक्षरों की तुलना Mac पर लिखे अक्षरों से करें।",
 "Compare the date of the report with the date of the listing.": "रिपोर्ट की तारीख की तुलना विज्ञापन की तारीख से करें।",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Mac को अपने सामने मिटाने को कहें, और जाँचें कि सेटअप कोई Apple Account या कंपनी साइन-इन नहीं माँगता।",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "अगर आपको PDF दिया गया है, तो जाँचें कि उसका पहचानकर्ता और तारीख इस पेज से मेल खाते हैं। इस पेज की सामग्री ही मान्य है।",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "इस मॉडल में बिल्ट-इन कैमरा है, लेकिन Mac कोई कैमरा नहीं बताता।",
 "This model has a Touch ID sensor, but the Mac does not report one.": "इस मॉडल में Touch ID सेंसर है, लेकिन Mac कोई सेंसर नहीं बताता।",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "इस Mac में कई उपयोगकर्ता खाते हैं। केवल वर्तमान सत्र की जाँच की गई: निश्चित होने के लिए हर खाते में साइन इन करें, या Mac को मिटा दें।",
-"No Activation Lock detected": "कोई एक्टिवेशन लॉक नहीं मिला"
+"No Activation Lock detected": "कोई एक्टिवेशन लॉक नहीं मिला",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Mac की इस पीढ़ी में, ये 4 अक्षर एक ही कॉन्फ़िगरेशन वाले हर Mac में समान होते हैं। ये इसी Mac की पहचान नहीं करते: पूरा सीरियल नंबर मिलाएँ।",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "अंतिम 4 अक्षरों की तुलना Mac के नीचे उकेरे गए या Apple मेनू › इस Mac के बारे में में दिखाए गए सीरियल नंबर से करें। यह केवल एक स्पष्ट गड़बड़ी को खारिज करने में मदद करता है: कुछ पीढ़ियों में, एक ही कॉन्फ़िगरेशन वाले हर Mac में ये समान होते हैं।",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "सीरियल नंबर के 4 अक्षरों की तुलना Mac पर मौजूद अक्षरों से करें: यह स्पष्ट गड़बड़ी खारिज करने के लिए काफ़ी है, दो एक जैसे Mac में फ़र्क़ करने के लिए नहीं।"
 }

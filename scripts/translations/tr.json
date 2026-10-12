@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Mac'in çalıntı olmadığını veya silindikten sonra kilitlenmeyeceğini.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "Satıcının kendi Mac'inde yanıltıcı bir rapor üretmediğini: kayıt sonradan yapılan değişiklikleri önler, kararlı bir satıcıyı değil.",
 "Check that it is this Mac": "Bunun bu Mac olduğunu kontrol edin",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "Son 4 karakteri Mac'in altına kazınmış veya Apple menüsü › Bu Mac Hakkında'da gösterilen seri numarasıyla karşılaştırın.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "Seri numarasının 4 karakterini Mac'in üzerindekilerle karşılaştırın.",
 "Compare the date of the report with the date of the listing.": "Raporun tarihini ilanın tarihiyle karşılaştırın.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Mac'in gözünüzün önünde silinmesini isteyin ve kurulumun Apple Hesabı veya kurumsal giriş istemediğini kontrol edin.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "Size bir PDF verildiyse, kimliğinin ve tarihinin bu sayfayla eşleştiğini kontrol edin. Geçerli olan bu sayfanın içeriğidir.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "Bu modelde dahili kamera var ancak Mac herhangi bir kamera bildirmiyor.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Bu modelde Touch ID sensörü var ancak Mac herhangi bir sensör bildirmiyor.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Bu Mac'te birden fazla kullanıcı hesabı var. Yalnızca geçerli oturum denetlendi: emin olmak için her hesapta oturum açın ya da Mac'i silin.",
-"No Activation Lock detected": "Etkinleştirme Kilidi algılanmadı"
+"No Activation Lock detected": "Etkinleştirme Kilidi algılanmadı",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Bu nesil Mac'lerde bu 4 karakter aynı yapılandırmaya sahip tüm Mac'lerde ortaktır. Tam olarak bu Mac'i tanımlamazlar: tam seri numarasını karşılaştırın.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Son 4 karakteri Mac'in altına kazınmış ya da Apple menüsü › Bu Mac Hakkında'da gösterilen seri numarasıyla karşılaştırın. Bu yalnızca bariz bir karışıklığı elemeye yarar: bazı nesillerde aynı yapılandırmaya sahip tüm Mac'ler bu karakterleri paylaşır.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Seri numarasının 4 karakterini Mac üzerindekilerle karşılaştırın: bariz bir karışıklığı elemeye yeter, iki özdeş Mac'i ayırt etmeye yetmez."
 }

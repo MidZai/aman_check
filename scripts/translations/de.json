@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Dass der Mac weder gestohlen noch nach dem Löschen gesperrt ist.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "Dass der Verkäufer keinen irreführenden Bericht auf seinem eigenen Mac erstellt hat: Die Registrierung verhindert nachträgliche Änderungen, nicht einen entschlossenen Verkäufer.",
 "Check that it is this Mac": "Prüfe, dass es dieser Mac ist",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "Vergleiche die letzten 4 Zeichen mit der auf der Unterseite des Mac eingravierten Seriennummer oder der unter Apple-Menü › Über diesen Mac angezeigten.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "Vergleiche die 4 Zeichen der Seriennummer mit denen auf dem Mac.",
 "Compare the date of the report with the date of the listing.": "Vergleiche das Datum des Berichts mit dem Datum des Inserats.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Lass den Mac vor deinen Augen löschen und prüfe, dass die Einrichtung keinen Apple Account und keine Firmenanmeldung verlangt.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "Hast du ein PDF erhalten, prüfe, ob Kennung und Datum mit dieser Seite übereinstimmen. Der Inhalt dieser Seite ist maßgeblich.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "Dieses Modell hat eine eingebaute Kamera, der Mac meldet aber keine.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Dieses Modell hat einen Touch-ID-Sensor, der Mac meldet aber keinen.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Dieser Mac hat mehrere Benutzerkonten. Nur die aktuelle Sitzung wurde geprüft: Melden Sie sich bei jedem Konto an oder löschen Sie den Mac, um sicherzugehen.",
-"No Activation Lock detected": "Keine Aktivierungssperre erkannt"
+"No Activation Lock detected": "Keine Aktivierungssperre erkannt",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Bei dieser Mac-Generation teilen alle Macs derselben Konfiguration diese 4 Zeichen. Sie identifizieren nicht genau diesen Mac: Vergleichen Sie die vollständige Seriennummer.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Vergleichen Sie die letzten 4 Zeichen mit der Seriennummer auf der Unterseite des Mac oder im Apple-Menü › Über diesen Mac. Das schließt nur eine grobe Verwechslung aus: Bei manchen Generationen teilen alle Macs derselben Konfiguration diese Zeichen.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Vergleichen Sie die 4 Zeichen der Seriennummer mit denen auf dem Mac: Das schließt eine grobe Verwechslung aus, unterscheidet aber nicht zwei identische Macs."
 }

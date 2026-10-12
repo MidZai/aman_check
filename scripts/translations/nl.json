@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Dat de Mac niet gestolen is en niet vergrendeld raakt na het wissen.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "Dat de verkoper geen misleidend rapport heeft gemaakt op zijn eigen Mac: de registratie voorkomt wijzigingen achteraf, niet een vastberaden verkoper.",
 "Check that it is this Mac": "Controleer dat het deze Mac is",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "Vergelijk de laatste 4 tekens met het serienummer dat onder op de Mac is gegraveerd, of getoond wordt in Apple-menu › Over deze Mac.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "Vergelijk de 4 tekens van het serienummer met die op de Mac.",
 "Compare the date of the report with the date of the listing.": "Vergelijk de datum van het rapport met de datum van de advertentie.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Vraag om de Mac waar je bij bent te wissen en controleer dat de configuratie geen Apple Account of bedrijfsaanmelding vraagt.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "Heb je een PDF gekregen, controleer dan of de identificatie en datum overeenkomen met deze pagina. De inhoud van deze pagina is wat telt.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "Dit model heeft een ingebouwde camera, maar de Mac meldt er geen.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Dit model heeft een Touch ID-sensor, maar de Mac meldt er geen.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Deze Mac heeft meerdere gebruikersaccounts. Alleen de huidige sessie is gecontroleerd: log in op elk account, of wis de Mac, om zeker te zijn.",
-"No Activation Lock detected": "Geen activeringsslot gedetecteerd"
+"No Activation Lock detected": "Geen activeringsslot gedetecteerd",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Bij deze generatie Macs delen alle Macs met dezelfde configuratie deze 4 tekens. Ze identificeren niet precies deze Mac: vergelijk het volledige serienummer.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "Vergelijk de laatste 4 tekens met het serienummer dat onder op de Mac is gegraveerd of in het Apple-menu › Over deze Mac wordt getoond. Dit sluit alleen een duidelijke verwisseling uit: bij sommige generaties delen alle Macs met dezelfde configuratie deze tekens.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "Vergelijk de 4 tekens van het serienummer met die op de Mac: genoeg om een duidelijke verwisseling uit te sluiten, niet om twee identieke Macs uit elkaar te houden."
 }

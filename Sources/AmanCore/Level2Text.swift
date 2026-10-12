@@ -38,12 +38,13 @@ public enum Level2Text {
     public static var checkThisMacTitle: String { L("Check that it is this Mac", "Vérifiez que c'est bien ce Mac") }
 
     public static var checkThisMac: String {
-        L("Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.",
-          "Comparez les 4 derniers caractères avec le numéro de série gravé sous la machine, ou affiché dans le menu Pomme › À propos de ce Mac.")
+        L("Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.",
+          "Comparez les 4 derniers caractères avec le numéro de série gravé sous la machine, ou affiché dans le menu Pomme › À propos de ce Mac. Cela permet seulement d'écarter une erreur grossière : sur certaines générations, tous les Mac de même configuration les partagent.")
     }
 
     public static var buyerChecks: [String] {
-        [L("Compare the 4 characters of the serial number with the ones on the Mac.", "Comparez les 4 caractères du numéro de série avec ceux du Mac."),
+        [L("Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.",
+           "Comparez les 4 caractères du numéro de série avec ceux du Mac : cela suffit à écarter une erreur grossière, pas à distinguer deux Mac identiques."),
          L("Compare the date of the report with the date of the listing.", "Comparez la date du rapport avec celle de l'annonce."),
          L("Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.",
            "Faites effacer le Mac devant vous, et vérifiez que l'assistant de configuration ne demande aucun identifiant Apple ni d'entreprise.")]

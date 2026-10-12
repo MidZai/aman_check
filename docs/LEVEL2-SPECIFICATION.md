@@ -368,3 +368,4 @@ Les phases 1 à 3 permettent déjà un pilote avec des boutiques, en créant les
 - [ ] Durée de validité de 30 jours et effacement à 90 jours : à confirmer (avant la phase 1).
 - [ ] Tarif en dinars et mode d'encaissement local pour l'Algérie (avant le pilote boutiques).
 - [ ] Texte du bandeau légal de niveau 2 et page de confidentialité : à faire relire (avant la mise en ligne).
+- [ ] Identification « licence + modèle + 4 derniers caractères » côté serveur : sur les numéros de série à 12 caractères (Mac Intel, premiers M1), ces 4 caractères désignent la configuration, pas l'exemplaire ; deux Mac de même configuration sont confondus. À trancher avant d'en faire une clé de rattachement.

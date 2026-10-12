@@ -323,3 +323,23 @@ struct MissingComponentTests {
         #expect(summary.notTested == 8)
     }
 }
+
+@Suite("Numéro de série · 4 derniers caractères")
+struct SerialNumberTextTests {
+    @Test("Série à 12 caractères : note de configuration partagée ; série récente : aucune note")
+    func configurationNote() {
+        let note = SerialNumberText.configurationNote(serialLength: 12)
+        #expect(note == L("On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.",
+                          "Sur cette génération de Mac, ces 4 caractères sont communs à tous les Mac de même configuration. Ils n'identifient pas cet exemplaire : comparez le numéro de série complet."))
+        #expect(SerialNumberText.configurationNote(serialLength: 10) == nil)
+        #expect(SerialNumberText.configurationNote(serialLength: 11) == nil)
+    }
+
+    @Test("Les textes du niveau 2 ne présentent plus les 4 caractères comme une identification")
+    func level2TextsAreHonest() {
+        for text in [Level2Text.checkThisMac, Level2Text.buyerChecks[0]] {
+            #expect(!text.lowercased().contains(L("identif", "reconna")), Comment(rawValue: text))
+        }
+        #expect(Level2Text.checkThisMac.contains(L("rule out", "écarter")))
+    }
+}

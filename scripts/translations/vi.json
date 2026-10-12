@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Rằng máy Mac không bị đánh cắp và không bị khóa sau khi xóa.",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "Rằng người bán không tạo báo cáo gây hiểu lầm trên chính máy Mac của họ: việc đăng ký ngăn thay đổi về sau, chứ không ngăn được người bán cố ý.",
 "Check that it is this Mac": "Kiểm tra đúng là máy Mac này",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "So sánh 4 ký tự cuối với số sê-ri khắc dưới máy Mac, hoặc hiển thị trong menu Apple › Giới thiệu về máy Mac này.",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "So sánh 4 ký tự của số sê-ri với số trên máy Mac.",
 "Compare the date of the report with the date of the listing.": "So sánh ngày của báo cáo với ngày đăng tin rao.",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "Yêu cầu xóa máy Mac trước mặt bạn, và kiểm tra rằng quá trình thiết lập không yêu cầu Tài khoản Apple hay đăng nhập doanh nghiệp.",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "Nếu bạn được đưa một tệp PDF, hãy kiểm tra mã định danh và ngày khớp với trang này. Nội dung trang này mới là nội dung có giá trị.",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "Mẫu máy này có camera tích hợp, nhưng máy Mac không báo cáo camera nào.",
 "This model has a Touch ID sensor, but the Mac does not report one.": "Mẫu máy này có cảm biến Touch ID, nhưng máy Mac không báo cáo cảm biến nào.",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "Máy Mac này có nhiều tài khoản người dùng. Chỉ phiên hiện tại được kiểm tra: đăng nhập vào từng tài khoản, hoặc xóa máy Mac, để chắc chắn.",
-"No Activation Lock detected": "Không phát hiện Khóa kích hoạt"
+"No Activation Lock detected": "Không phát hiện Khóa kích hoạt",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "Ở thế hệ Mac này, 4 ký tự này giống nhau trên mọi máy Mac cùng cấu hình. Chúng không xác định chính xác chiếc Mac này: hãy so sánh số sê-ri đầy đủ.",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "So sánh 4 ký tự cuối với số sê-ri khắc dưới máy Mac, hoặc hiển thị trong menu Apple › Giới thiệu về máy Mac này. Điều này chỉ giúp loại trừ nhầm lẫn rõ ràng: ở một số thế hệ, mọi máy Mac cùng cấu hình đều có chung các ký tự này.",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "So sánh 4 ký tự của số sê-ri với các ký tự trên máy Mac: đủ để loại trừ nhầm lẫn rõ ràng, không đủ để phân biệt hai máy Mac giống hệt nhau."
 }

@@ -435,8 +435,6 @@
 "That the Mac is neither stolen nor locked after it is erased.": "Macが盗難品でなく、消去後にロックされないこと。",
 "That the seller did not produce a misleading report on their own Mac: the registration prevents changes after the fact, not a determined seller.": "販売者が自分のMacで誤解を招くレポートを作成していないこと：登録は事後の変更を防ぎますが、悪意のある販売者は防げません。",
 "Check that it is this Mac": "このMacであることを確認",
-"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac.": "末尾4文字を、Macの底面に刻印されたシリアル番号、またはAppleメニュー › このMacについてに表示される番号と比べてください。",
-"Compare the 4 characters of the serial number with the ones on the Mac.": "シリアル番号の4文字をMac本体のものと比べてください。",
 "Compare the date of the report with the date of the listing.": "レポートの日付と出品の日付を比べてください。",
 "Ask for the Mac to be erased in front of you, and check that setup asks for no Apple Account or company sign-in.": "目の前でMacを消去してもらい、設定時にAppleアカウントや企業のサインインを求められないことを確認してください。",
 "If you were given a PDF, check that its identifier and date match this page. The content of this page is the one that counts.": "PDFを受け取った場合は、その識別子と日付がこのページと一致することを確認してください。有効なのはこのページの内容です。",
@@ -653,5 +651,8 @@
 "This model has a built-in camera, but the Mac does not report one.": "このモデルには内蔵カメラがありますが、Mac はカメラを報告していません。",
 "This model has a Touch ID sensor, but the Mac does not report one.": "このモデルには Touch ID センサーがありますが、Mac はセンサーを報告していません。",
 "This Mac has several user accounts. Only the current session was checked: sign in to each account, or erase the Mac, to be sure.": "この Mac には複数のユーザアカウントがあります。現在のセッションのみを確認しました。確実にするには、各アカウントにサインインするか、Mac を消去してください。",
-"No Activation Lock detected": "アクティベーションロックは検出されませんでした"
+"No Activation Lock detected": "アクティベーションロックは検出されませんでした",
+"On this generation of Mac, these 4 characters are shared by every Mac of the same configuration. They don't identify this exact Mac: compare the full serial number.": "この世代の Mac では、この 4 文字は同じ構成のすべての Mac で共通です。この個体を特定するものではありません。完全なシリアル番号を比較してください。",
+"Compare the last 4 characters with the serial number engraved under the Mac, or shown in Apple menu › About This Mac. This only helps rule out an obvious mix-up: on some generations, every Mac of the same configuration shares them.": "最後の 4 文字を、Mac の底面に刻印されているシリアル番号、または Apple メニュー › この Mac について に表示されるシリアル番号と比較してください。これは明らかな取り違えを除外するためだけのものです。一部の世代では、同じ構成のすべての Mac がこの 4 文字を共有します。",
+"Compare the 4 characters of the serial number with the ones on the Mac: enough to rule out an obvious mix-up, not to tell two identical Macs apart.": "シリアル番号の 4 文字を Mac に記載されたものと比較してください。明らかな取り違えを除外するには十分ですが、同一構成の 2 台の Mac を区別することはできません。"
 }
