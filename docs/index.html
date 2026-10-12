@@ -227,13 +227,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <h1>Ten minutes with the Mac. Here's what to do with them.</h1>
       <p class="lead">Aman Check runs on the Mac you're about to buy or sell and writes a dated condition report anyone can read. Free, open source, and nothing leaves the Mac.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/MidZai/aman_check/releases/latest">
+        <a class="btn btn-primary" data-release="MidZai/aman_check" href="https://github.com/MidZai/aman_check/releases/latest">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
           Download for macOS
         </a>
         <a class="btn btn-ghost" href="https://github.com/MidZai/aman_check">View the source</a>
       </div>
-      <p class="fine">macOS 14 or later, Apple Silicon and Intel. The app isn't notarized by Apple, so macOS asks you to allow it once: <a href="https://github.com/MidZai/aman_check#macos-says-aman-check-cant-be-opened">here's how</a>.</p>
+      <p class="fine">macOS 14 or later, Apple Silicon and Intel. The app isn't notarized by Apple, so macOS asks you to allow it once: <a href="https://github.com/MidZai/aman_check#macos-says-aman-check-cant-be-opened">here's how</a>. <a href="https://github.com/MidZai/aman_check/releases/latest">Release notes and checksum</a>.</p>
     </div>
   </div>
 
@@ -362,12 +362,13 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
             <li><b>Same rules</b>: no network, no data sent, never changes your data, 18 languages.</li>
           </ul>
           <div class="cta">
-            <a class="btn btn-primary" href="https://github.com/MidZai/aman_disk/releases/latest">
+            <a class="btn btn-primary" data-release="MidZai/aman_disk" href="https://github.com/MidZai/aman_disk/releases/latest">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
               Download Aman Disk
             </a>
             <a class="btn btn-ghost" href="https://github.com/MidZai/aman_disk">Aman Disk on GitHub</a>
           </div>
+          <p class="fine"><a href="https://github.com/MidZai/aman_disk/releases/latest">Release notes and checksum</a>. Same first-launch step as Aman Check.</p>
           <div class="shots2">
             <figure class="shot"><img src="site/aman-disk-health.png" alt="Aman Disk: internal SSD healthy, 98% remaining life, temperature history over the last hour and the S.M.A.R.T. attribute table." width="1600" height="1018" loading="lazy"></figure>
             <figure class="shot"><img src="site/aman-disk-performance.png" alt="Aman Disk: performance test with sequential and random read and write speeds." width="1600" height="1018" loading="lazy"></figure>
@@ -382,7 +383,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <h2>Both apps are free and open source.</h2>
       <p>MIT licensed, written in Swift, no account, no paid tier. If they helped you buy or sell with a clear head, a coffee keeps them going.</p>
       <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/MidZai/aman_check/releases/latest">
+        <a class="btn btn-primary" data-release="MidZai/aman_check" href="https://github.com/MidZai/aman_check/releases/latest">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
           Download Aman Check
         </a>
@@ -404,6 +405,19 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 </footer>
 
 <script>
+  // Download buttons: point straight at the latest DMG when the GitHub API answers; the release page stays as fallback.
+  (function () {
+    document.querySelectorAll('a[data-release]').forEach(function (a) {
+      fetch('https://api.github.com/repos/' + a.dataset.release + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (rel) {
+          var dmg = rel && rel.assets && rel.assets.find(function (x) { return /\.dmg$/i.test(x.name); });
+          if (dmg) { a.href = dmg.browser_download_url; a.setAttribute('download', dmg.name); }
+        })
+        .catch(function () {});
+    });
+  })();
+
   // One authored moment: each time mark on the rail fills in as its step reaches the reader.
   (function () {
     var steps = document.querySelectorAll('.step');
