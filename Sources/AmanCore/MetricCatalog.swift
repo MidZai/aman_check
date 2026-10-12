@@ -33,6 +33,10 @@ public enum MetricID {
     public static let batteryHealth = "battery.health_percent"
     public static let batteryCycles = "battery.cycles"
     public static let batteryCondition = "battery.condition"
+    /// Composant que le catalogue attend sur ce modèle mais que la machine ne signale pas.
+    public static let batteryPresence = "battery.presence"
+    public static let cameraPresence = "hardware.camera_presence"
+    public static let touchIDPresence = "hardware.touch_id_presence"
     public static let batteryDesignCapacity = "battery.design_capacity"
     public static let batteryMaxCapacity = "battery.max_capacity"
     public static let batteryCharging = "battery.is_charging"
@@ -166,6 +170,15 @@ public enum MetricCatalog {
               help: ("One cycle = 100% of the battery used, possibly over several days.",
                      "Un cycle = 100 % de la batterie utilisés, éventuellement sur plusieurs jours.")),
             m(MetricID.batteryCondition, "Condition reported by macOS", "État indiqué par macOS", .battery, .essential, judged: true),
+            m(MetricID.batteryPresence, "Battery", "Batterie", .battery, .essential, judged: true,
+              help: ("This model ships with a battery, but the Mac does not report one.",
+                     "Ce modèle est livré avec une batterie, mais le Mac n'en signale aucune.")),
+            m(MetricID.cameraPresence, "Built-in camera", "Caméra intégrée", .identity, .essential, judged: true,
+              help: ("This model has a built-in camera, but the Mac does not report one.",
+                     "Ce modèle a une caméra intégrée, mais le Mac n'en signale aucune.")),
+            m(MetricID.touchIDPresence, "Touch ID", "Touch ID", .identity, .essential, judged: true,
+              help: ("This model has a Touch ID sensor, but the Mac does not report one.",
+                     "Ce modèle a un capteur Touch ID, mais le Mac n'en signale aucun.")),
             m(MetricID.batteryDesignCapacity, "Original capacity", "Capacité d'origine", .battery, .advanced, judged: false),
             m(MetricID.batteryMaxCapacity, "Current full-charge capacity", "Capacité actuelle à pleine charge", .battery, .advanced, judged: false),
             m(MetricID.batteryCharging, "Power", "Alimentation", .battery, .advanced, judged: false),

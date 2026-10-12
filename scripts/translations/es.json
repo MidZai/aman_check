@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "Estado comunicado por el propio SSD (S.M.A.R.T.), leído con el motor de Aman Disk.",
 "Time the SSD has been powered on. This is not the age of the Mac.": "Tiempo que el SSD ha estado encendido. No es la edad del Mac.",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "Cantidad total escrita en el SSD desde su fabricación: la principal causa de desgaste del SSD.",
-"Share of the rated endurance already used, as reported by the SSD.": "Parte de la resistencia nominal ya consumida, según informa el SSD."
+"Share of the rated endurance already used, as reported by the SSD.": "Parte de la resistencia nominal ya consumida, según informa el SSD.",
+"Expected on this model but not detected.": "Esperado en este modelo, pero no detectado.",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "La pieza puede estar desconectada, averiada o sustituida por una no original.",
+"Built-in camera": "Cámara integrada",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "Este modelo viene con batería, pero el Mac no la detecta.",
+"This model has a built-in camera, but the Mac does not report one.": "Este modelo tiene cámara integrada, pero el Mac no la detecta.",
+"This model has a Touch ID sensor, but the Mac does not report one.": "Este modelo tiene sensor Touch ID, pero el Mac no lo detecta."
 }

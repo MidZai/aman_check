@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "由 SSD 自身报告的状态（S.M.A.R.T.），通过 Aman Disk 引擎读取。",
 "Time the SSD has been powered on. This is not the age of the Mac.": "SSD 的通电时长。这不是 Mac 的使用年限。",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "自出厂以来写入 SSD 的总量：SSD 损耗的主要原因。",
-"Share of the rated endurance already used, as reported by the SSD.": "SSD 报告的已用额定耐久度比例。"
+"Share of the rated endurance already used, as reported by the SSD.": "SSD 报告的已用额定耐久度比例。",
+"Expected on this model but not detected.": "此型号应配备，但未检测到。",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "该部件可能已断开、损坏或被换成非原装部件。",
+"Built-in camera": "内置摄像头",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "此型号配有电池，但 Mac 未报告电池。",
+"This model has a built-in camera, but the Mac does not report one.": "此型号有内置摄像头，但 Mac 未报告摄像头。",
+"This model has a Touch ID sensor, but the Mac does not report one.": "此型号有 Touch ID 传感器，但 Mac 未报告传感器。"
 }

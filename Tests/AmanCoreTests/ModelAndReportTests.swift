@@ -1,6 +1,7 @@
 import Testing
 import Foundation
 @testable import AmanCore
+import DiskHealthCore
 
 @Suite("Mesures et catalogue")
 struct MeasurementTests {
@@ -24,7 +25,8 @@ struct MeasurementTests {
                    MetricID.batteryTemperature, MetricID.storageHealth, MetricID.storagePowerOnHours,
                    MetricID.storageDataWritten, MetricID.storagePercentageUsed, MetricID.storageAvailableSpare,
                    MetricID.storageMediaErrors, MetricID.storageTemperature, MetricID.storageModel,
-                   MetricID.storageInterface, MetricID.wifi, MetricID.bluetooth]
+                   MetricID.storageInterface, MetricID.wifi, MetricID.bluetooth,
+                   MetricID.batteryPresence, MetricID.cameraPresence, MetricID.touchIDPresence]
         #expect(Set(ids).count == MetricCatalog.allIDs.count)
         for id in ids {
             #expect(MetricCatalog.contains(id), "\(id) sans libellé")
@@ -266,5 +268,51 @@ struct ReportTests {
         #expect(back.measurements.first?.value == .int(83))
         #expect(back.tests.first?.test == .keyboard)
         #expect(back.trustLevel == 1)
+    }
+}
+
+@Suite("Composant attendu mais non détecté")
+struct MissingComponentTests {
+    private func missing(_ detected: DeviceProfile.Detected, model: String = "MacBookPro16,1") -> [Measurement] {
+        DeviceProfile.make(modelIdentifier: model, detected: detected).missingComponentMeasurements()
+    }
+
+    @Test("Touch ID attendu par le catalogue mais absent : ligne problème, test guidé non proposé")
+    func touchIDMissing() {
+        let profile = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true, hasBuiltInCamera: true, hasBiometrics: false))
+        #expect(profile.hasTouchID, "the component stays in the profile")
+        let lines = profile.missingComponentMeasurements()
+        #expect(lines.map(\.id) == [MetricID.touchIDPresence])
+        #expect(lines.first?.status == .problem)
+        #expect(lines.first?.displayText == L("Expected on this model but not detected.", "Attendu sur ce modèle mais non détecté."))
+        #expect(lines.first?.note == L("The part may be disconnected, faulty or replaced by a non-genuine one.", "La pièce peut être débranchée, défectueuse ou remplacée par une pièce non d'origine."))
+        #expect(!TestID.applicable(to: profile).contains(.touchID))
+        #expect(MetricCatalog.contains(MetricID.touchIDPresence))
+    }
+
+    @Test("Caméra et batterie : même règle")
+    func cameraAndBatteryMissing() {
+        #expect(missing(.init(hasBattery: true, hasBuiltInCamera: false, hasBiometrics: true)).map(\.id) == [MetricID.cameraPresence])
+        let camera = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true, hasBuiltInCamera: false, hasBiometrics: true))
+        #expect(!TestID.applicable(to: camera).contains(.camera))
+        #expect(missing(.init(hasBattery: false, hasBuiltInCamera: true, hasBiometrics: true)).map(\.id) == [MetricID.batteryPresence])
+        #expect(missing(.init(hasBattery: true, hasBuiltInCamera: true, hasBiometrics: true)).isEmpty)
+    }
+
+    @Test("Modèle inconnu : la détection fait foi, aucune ligne")
+    func unknownModelKeepsDetection() {
+        let profile = DeviceProfile.make(modelIdentifier: "Mac99,9", detected: .init(hasBattery: true, hasBuiltInCamera: false, hasBiometrics: false))
+        #expect(profile.missingComponentMeasurements().isEmpty)
+        #expect(!profile.hasTouchID)
+    }
+
+    @Test("Le résumé compte le composant manquant comme problème, pas comme non testé")
+    func summaryCountsProblem() {
+        let profile = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true, hasBuiltInCamera: true, hasBiometrics: false))
+        let report = ConditionReport(appVersion: "test", profile: profile, measurements: profile.missingComponentMeasurements(),
+                                     tests: [], plannedTests: TestID.applicable(to: profile))
+        let summary = ReportSummary(report: report)
+        #expect(summary.problem == 1)
+        #expect(summary.notTested == 8)
     }
 }

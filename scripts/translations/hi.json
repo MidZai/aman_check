@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "SSD द्वारा स्वयं बताई गई स्थिति (S.M.A.R.T.), Aman Disk इंजन से पढ़ी गई।",
 "Time the SSD has been powered on. This is not the age of the Mac.": "SSD के चालू रहने का समय। यह Mac की उम्र नहीं है।",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "निर्माण के बाद से SSD पर लिखी गई कुल मात्रा: SSD घिसावट का मुख्य कारण।",
-"Share of the rated endurance already used, as reported by the SSD.": "रेटेड सहनशक्ति का पहले से उपयोग हुआ हिस्सा, जैसा SSD बताता है।"
+"Share of the rated endurance already used, as reported by the SSD.": "रेटेड सहनशक्ति का पहले से उपयोग हुआ हिस्सा, जैसा SSD बताता है।",
+"Expected on this model but not detected.": "इस मॉडल में अपेक्षित, लेकिन पता नहीं चला।",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "पुर्ज़ा डिस्कनेक्ट, खराब या गैर-असली पुर्ज़े से बदला हुआ हो सकता है।",
+"Built-in camera": "बिल्ट-इन कैमरा",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "यह मॉडल बैटरी के साथ आता है, लेकिन Mac कोई बैटरी नहीं बताता।",
+"This model has a built-in camera, but the Mac does not report one.": "इस मॉडल में बिल्ट-इन कैमरा है, लेकिन Mac कोई कैमरा नहीं बताता।",
+"This model has a Touch ID sensor, but the Mac does not report one.": "इस मॉडल में Touch ID सेंसर है, लेकिन Mac कोई सेंसर नहीं बताता।"
 }

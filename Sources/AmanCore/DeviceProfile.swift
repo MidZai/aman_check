@@ -28,8 +28,39 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
     public let hasSDSlot: Bool
     public let hasHDMI: Bool
     public let hasMagSafe: Bool
+    /// Composants que le catalogue attend sur ce modèle et que la machine ne signale pas (B1.1) :
+    /// ils restent dans le profil, mais leur test guidé n'est pas proposé et le rapport les signale.
+    /// Optionnel pour lire les rapports enregistrés avant son ajout.
+    public var missingComponents: [MissingComponent]? = nil
 
     public var isRecognized: Bool { model != nil }
+
+    public enum MissingComponent: String, Codable, Sendable, CaseIterable {
+        case battery, camera, touchID
+
+        public var metricID: String {
+            switch self {
+            case .battery: return MetricID.batteryPresence
+            case .camera: return MetricID.cameraPresence
+            case .touchID: return MetricID.touchIDPresence
+            }
+        }
+    }
+
+    public func isMissing(_ component: MissingComponent) -> Bool {
+        missingComponents?.contains(component) ?? false
+    }
+
+    /// Une ligne « problème » par composant attendu mais non détecté : une pièce absente n'est jamais
+    /// une simple absence de test.
+    public func missingComponentMeasurements(now: Date = Date()) -> [Measurement] {
+        (missingComponents ?? []).map { component in
+            Measurement(id: component.metricID, value: .text("missing"), status: .problem, method: nil, collectedAt: now,
+                        display: L("Expected on this model but not detected.", "Attendu sur ce modèle mais non détecté."),
+                        note: L("The part may be disconnected, faulty or replaced by a non-genuine one.",
+                                "La pièce peut être débranchée, défectueuse ou remplacée par une pièce non d'origine."))
+        }
+    }
     public var isLaptop: Bool { kind == .laptop }
 
     /// Nom commercial, ou l'identifiant brut si le modèle n'est pas reconnu.
@@ -70,13 +101,22 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
             return nil
         }()
 
+        // Modèle reconnu : une détection négative ne retire pas le composant, elle le signale (B1.1).
+        var missing: [MissingComponent] = []
+        if let model {
+            if model.kind == .laptop && d.hasBattery == false { missing.append(.battery) }
+            if model.hasCamera && d.hasBuiltInCamera == false { missing.append(.camera) }
+            if model.hasTouchID && d.hasBiometrics == false { missing.append(.touchID) }
+        }
+        let expectedBattery = model.map { $0.kind == .laptop } ?? isLaptop
+
         return DeviceProfile(
             modelIdentifier: modelIdentifier,
             model: model,
             isSimulated: simulated,
             kind: kind,
             chip: chip,
-            hasBattery: d.hasBattery ?? isLaptop,
+            hasBattery: missing.contains(.battery) ? expectedBattery : (d.hasBattery ?? isLaptop),
             hasBuiltInKeyboard: isLaptop,
             hasBuiltInTrackpad: isLaptop,
             // Tous les portables pris en charge (2018 et plus) ont un trackpad Force Touch.
@@ -84,8 +124,8 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
             hasTouchBar: model?.hasTouchBar ?? false,
             hasPhysicalFunctionRow: model?.hasFunctionRow ?? isLaptop,
             hasPhysicalEscape: model?.hasPhysicalEscape ?? isLaptop,
-            hasTouchID: d.hasBiometrics ?? model?.hasTouchID ?? false,
-            hasBuiltInCamera: d.hasBuiltInCamera ?? model?.hasCamera ?? (isLaptop || kind == .iMac),
+            hasTouchID: missing.contains(.touchID) ? true : (d.hasBiometrics ?? model?.hasTouchID ?? false),
+            hasBuiltInCamera: missing.contains(.camera) ? true : (d.hasBuiltInCamera ?? model?.hasCamera ?? (isLaptop || kind == .iMac)),
             // Micro intégré : portables et iMac. Mac mini / Studio / Pro n'en ont pas.
             hasBuiltInMic: isLaptop || kind == .iMac,
             // Tous les Mac ont au moins un haut-parleur interne (y compris Mac mini, Studio, Pro).
@@ -94,7 +134,8 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
             hasHeadphoneJack: true,
             hasSDSlot: model?.hasSDSlot ?? false,
             hasHDMI: model?.hasHDMI ?? false,
-            hasMagSafe: model?.hasMagSafe ?? false
+            hasMagSafe: model?.hasMagSafe ?? false,
+            missingComponents: missing.isEmpty ? nil : missing
         )
     }
 

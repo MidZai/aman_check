@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "Стан, який повідомляє сам SSD (S.M.A.R.T.), зчитано рушієм Aman Disk.",
 "Time the SSD has been powered on. This is not the age of the Mac.": "Час, протягом якого SSD був увімкнений. Це не вік Mac.",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "Загальний обсяг, записаний на SSD з моменту виробництва: головна причина зносу SSD.",
-"Share of the rated endurance already used, as reported by the SSD.": "Частка номінального ресурсу, яку вже використано, за даними SSD."
+"Share of the rated endurance already used, as reported by the SSD.": "Частка номінального ресурсу, яку вже використано, за даними SSD.",
+"Expected on this model but not detected.": "Очікується в цій моделі, але не виявлено.",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "Деталь може бути від'єднана, несправна або замінена неоригінальною.",
+"Built-in camera": "Вбудована камера",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "Ця модель постачається з акумулятором, але Mac його не повідомляє.",
+"This model has a built-in camera, but the Mac does not report one.": "Ця модель має вбудовану камеру, але Mac її не повідомляє.",
+"This model has a Touch ID sensor, but the Mac does not report one.": "Ця модель має сенсор Touch ID, але Mac його не повідомляє."
 }

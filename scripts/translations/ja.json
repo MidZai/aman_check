@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "SSD自身が報告する状態（S.M.A.R.T.）。Aman Diskのエンジンで読み取ります。",
 "Time the SSD has been powered on. This is not the age of the Mac.": "SSDに通電していた時間。Macの使用年数ではありません。",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "製造以来SSDに書き込まれた総量。SSD消耗の主な原因です。",
-"Share of the rated endurance already used, as reported by the SSD.": "SSDが報告する、定格耐久性のうち使用済みの割合。"
+"Share of the rated endurance already used, as reported by the SSD.": "SSDが報告する、定格耐久性のうち使用済みの割合。",
+"Expected on this model but not detected.": "このモデルには搭載されているはずですが、検出されませんでした。",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "部品が外れているか、故障しているか、純正でない部品に交換されている可能性があります。",
+"Built-in camera": "内蔵カメラ",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "このモデルにはバッテリーが搭載されていますが、Mac はバッテリーを報告していません。",
+"This model has a built-in camera, but the Mac does not report one.": "このモデルには内蔵カメラがありますが、Mac はカメラを報告していません。",
+"This model has a Touch ID sensor, but the Mac does not report one.": "このモデルには Touch ID センサーがありますが、Mac はセンサーを報告していません。"
 }

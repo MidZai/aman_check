@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "Trạng thái do chính SSD báo cáo (S.M.A.R.T.), đọc bằng công cụ của Aman Disk.",
 "Time the SSD has been powered on. This is not the age of the Mac.": "Thời gian SSD được bật. Đây không phải tuổi của máy Mac.",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "Tổng lượng đã ghi vào SSD kể từ khi sản xuất: nguyên nhân chính gây hao mòn SSD.",
-"Share of the rated endurance already used, as reported by the SSD.": "Phần độ bền định mức đã dùng, theo SSD báo cáo."
+"Share of the rated endurance already used, as reported by the SSD.": "Phần độ bền định mức đã dùng, theo SSD báo cáo.",
+"Expected on this model but not detected.": "Được mong đợi trên mẫu máy này nhưng không được phát hiện.",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "Bộ phận có thể bị ngắt kết nối, hỏng hoặc đã bị thay bằng linh kiện không chính hãng.",
+"Built-in camera": "Camera tích hợp",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "Mẫu máy này có pin, nhưng máy Mac không báo cáo pin nào.",
+"This model has a built-in camera, but the Mac does not report one.": "Mẫu máy này có camera tích hợp, nhưng máy Mac không báo cáo camera nào.",
+"This model has a Touch ID sensor, but the Mac does not report one.": "Mẫu máy này có cảm biến Touch ID, nhưng máy Mac không báo cáo cảm biến nào."
 }

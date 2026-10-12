@@ -148,6 +148,8 @@ final class CheckController: ObservableObject {
             profile = DeviceProfile.make(modelIdentifier: profile.modelIdentifier, detected: detected)
         }
         measurements += identity.measurements
+        // Composants attendus sur ce modèle mais non détectés : une ligne « problème » chacun (B1.1).
+        measurements += profile.missingComponentMeasurements()
         steps[.identity] = .done
 
         steps[.locks] = .running

@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "SSD'nin kendisinin bildirdiği durum (S.M.A.R.T.), Aman Disk motoruyla okunur.",
 "Time the SSD has been powered on. This is not the age of the Mac.": "SSD'nin açık kaldığı süre. Bu Mac'in yaşı değildir.",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "Üretiminden bu yana SSD'ye yazılan toplam miktar: SSD aşınmasının ana nedeni.",
-"Share of the rated endurance already used, as reported by the SSD.": "SSD'nin bildirdiğine göre nominal dayanıklılığın kullanılan kısmı."
+"Share of the rated endurance already used, as reported by the SSD.": "SSD'nin bildirdiğine göre nominal dayanıklılığın kullanılan kısmı.",
+"Expected on this model but not detected.": "Bu modelde olması bekleniyor ancak algılanmadı.",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "Parça çıkarılmış, arızalı ya da orijinal olmayan bir parçayla değiştirilmiş olabilir.",
+"Built-in camera": "Dahili kamera",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "Bu model pil ile gelir ancak Mac herhangi bir pil bildirmiyor.",
+"This model has a built-in camera, but the Mac does not report one.": "Bu modelde dahili kamera var ancak Mac herhangi bir kamera bildirmiyor.",
+"This model has a Touch ID sensor, but the Mac does not report one.": "Bu modelde Touch ID sensörü var ancak Mac herhangi bir sensör bildirmiyor."
 }

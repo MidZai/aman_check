@@ -59,8 +59,8 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
             case .trackpad: return profile.hasBuiltInTrackpad
             case .speakers: return profile.hasInternalSpeakers
             case .microphone: return profile.hasBuiltInMic
-            case .camera: return profile.hasBuiltInCamera
-            case .touchID: return profile.hasTouchID
+            case .camera: return profile.hasBuiltInCamera && !profile.isMissing(.camera)
+            case .touchID: return profile.hasTouchID && !profile.isMissing(.touchID)
             case .ports: return true
             }
         }

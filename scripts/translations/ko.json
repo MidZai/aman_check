@@ -645,5 +645,12 @@
 "Status reported by the SSD itself (S.M.A.R.T.), read with the Aman Disk engine.": "SSD 자체가 보고하는 상태(S.M.A.R.T.)로, Aman Disk 엔진으로 읽습니다.",
 "Time the SSD has been powered on. This is not the age of the Mac.": "SSD가 전원이 켜져 있던 시간입니다. Mac의 사용 연수가 아닙니다.",
 "Total amount written to the SSD since it was made: the main cause of SSD wear.": "제조 이후 SSD에 기록된 총량으로, SSD 마모의 주요 원인입니다.",
-"Share of the rated endurance already used, as reported by the SSD.": "SSD가 보고하는, 정격 내구성 중 이미 사용된 비율입니다."
+"Share of the rated endurance already used, as reported by the SSD.": "SSD가 보고하는, 정격 내구성 중 이미 사용된 비율입니다.",
+"Expected on this model but not detected.": "이 모델에는 있어야 하지만 감지되지 않았습니다.",
+"The part may be disconnected, faulty or replaced by a non-genuine one.": "부품이 분리되었거나 고장 났거나 정품이 아닌 부품으로 교체되었을 수 있습니다.",
+"Built-in camera": "내장 카메라",
+"Touch ID": "Touch ID",
+"This model ships with a battery, but the Mac does not report one.": "이 모델에는 배터리가 있지만 Mac이 배터리를 보고하지 않습니다.",
+"This model has a built-in camera, but the Mac does not report one.": "이 모델에는 내장 카메라가 있지만 Mac이 카메라를 보고하지 않습니다.",
+"This model has a Touch ID sensor, but the Mac does not report one.": "이 모델에는 Touch ID 센서가 있지만 Mac이 센서를 보고하지 않습니다."
 }
