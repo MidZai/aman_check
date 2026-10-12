@@ -4,5 +4,5 @@ import Foundation
 /// Must match the VERSION file at the repository root, which build_app.sh and scripts/bundle.sh
 /// read; VersionTests checks both stay equal.
 public enum AmanVersion {
-    public static let current = "1.0.0"
+    public static let current = "1.0.1"
 }
