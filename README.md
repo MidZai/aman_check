@@ -49,7 +49,7 @@ It is written for non-technical people: plain words, one status per line, and a 
 **Guided tests** (the person does them, the app records the result)
 
 - **Display**: full-screen solid colours, Dock and menu bar included, to spot dead pixels and stains.
-- **Keyboard**: every key turns green when pressed, including modifiers and arrows; ANSI or ISO layout detected automatically.
+- **Keyboard**: every key turns green when pressed, including modifiers and arrows; ANSI, ISO or JIS layout detected automatically.
 - **Touch Bar**, **trackpad** (click, secondary click, scroll, pinch, rotate, force click, 8×5 grid), **speakers** (left and right), **microphone** (level meter and a 3‑second playback), **camera** (live preview, nothing recorded), **Touch ID**.
 - **Ports**: a USB stick validates each port without a click; charging, video output, headphone jack and SD card reader are checked too.
 
@@ -75,7 +75,7 @@ Aman Check is deliberately careful with words, because a flattering report can c
 - **No network connection** at level 1. Aman Check never connects to the Internet by itself: no telemetry, no update check. The links in the app (GitHub, Ko-fi) open in your browser when you click them.
 - **Nothing is changed** on the Mac being checked. The app only reads; the only files it writes are the reports you choose to save and its own preferences (language, display options). No administrator password is ever asked.
 - **Camera and microphone** are only used during the tests you start, and nothing is kept.
-- The optional online publication (see below) only happens after an explicit click, and the screen before it lists exactly what will be sent.
+- The optional online publication (see below) is not available in this version. When it is, it will only happen after an explicit click, and the screen before it lists exactly what will be sent.
 
 ## Installation
 
@@ -131,13 +131,13 @@ open -n "Aman Check.app" --args --language ja                  # force a languag
 
 ## Verifiable online report (level 2)
 
-The report can optionally be **published online**: the exact bytes of the report are stored on a server, signed with Ed25519, and the PDF gets a QR code and a public link. A buyer who scans the code sees the same report and can check it has not been changed since. The seller can withdraw it at any time.
+The report will optionally be **publishable online**: the exact bytes of the report are stored on a server, signed with Ed25519, and the PDF gets a QR code and a public link. A buyer who scans the code sees the same report and can check it has not been changed since. The seller can withdraw it from the Mac that published it.
 
 - The app sends nothing until you click “Publish” and confirm the list of what will be sent.
 - Only the last 4 characters of the serial number leave the Mac.
 - The server lives in [`server/`](server/README.md): Cloudflare Workers, Hono, D1, no JavaScript on the public page. Licence keys, prices and payment are configuration, never code in the app.
 
-The service is **not deployed yet** (the domain has not been chosen). Everything runs locally for development; see [server/README.md](server/README.md) and [docs/LEVEL2-SPECIFICATION.md](docs/LEVEL2-SPECIFICATION.md).
+The service is **not deployed yet** (the domain has not been chosen), so the publishing section is hidden in the app; it appears on its own once the real address is set. For development, `--publish-server http://127.0.0.1:8787` points the app at a local server; see [server/README.md](server/README.md) and [docs/LEVEL2-SPECIFICATION.md](docs/LEVEL2-SPECIFICATION.md).
 
 | Public page (valid) | Replaced | Withdrawn |
 |---|---|---|
