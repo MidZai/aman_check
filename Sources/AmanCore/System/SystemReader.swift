@@ -19,6 +19,26 @@ public enum Shell {
         }
     }
 
+    /// Plusieurs commandes en parallèle, chacune avec son délai ; résultats dans l'ordre des commandes.
+    /// Synchrone : à appeler hors du fil principal.
+    public static func runAllSync(_ commands: [(path: String, arguments: [String])], timeout: TimeInterval = 15) -> [CommandResult?] {
+        var results = [CommandResult?](repeating: nil, count: commands.count)
+        let lock = NSLock()
+        let group = DispatchGroup()
+        // Une tâche par commande (pas concurrentPerform, limité au nombre de cœurs : sur un vieux Mac
+        // à deux cœurs, les commandes attendraient leur tour).
+        for (index, command) in commands.enumerated() {
+            DispatchQueue.global(qos: .userInitiated).async(group: group) {
+                let result = runSync(command.path, command.arguments, timeout: timeout)
+                lock.lock()
+                results[index] = result
+                lock.unlock()
+            }
+        }
+        group.wait()
+        return results
+    }
+
     /// Version synchrone (Aman Legacy, macOS 10.13) : à appeler hors du fil principal.
     public static func runSync(_ path: String, _ arguments: [String], timeout: TimeInterval = 15) -> CommandResult? {
         guard FileManager.default.isExecutableFile(atPath: path) else { return nil }
