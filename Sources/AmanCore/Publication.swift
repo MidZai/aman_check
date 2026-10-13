@@ -1,5 +1,5 @@
 import Foundation
-import CryptoKit
+import CommonCrypto
 import DiskHealthCore
 
 /// Encodage du rapport : clés triées, dates ISO 8601, comme l'export JSON de niveau 1.
@@ -22,8 +22,14 @@ public enum ReportCoding {
         try encoder().encode(report)
     }
 
+    /// SHA-256 de CommonCrypto, disponible sur toutes les versions de macOS (CryptoKit demande 10.15 ;
+    /// Aman Legacy tourne sur 10.13). Même empreinte : LegacyCompatTests la vérifie.
     public static func sha256(_ data: Data) -> String {
-        SHA256.hash(data: data).map { String(format: "%02x", $0) }.joined()
+        var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { bytes in
+            _ = CC_SHA256(bytes.baseAddress, CC_LONG(data.count), &digest)
+        }
+        return digest.map { String(format: "%02x", $0) }.joined()
     }
 }
 
