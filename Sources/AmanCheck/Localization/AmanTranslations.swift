@@ -62,7 +62,8 @@ enum AmanTranslations {
             var entries: [Template] = []
             for (english, translation) in table where english.contains("{0}") {
                 let parts = Self.split(english)
-                let pattern = "^" + parts.literals.map(NSRegularExpression.escapedPattern(for:)).joined(separator: "(.+?)") + "$"
+                // (.*?) : une valeur insérée peut être vide (« 0 problem » : le « s » du pluriel manque).
+                let pattern = "^" + parts.literals.map(NSRegularExpression.escapedPattern(for:)).joined(separator: "(.*?)") + "$"
                 guard let regex = try? NSRegularExpression(pattern: pattern, options: [.dotMatchesLineSeparators]) else { continue }
                 entries.append(Template(regex: regex, translation: translation, count: parts.count))
             }
