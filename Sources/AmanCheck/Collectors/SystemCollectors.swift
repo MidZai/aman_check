@@ -4,21 +4,6 @@ import IOBluetooth
 import AmanCore
 import DiskHealthCore
 
-/// Batterie (spec §6.2) : lecture IOKit + état déclaré par macOS, analyse dans AmanCore.
-enum BatteryCollector {
-    static func collect(profile: DeviceProfile) async -> [Measurement] {
-        // Profil simulé de Mac de bureau : pas de batterie, même si la machine de développement en a une.
-        if profile.isSimulated && !profile.hasBattery { return [] }
-        guard let props = SystemReader.batteryProperties() else { return [] }
-        let registry = BatteryRegistry(properties: props)
-        DiagnosticLog.shared.record("AppleSmartBattery", String(describing: registry))
-        let sp = await Shell.run("/usr/sbin/system_profiler", ["SPPowerDataType", "-json"])
-        if let sp { DiagnosticLog.shared.record("SPPowerDataType", sp.stdout) }
-        let power = sp.flatMap { PowerProfile(systemProfilerJSON: Data($0.stdout.utf8)) }
-        return BatteryAnalysis.analyze(registry: registry, power: power, ratedCyclesFromModel: profile.model?.ratedBatteryCycles)
-    }
-}
-
 /// Verrouillages, SIP, FileVault, machine virtuelle (spec §6.4). Aucune élévation de droits.
 enum SecurityCollector {
     static func collect(profile: DeviceProfile) async -> [Measurement] {
