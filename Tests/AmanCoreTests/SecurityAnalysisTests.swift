@@ -54,9 +54,9 @@ struct SecurityAnalysisTests {
                                               chip: .intelT2, activationLockOff: true, localUserCount: 1)
         #expect(m.status == .watch)
         #expect(m.value == .int(1))
-        #expect(m.detail?.contains("Localiser") == true)
+        #expect(m.detail?.contains(L("Find My", "Localiser")) == true)
         // Verrou signalé désactivé malgré Localiser sur T2 : l'explication (démarrage sécurisé) est donnée.
-        #expect(m.detail?.contains("démarrage sécurisé") == true)
+        #expect(m.detail?.contains(L("Secure Boot", "démarrage sécurisé")) == true)
         let all = [m.display, m.detail, m.note, m.method].compactMap { $0 }.joined()
         #expect(!all.contains("example.com"))
         #expect(!all.contains("@"))
@@ -68,7 +68,7 @@ struct SecurityAnalysisTests {
                                               chip: .appleSilicon, activationLockOff: true, localUserCount: 1)
         #expect(m.status == .watch)
         #expect(m.value == .int(2))
-        #expect(m.detail?.contains("démarrage sécurisé") == false)
+        #expect(m.detail?.contains(L("Secure Boot", "démarrage sécurisé")) == false)
         #expect(m.displayText.contains("2"))
     }
 
