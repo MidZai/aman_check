@@ -4,8 +4,8 @@ import PackageDescription
 // Aman Check — contrôle d'état d'un Mac d'occasion.
 //
 // CDiskIO + DiskHealthCore : moteur S.M.A.R.T. d'Aman Disk (https://github.com/MidZai/aman_disk),
-// copié à l'identique sauf un correctif marqué « CORRECTIF Aman Check » (USBBridgeDatabase.swift),
-// à reporter dans Aman Disk. Toute autre correction se fait dans Aman Disk, puis se recopie.
+// copié à l'identique (scripts/sync-engine.sh d'Aman Legacy, vérifié par diff -rq).
+// Toute correction se fait dans Aman Disk, puis se recopie.
 let package = Package(
     name: "AmanCheck",
     defaultLocalization: "fr",
