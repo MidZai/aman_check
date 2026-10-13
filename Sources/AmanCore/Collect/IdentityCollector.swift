@@ -1,16 +1,21 @@
 import Foundation
-import AmanCore
 import DiskHealthCore
 
 /// Identité et caractéristiques (spec §6.1).
-enum IdentityCollector {
-    struct Output {
-        var measurements: [Measurement]
+public enum IdentityCollector {
+    public struct Output {
+        public var measurements: [Measurement]
         /// Puce T2 lue dans `SPiBridgeDataType` (Intel uniquement).
-        var hasT2: Bool?
+        public var hasT2: Bool?
     }
 
-    static func collect(profile: DeviceProfile, storageCapacity: Measurement) async -> Output {
+    @available(macOS 10.15, *)
+    public static func collect(profile: DeviceProfile, storageCapacity: Measurement) async -> Output {
+        await runInBackground { collectSync(profile: profile, storageCapacity: storageCapacity) }
+    }
+
+    /// Version synchrone (Aman Legacy) : lance des commandes, à appeler hors du fil principal.
+    public static func collectSync(profile: DeviceProfile, storageCapacity: Measurement) -> Output {
         let now = Date()
         var result: [Measurement] = []
         let model = profile.model
@@ -94,7 +99,7 @@ enum IdentityCollector {
         }
 
         // Graphisme et écran (system_profiler : pas d'API publique équivalente).
-        let displays = await Shell.run("/usr/sbin/system_profiler", ["SPDisplaysDataType", "-json"])
+        let displays = Shell.runSync("/usr/sbin/system_profiler", ["SPDisplaysDataType", "-json"])
         if let displays { DiagnosticLog.shared.record("SPDisplaysDataType", displays.stdout) }
         let parsed = DisplaysParser.parse(displays?.stdout)
         if let gpu = parsed.gpu {
@@ -115,7 +120,7 @@ enum IdentityCollector {
             result.append(Measurement(id: MetricID.securityChip, value: .text("apple-silicon"), status: .info, collectedAt: now,
                                       display: L("Apple silicon (Secure Enclave)", "Puce Apple (Secure Enclave)")))
         } else {
-            let bridge = await Shell.run("/usr/sbin/system_profiler", ["SPiBridgeDataType", "-json"])
+            let bridge = Shell.runSync("/usr/sbin/system_profiler", ["SPiBridgeDataType", "-json"])
             if let bridge { DiagnosticLog.shared.record("SPiBridgeDataType", bridge.stdout) }
             let name = DisplaysParser.bridgeModelName(bridge?.stdout)
             hasT2 = name.map { $0.contains("T2") }
@@ -132,7 +137,7 @@ enum IdentityCollector {
         return Output(measurements: result, hasT2: hasT2)
     }
 
-    static func macOSMax(_ model: MacModel?, now: Date) -> Measurement {
+    public static func macOSMax(_ model: MacModel?, now: Date) -> Measurement {
         guard let model else {
             return .unavailable(MetricID.macOSMax, note: L("Model not recognized.", "Modèle non reconnu."))
         }
@@ -156,7 +161,7 @@ enum IdentityCollector {
     }
 
     /// « Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz » → « Intel Core i9-9980HK », « 2,4 GHz ».
-    static func prettyCPU(_ brand: String) -> (name: String, detail: String?) {
+    public static func prettyCPU(_ brand: String) -> (name: String, detail: String?) {
         var name = brand.replacingOccurrences(of: "(R)", with: "").replacingOccurrences(of: "(TM)", with: "")
         var detail: String?
         if let at = name.range(of: "@") {
@@ -173,11 +178,11 @@ enum IdentityCollector {
 }
 
 /// Lecture tolérante de `system_profiler SPDisplaysDataType -json`.
-enum DisplaysParser {
-    struct GPU { let name: String; let detail: String? }
-    struct Screen { let name: String; let detail: String?; let raw: String }
+public enum DisplaysParser {
+    public struct GPU { public let name: String; public let detail: String? }
+    public struct Screen { public let name: String; public let detail: String?; public let raw: String }
 
-    static func parse(_ json: String?) -> (gpu: GPU?, builtInDisplay: Screen?) {
+    public static func parse(_ json: String?) -> (gpu: GPU?, builtInDisplay: Screen?) {
         guard let json, let root = try? JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any],
               let items = root["SPDisplaysDataType"] as? [[String: Any]] else { return (nil, nil) }
         var names: [String] = []
@@ -215,7 +220,7 @@ enum DisplaysParser {
     }
 
     /// « Puce de sécurité T2 d'Apple » (nom localisé) : on cherche « T2 ».
-    static func bridgeModelName(_ json: String?) -> String? {
+    public static func bridgeModelName(_ json: String?) -> String? {
         guard let json, let root = try? JSONSerialization.jsonObject(with: Data(json.utf8)) as? [String: Any],
               let items = root["SPiBridgeDataType"] as? [[String: Any]] else { return nil }
         return items.compactMap { $0["ibridge_model_name"] as? String }.first
