@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "{1} में से {0} पोर्ट परीक्षित।",
 "Plug the device directly into the Mac, without a hub.": "डिवाइस को बिना हब के सीधे Mac में लगाएँ।",
 "The camera was found but sends no image.": "कैमरा मिला, लेकिन कोई तस्वीर नहीं भेज रहा।",
-"Ran {0} when this version of Aman Check was released.": "जब Aman Check का यह संस्करण जारी हुआ, तब {0} चला रहा था।"
+"Ran {0} when this version of Aman Check was released.": "जब Aman Check का यह संस्करण जारी हुआ, तब {0} चला रहा था।",
+"21.5-inch": "21.5 इंच",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "केवल Metal-सक्षम ग्राफ़िक्स कार्ड के साथ; अन्यथा macOS 10.13 High Sierra।"
 }

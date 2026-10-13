@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "{1}개 중 {0}개 포트 테스트됨.",
 "Plug the device directly into the Mac, without a hub.": "허브 없이 기기를 Mac에 직접 연결하십시오.",
 "The camera was found but sends no image.": "카메라가 발견되었지만 이미지를 보내지 않습니다.",
-"Ran {0} when this version of Aman Check was released.": "이 Aman Check 버전이 출시되었을 때 {0}을(를) 실행하고 있었습니다."
+"Ran {0} when this version of Aman Check was released.": "이 Aman Check 버전이 출시되었을 때 {0}을(를) 실행하고 있었습니다.",
+"21.5-inch": "21.5형",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Metal 지원 그래픽 카드가 있는 경우에만. 그렇지 않으면 macOS 10.13 High Sierra."
 }

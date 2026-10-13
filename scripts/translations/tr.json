@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "{1} bağlantı noktasından {0} tanesi test edildi.",
 "Plug the device directly into the Mac, without a hub.": "Aygıtı hub olmadan doğrudan Mac'e takın.",
 "The camera was found but sends no image.": "Kamera bulundu ancak görüntü göndermiyor.",
-"Ran {0} when this version of Aman Check was released.": "Aman Check'in bu sürümü yayımlandığında {0} çalıştırıyordu."
+"Ran {0} when this version of Aman Check was released.": "Aman Check'in bu sürümü yayımlandığında {0} çalıştırıyordu.",
+"21.5-inch": "21,5 inç",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Yalnızca Metal uyumlu bir ekran kartıyla; aksi halde macOS 10.13 High Sierra."
 }

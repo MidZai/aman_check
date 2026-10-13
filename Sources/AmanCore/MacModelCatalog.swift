@@ -52,9 +52,14 @@ public struct MacModel: Codable, Sendable, Hashable {
     public let hasSDSlot: Bool
     public let hasMagSafe: Bool
     /// Dernière version majeure de macOS pour ce modèle ; `nil` : encore pris en charge par la plus récente.
+    /// 10 pour macOS 10.x : la version mineure est dans `lastMacOSMinor` (Mac anciens, Aman Legacy).
     public let lastMacOS: Int?
     /// Cycles de charge pour lesquels la batterie est conçue (Apple : 1 000 pour les portables récents).
     public let ratedBatteryCycles: Int?
+    /// Version mineure quand `lastMacOS` vaut 10 (13 : High Sierra, 14 : Mojave, 15 : Catalina).
+    public var lastMacOSMinor: Int? = nil
+    /// Précision sur le dernier macOS quand il dépend de la configuration (Mac Pro 2010–2012 : carte graphique).
+    public var lastMacOSNote: String? = nil
 
     public var yearText: String {
         guard let alsoYear else { return String(year) }
@@ -86,13 +91,27 @@ public enum MacOSRelease {
         max(latestKnown, runningMajor)
     }
 
-    public static func name(_ major: Int) -> String {
-        switch major {
-        case 14: return "macOS 14 Sonoma"
-        case 15: return "macOS 15 Sequoia"
-        case 26: return "macOS 26 Tahoe"
-        default: return "macOS \(major)"
+    /// Nom commercial (« Sonoma ») ; `nil` si inconnu. Les versions 10.x se distinguent par leur numéro mineur.
+    public static func marketingName(_ major: Int, minor: Int = 0) -> String? {
+        switch (major, minor) {
+        case (10, 13): return "High Sierra"
+        case (10, 14): return "Mojave"
+        case (10, 15): return "Catalina"
+        case (11, _): return "Big Sur"
+        case (12, _): return "Monterey"
+        case (13, _): return "Ventura"
+        case (14, _): return "Sonoma"
+        case (15, _): return "Sequoia"
+        case (26, _): return "Tahoe"
+        default: return nil
         }
+    }
+
+    /// « macOS 14 Sonoma », « macOS 10.13 High Sierra ».
+    public static func name(_ major: Int, minor: Int = 0) -> String {
+        let number = major == 10 ? "10.\(minor)" : "\(major)"
+        guard let marketing = marketingName(major, minor: minor) else { return "macOS \(number)" }
+        return "macOS \(number) \(marketing)"
     }
 }
 
@@ -101,7 +120,7 @@ public enum MacModelCatalog {
         byIdentifier[identifier]
     }
 
-    public static let all: [MacModel] = laptops + desktops
+    public static let all: [MacModel] = laptops + desktops + olderLaptops + olderDesktops
 
     private static let byIdentifier: [String: MacModel] = {
         var map: [String: MacModel] = [:]
@@ -118,14 +137,25 @@ public enum MacModelCatalog {
 
     private static func laptop(_ ids: [String], _ family: String, inches: Int, year: Int, alsoYear: Int? = nil, variant: String? = nil,
                                chip: ChipFamily, touchBar: Bool = false, physicalEscape: Bool = true,
-                               ports: Int, hdmi: Bool = false, sd: Bool = false, magSafe: Bool = false,
-                               lastMacOS: Int? = nil) -> MacModel {
-        MacModel(identifiers: ids, family: family, inches: inches, year: year, alsoYear: alsoYear, variant: variant, kind: .laptop,
-                 chip: chip, hasTouchBar: touchBar, hasPhysicalEscape: physicalEscape,
-                 // Tous les portables listés ici ont Touch ID et une caméra FaceTime HD.
-                 hasTouchID: true, hasCamera: true,
-                 thunderboltPorts: ports, hasHDMI: hdmi, hasSDSlot: sd, hasMagSafe: magSafe,
-                 lastMacOS: lastMacOS, ratedBatteryCycles: 1000)
+                               ports: Int?, hdmi: Bool = false, sd: Bool = false, magSafe: Bool = false,
+                               lastMacOS: Int? = nil, lastMacOSMinor: Int? = nil, touchID: Bool = true) -> MacModel {
+        var model = MacModel(identifiers: ids, family: family, inches: inches, year: year, alsoYear: alsoYear, variant: variant, kind: .laptop,
+                             chip: chip, hasTouchBar: touchBar, hasPhysicalEscape: physicalEscape,
+                             // Les portables compatibles avec macOS 14 ont tous Touch ID ; tous ont une caméra FaceTime.
+                             hasTouchID: touchID, hasCamera: true,
+                             thunderboltPorts: ports, hasHDMI: hdmi, hasSDSlot: sd, hasMagSafe: magSafe,
+                             // 1 000 cycles pour tous les portables du catalogue (Apple, support 102888).
+                             lastMacOS: lastMacOS, ratedBatteryCycles: 1000)
+        model.lastMacOSMinor = lastMacOSMinor
+        return model
+    }
+
+    /// Mac antérieurs à macOS 14 (Aman Legacy) : sans Touch ID (fiches techniques Apple), ports USB-C/Thunderbolt 3
+    /// seulement s'il y en a ; HDMI, carte SD et MagSafe non renseignés (non utilisés par Aman Legacy).
+    private static func oldLaptop(_ ids: [String], _ family: String, inches: Int, year: Int, alsoYear: Int? = nil, variant: String? = nil,
+                                  touchBar: Bool = false, ports: Int? = nil, lastMacOS: Int, minor: Int? = nil) -> MacModel {
+        laptop(ids, family, inches: inches, year: year, alsoYear: alsoYear, variant: variant, chip: .intel,
+               touchBar: touchBar, physicalEscape: !touchBar, ports: ports, lastMacOS: lastMacOS, lastMacOSMinor: minor, touchID: touchBar)
     }
 
     static let laptops: [MacModel] = [
@@ -169,12 +199,15 @@ public enum MacModelCatalog {
 
     private static func desktop(_ ids: [String], _ family: String, kind: MacKind, inches: Int? = nil, year: Int, alsoYear: Int? = nil,
                                 variant: String? = nil, chip: ChipFamily, camera: Bool, hdmi: Bool = false,
-                                sd: Bool = false, lastMacOS: Int? = nil) -> MacModel {
-        MacModel(identifiers: ids, family: family, inches: inches, year: year, alsoYear: alsoYear, variant: variant, kind: kind,
-                 chip: chip, hasTouchBar: false, hasPhysicalEscape: false, hasTouchID: false, hasCamera: camera,
-                 // Ports des Mac de bureau non renseignés : pas de total affiché (correctifs §6.6).
-                 thunderboltPorts: nil, hasHDMI: hdmi, hasSDSlot: sd, hasMagSafe: false,
-                 lastMacOS: lastMacOS, ratedBatteryCycles: nil)
+                                sd: Bool = false, lastMacOS: Int? = nil, minor: Int? = nil, note: String? = nil) -> MacModel {
+        var model = MacModel(identifiers: ids, family: family, inches: inches, year: year, alsoYear: alsoYear, variant: variant, kind: kind,
+                             chip: chip, hasTouchBar: false, hasPhysicalEscape: false, hasTouchID: false, hasCamera: camera,
+                             // Ports des Mac de bureau non renseignés : pas de total affiché (correctifs §6.6).
+                             thunderboltPorts: nil, hasHDMI: hdmi, hasSDSlot: sd, hasMagSafe: false,
+                             lastMacOS: lastMacOS, ratedBatteryCycles: nil)
+        model.lastMacOSMinor = minor
+        model.lastMacOSNote = note
+        return model
     }
 
     static let desktops: [MacModel] = [
@@ -197,5 +230,87 @@ public enum MacModelCatalog {
 
         desktop(["MacPro7,1"], "Mac Pro", kind: .pro, year: 2019, chip: .intelT2, camera: false, lastMacOS: 26),
         desktop(["Mac14,8"], "Mac Pro", kind: .pro, year: 2023, chip: .appleSilicon, camera: false, hdmi: true)
+    ]
+
+    // MARK: - Mac antérieurs à macOS 14 (Aman Legacy)
+
+    // Mac qui font tourner macOS 10.13 High Sierra mais pas macOS 14. Jamais rencontrés par Aman Check (macOS 14+).
+    // Sources : pages Apple « Identifier votre MacBook Pro / MacBook Air / MacBook / iMac / Mac mini / Mac Pro »
+    // (identifiants, dernier macOS), liste Ventura (MacBook 2017), cycles de batterie (support 102888), fiches
+    // techniques de chaque modèle (caméra, clavier 78/79 touches avec 12 touches de fonction, Touch Bar et Touch ID).
+    // Détail et liens : aman_legacy/docs/SOURCES-CATALOGUE.md. Fiche des MacBook Air 2011 muette sur le clavier.
+    static let olderLaptops: [MacModel] = [
+        oldLaptop(["MacBookPro6,1"], "MacBook Pro", inches: 17, year: 2010, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookPro6,2"], "MacBook Pro", inches: 15, year: 2010, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookPro7,1"], "MacBook Pro", inches: 13, year: 2010, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookPro8,1"], "MacBook Pro", inches: 13, year: 2011, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookPro8,2"], "MacBook Pro", inches: 15, year: 2011, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookPro8,3"], "MacBook Pro", inches: 17, year: 2011, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookPro9,1"], "MacBook Pro", inches: 15, year: 2012, lastMacOS: 10, minor: 15),
+        oldLaptop(["MacBookPro9,2"], "MacBook Pro", inches: 13, year: 2012, lastMacOS: 10, minor: 15),
+        oldLaptop(["MacBookPro10,1"], "MacBook Pro", inches: 15, year: 2012, alsoYear: 2013, variant: "Retina", lastMacOS: 10, minor: 15),
+        oldLaptop(["MacBookPro10,2"], "MacBook Pro", inches: 13, year: 2012, alsoYear: 2013, variant: "Retina", lastMacOS: 10, minor: 15),
+        oldLaptop(["MacBookPro11,1"], "MacBook Pro", inches: 13, year: 2013, alsoYear: 2014, variant: "Retina", lastMacOS: 11),
+        oldLaptop(["MacBookPro11,2", "MacBookPro11,3"], "MacBook Pro", inches: 15, year: 2013, alsoYear: 2014, variant: "Retina", lastMacOS: 11),
+        oldLaptop(["MacBookPro12,1"], "MacBook Pro", inches: 13, year: 2015, variant: "Retina", lastMacOS: 12),
+        oldLaptop(["MacBookPro11,4", "MacBookPro11,5"], "MacBook Pro", inches: 15, year: 2015, variant: "Retina", lastMacOS: 12),
+        oldLaptop(["MacBookPro13,1"], "MacBook Pro", inches: 13, year: 2016, variant: L("two Thunderbolt 3 ports", "deux ports Thunderbolt 3"), ports: 2, lastMacOS: 12),
+        oldLaptop(["MacBookPro13,2"], "MacBook Pro", inches: 13, year: 2016, variant: L("four Thunderbolt 3 ports", "quatre ports Thunderbolt 3"), touchBar: true, ports: 4, lastMacOS: 12),
+        oldLaptop(["MacBookPro13,3"], "MacBook Pro", inches: 15, year: 2016, touchBar: true, ports: 4, lastMacOS: 12),
+        oldLaptop(["MacBookPro14,1"], "MacBook Pro", inches: 13, year: 2017, variant: L("two Thunderbolt 3 ports", "deux ports Thunderbolt 3"), ports: 2, lastMacOS: 13),
+        oldLaptop(["MacBookPro14,2"], "MacBook Pro", inches: 13, year: 2017, variant: L("four Thunderbolt 3 ports", "quatre ports Thunderbolt 3"), touchBar: true, ports: 4, lastMacOS: 13),
+        oldLaptop(["MacBookPro14,3"], "MacBook Pro", inches: 15, year: 2017, touchBar: true, ports: 4, lastMacOS: 13),
+
+        oldLaptop(["MacBookAir3,1"], "MacBook Air", inches: 11, year: 2010, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookAir3,2"], "MacBook Air", inches: 13, year: 2010, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookAir4,1"], "MacBook Air", inches: 11, year: 2011, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookAir4,2"], "MacBook Air", inches: 13, year: 2011, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBookAir5,1"], "MacBook Air", inches: 11, year: 2012, lastMacOS: 10, minor: 15),
+        oldLaptop(["MacBookAir5,2"], "MacBook Air", inches: 13, year: 2012, lastMacOS: 10, minor: 15),
+        oldLaptop(["MacBookAir6,1"], "MacBook Air", inches: 11, year: 2013, alsoYear: 2014, lastMacOS: 11),
+        oldLaptop(["MacBookAir6,2"], "MacBook Air", inches: 13, year: 2013, alsoYear: 2014, lastMacOS: 11),
+        oldLaptop(["MacBookAir7,1"], "MacBook Air", inches: 11, year: 2015, lastMacOS: 12),
+        oldLaptop(["MacBookAir7,2"], "MacBook Air", inches: 13, year: 2015, alsoYear: 2017, lastMacOS: 12),
+
+        oldLaptop(["MacBook6,1"], "MacBook", inches: 13, year: 2009, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBook7,1"], "MacBook", inches: 13, year: 2010, lastMacOS: 10, minor: 13),
+        oldLaptop(["MacBook8,1"], "MacBook", inches: 12, year: 2015, variant: "Retina", ports: 1, lastMacOS: 11),
+        oldLaptop(["MacBook9,1"], "MacBook", inches: 12, year: 2016, variant: "Retina", ports: 1, lastMacOS: 12),
+        oldLaptop(["MacBook10,1"], "MacBook", inches: 12, year: 2017, variant: "Retina", ports: 1, lastMacOS: 13)
+    ]
+
+    /// iMac 21,5 pouces : la taille n'est pas un entier, elle passe dans la variante (comme iMac19,2).
+    private static var inch21: String { L("21.5-inch", "21,5 pouces") }
+
+    static let olderDesktops: [MacModel] = [
+        // iMac10,1 : 21,5 ou 27 pouces (même identifiant) : taille non renseignée.
+        desktop(["iMac10,1"], "iMac", kind: .iMac, year: 2009, chip: .intel, camera: true, lastMacOS: 10, minor: 13),
+        desktop(["iMac11,2"], "iMac", kind: .iMac, year: 2010, variant: inch21, chip: .intel, camera: true, lastMacOS: 10, minor: 13),
+        desktop(["iMac11,3"], "iMac", kind: .iMac, inches: 27, year: 2010, chip: .intel, camera: true, lastMacOS: 10, minor: 13),
+        desktop(["iMac12,1"], "iMac", kind: .iMac, year: 2011, variant: inch21, chip: .intel, camera: true, lastMacOS: 10, minor: 13),
+        desktop(["iMac12,2"], "iMac", kind: .iMac, inches: 27, year: 2011, chip: .intel, camera: true, lastMacOS: 10, minor: 13),
+        desktop(["iMac13,1"], "iMac", kind: .iMac, year: 2012, variant: inch21, chip: .intel, camera: true, lastMacOS: 10, minor: 15),
+        desktop(["iMac13,2"], "iMac", kind: .iMac, inches: 27, year: 2012, chip: .intel, camera: true, lastMacOS: 10, minor: 15),
+        desktop(["iMac14,1"], "iMac", kind: .iMac, year: 2013, variant: inch21, chip: .intel, camera: true, lastMacOS: 10, minor: 15),
+        desktop(["iMac14,2"], "iMac", kind: .iMac, inches: 27, year: 2013, chip: .intel, camera: true, lastMacOS: 10, minor: 15),
+        desktop(["iMac14,4"], "iMac", kind: .iMac, year: 2014, variant: inch21, chip: .intel, camera: true, lastMacOS: 11),
+        desktop(["iMac15,1"], "iMac", kind: .iMac, inches: 27, year: 2014, alsoYear: 2015, variant: "Retina 5K", chip: .intel, camera: true, lastMacOS: 11),
+        desktop(["iMac16,1"], "iMac", kind: .iMac, year: 2015, variant: inch21, chip: .intel, camera: true, lastMacOS: 12),
+        desktop(["iMac16,2"], "iMac", kind: .iMac, year: 2015, variant: L("21.5-inch, Retina 4K", "21,5 pouces, Retina 4K"), chip: .intel, camera: true, lastMacOS: 12),
+        desktop(["iMac17,1"], "iMac", kind: .iMac, inches: 27, year: 2015, variant: "Retina 5K", chip: .intel, camera: true, lastMacOS: 12),
+        desktop(["iMac18,1"], "iMac", kind: .iMac, year: 2017, variant: inch21, chip: .intel, camera: true, lastMacOS: 13),
+        desktop(["iMac18,2"], "iMac", kind: .iMac, year: 2017, variant: L("21.5-inch, Retina 4K", "21,5 pouces, Retina 4K"), chip: .intel, camera: true, lastMacOS: 13),
+        desktop(["iMac18,3"], "iMac", kind: .iMac, inches: 27, year: 2017, variant: "Retina 5K", chip: .intel, camera: true, lastMacOS: 13),
+
+        desktop(["Macmini4,1"], "Mac mini", kind: .mini, year: 2010, chip: .intel, camera: false, lastMacOS: 10, minor: 13),
+        desktop(["Macmini5,1", "Macmini5,2"], "Mac mini", kind: .mini, year: 2011, chip: .intel, camera: false, lastMacOS: 10, minor: 13),
+        desktop(["Macmini6,1", "Macmini6,2"], "Mac mini", kind: .mini, year: 2012, chip: .intel, camera: false, lastMacOS: 10, minor: 15),
+        desktop(["Macmini7,1"], "Mac mini", kind: .mini, year: 2014, chip: .intel, camera: false, lastMacOS: 12),
+
+        // MacPro5,1 : 2010 ou 2012 ; Mojave seulement avec une carte graphique Metal (Apple, support 102887).
+        desktop(["MacPro5,1"], "Mac Pro", kind: .pro, year: 2010, alsoYear: 2012, chip: .intel, camera: false, lastMacOS: 10, minor: 14,
+                note: L("Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.",
+                        "Seulement avec une carte graphique compatible Metal ; sinon macOS 10.13 High Sierra.")),
+        desktop(["MacPro6,1"], "Mac Pro", kind: .pro, year: 2013, chip: .intel, camera: false, lastMacOS: 12)
     ]
 }

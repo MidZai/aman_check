@@ -78,10 +78,10 @@ public enum IdentityCollector {
         let v = ProcessInfo.processInfo.operatingSystemVersion
         let version = v.patchVersion > 0 ? "\(v.majorVersion).\(v.minorVersion).\(v.patchVersion)" : "\(v.majorVersion).\(v.minorVersion)"
         let build = SystemReader.sysctlString("kern.osversion")
-        let releaseName = MacOSRelease.name(v.majorVersion).replacingOccurrences(of: "macOS \(v.majorVersion) ", with: "")
+        let releaseName = MacOSRelease.marketingName(v.majorVersion, minor: v.minorVersion)
         result.append(Measurement(id: MetricID.macOS, value: .text(version), status: .info, method: "ProcessInfo.operatingSystemVersion",
                                   collectedAt: now, display: "macOS \(version)",
-                                  detail: [releaseName == "macOS \(v.majorVersion)" ? nil : releaseName, build.map { "build \($0)" }]
+                                  detail: [releaseName, build.map { "build \($0)" }]
                                       .compactMap { $0 }.joined(separator: " · ")))
         result.append(macOSMax(model, now: now))
 
@@ -152,8 +152,11 @@ public enum IdentityCollector {
             } else {
                 detail = L("Will not receive \(MacOSRelease.name(MacOSRelease.latestKnown))", "Ne recevra pas \(MacOSRelease.name(MacOSRelease.latestKnown))")
             }
-            return Measurement(id: MetricID.macOSMax, value: .int(Int64(last)), status: .info, provenance: .derived, method: method, collectedAt: now,
-                               display: MacOSRelease.name(last), detail: detail)
+            // macOS 10.x (Mac anciens, Aman Legacy) : la version mineure distingue High Sierra, Mojave et Catalina.
+            let minor = model.lastMacOSMinor ?? 0
+            return Measurement(id: MetricID.macOSMax, value: last == 10 ? .text("10.\(minor)") : .int(Int64(last)), status: .info,
+                               provenance: .derived, method: method, collectedAt: now,
+                               display: MacOSRelease.name(last, minor: minor), detail: detail, note: model.lastMacOSNote)
         }
         return Measurement(id: MetricID.macOSMax, value: .int(Int64(MacOSRelease.latestKnown)), status: .info, provenance: .derived, method: method,
                            collectedAt: now, display: MacOSRelease.name(MacOSRelease.latestKnown),

@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "{0} von {1} Anschlüssen getestet.",
 "Plug the device directly into the Mac, without a hub.": "Schließen Sie das Gerät direkt am Mac an, ohne Hub.",
 "The camera was found but sends no image.": "Die Kamera wurde gefunden, sendet aber kein Bild.",
-"Ran {0} when this version of Aman Check was released.": "Lief mit {0}, als diese Version von Aman Check erschien."
+"Ran {0} when this version of Aman Check was released.": "Lief mit {0}, als diese Version von Aman Check erschien.",
+"21.5-inch": "21,5 Zoll",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Nur mit einer Metal-fähigen Grafikkarte, sonst macOS 10.13 High Sierra."
 }

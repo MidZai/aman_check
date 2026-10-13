@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "Đã kiểm tra {0} trên {1} cổng.",
 "Plug the device directly into the Mac, without a hub.": "Cắm thiết bị trực tiếp vào máy Mac, không qua hub.",
 "The camera was found but sends no image.": "Đã tìm thấy camera nhưng không gửi hình ảnh.",
-"Ran {0} when this version of Aman Check was released.": "Chạy {0} khi phiên bản Aman Check này được phát hành."
+"Ran {0} when this version of Aman Check was released.": "Chạy {0} khi phiên bản Aman Check này được phát hành.",
+"21.5-inch": "21,5 inch",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Chỉ khi có card đồ họa hỗ trợ Metal; nếu không thì macOS 10.13 High Sierra."
 }

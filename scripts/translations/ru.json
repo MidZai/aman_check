@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "Проверено портов: {0} из {1}.",
 "Plug the device directly into the Mac, without a hub.": "Подключите устройство напрямую к Mac, без концентратора.",
 "The camera was found but sends no image.": "Камера найдена, но не передаёт изображение.",
-"Ran {0} when this version of Aman Check was released.": "Работал на {0} на момент выхода этой версии Aman Check."
+"Ran {0} when this version of Aman Check was released.": "Работал на {0} на момент выхода этой версии Aman Check.",
+"21.5-inch": "21,5 дюйма",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Только с видеокартой, поддерживающей Metal; иначе macOS 10.13 High Sierra."
 }

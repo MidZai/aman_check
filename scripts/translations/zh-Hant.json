@@ -672,5 +672,7 @@
 "{0} of {1} ports tested.": "已測試 {1} 個連接埠中的 {0} 個。",
 "Plug the device directly into the Mac, without a hub.": "請將裝置直接插入 Mac，不要經過集線器。",
 "The camera was found but sends no image.": "已找到相機，但沒有傳送影像。",
-"Ran {0} when this version of Aman Check was released.": "在此版本 Aman Check 發布時執行 {0}。"
+"Ran {0} when this version of Aman Check was released.": "在此版本 Aman Check 發布時執行 {0}。",
+"21.5-inch": "21.5 吋",
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "僅限配備支援 Metal 的顯示卡；否則為 macOS 10.13 High Sierra。"
 }
