@@ -30,6 +30,8 @@ enum Snapshots {
                        size: CGSize(width: 1040, height: 720), to: dir.appendingPathComponent("4-test-\(test.rawValue).png"))
             }
             try? ReportExporter.writePDF(controller.report, detailed: true, to: dir.appendingPathComponent("5-rapport.pdf"))
+            // Rapport en JSON : permet de comparer les mesures d'une version à l'autre (même encodage que le niveau 2).
+            try? ReportCoding.encode(controller.report).write(to: dir.appendingPathComponent("5-rapport.json"))
             // Niveau 2 : publication fictive (aucun réseau), pour vérifier l'en-tête, le QR code et la fiche A5.
             let sample = PublicationRecord(publicId: "7K3P-Q2XD-M4RT", url: "https://aman-check.invalid/r/7K3P-Q2XD-M4RT",
                                            sha256: String(repeating: "3fa9c2e1", count: 8), publishedAt: Date(), signature: "",
