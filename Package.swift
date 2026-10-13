@@ -44,7 +44,10 @@ let package = Package(
         // entièrement testable avec des fixtures.
         .target(
             name: "AmanCore",
-            dependencies: ["DiskHealthCore"]
+            dependencies: ["DiskHealthCore"],
+            linkerSettings: [
+                .linkedFramework("IOKit")
+            ]
         ),
         // Lecture du stockage (moteur d'Aman Disk) convertie en mesures Aman Check.
         .target(

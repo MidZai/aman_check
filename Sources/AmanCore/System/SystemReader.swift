@@ -1,17 +1,17 @@
 import Foundation
 import IOKit
-import AmanCore
 
 /// Résultat d'une commande : sortie, erreurs et code de retour. `nil` en cas d'échec de lancement ou de délai dépassé.
-struct CommandResult: Sendable {
-    let stdout: String
-    let stderr: String
-    let exitCode: Int32
+public struct CommandResult: Sendable {
+    public let stdout: String
+    public let stderr: String
+    public let exitCode: Int32
 }
 
 /// Commandes système sans API (spec §5) : délai maximal, stderr capturé, jamais sur le fil principal.
-enum Shell {
-    static func run(_ path: String, _ arguments: [String], timeout: TimeInterval = 15) async -> CommandResult? {
+public enum Shell {
+    @available(macOS 10.15, *)
+    public static func run(_ path: String, _ arguments: [String], timeout: TimeInterval = 15) async -> CommandResult? {
         await withCheckedContinuation { continuation in
             DispatchQueue.global(qos: .userInitiated).async {
                 continuation.resume(returning: runSync(path, arguments, timeout: timeout))
@@ -19,7 +19,8 @@ enum Shell {
         }
     }
 
-    private static func runSync(_ path: String, _ arguments: [String], timeout: TimeInterval) -> CommandResult? {
+    /// Version synchrone (Aman Legacy, macOS 10.13) : à appeler hors du fil principal.
+    public static func runSync(_ path: String, _ arguments: [String], timeout: TimeInterval = 15) -> CommandResult? {
         guard FileManager.default.isExecutableFile(atPath: path) else { return nil }
         let process = Process()
         process.executableURL = URL(fileURLWithPath: path)
@@ -63,8 +64,9 @@ enum Shell {
 }
 
 /// Lectures directes (sysctl, IOKit) : préférées aux sorties texte (spec §5).
-enum SystemReader {
-    static func sysctlString(_ name: String) -> String? {
+/// IOKit : `MACH_PORT_NULL` est l'équivalent documenté de `kIOMainPortDefault` (macOS 12 seulement).
+public enum SystemReader {
+    public static func sysctlString(_ name: String) -> String? {
         var size = 0
         guard sysctlbyname(name, nil, &size, nil, 0) == 0, size > 0 else { return nil }
         var buffer = [CChar](repeating: 0, count: size)
@@ -73,20 +75,20 @@ enum SystemReader {
     }
 
     /// Entier 32 ou 64 bits : le tampon est mis à zéro, sysctl n'écrit que la taille réelle (petit-boutiste).
-    static func sysctlInt(_ name: String) -> Int? {
+    public static func sysctlInt(_ name: String) -> Int? {
         var value: Int64 = 0
         var size = MemoryLayout<Int64>.size
         guard sysctlbyname(name, &value, &size, nil, 0) == 0 else { return nil }
         return Int(value)
     }
 
-    static var modelIdentifier: String { sysctlString("hw.model") ?? "Mac" }
+    public static var modelIdentifier: String { sysctlString("hw.model") ?? "Mac" }
 
-    static var isAppleSilicon: Bool { sysctlInt("hw.optional.arm64") == 1 }
+    public static var isAppleSilicon: Bool { sysctlInt("hw.optional.arm64") == 1 }
 
     /// Numéro de série complet (IOPlatformSerialNumber). Jamais affiché en entier.
-    static var serialNumber: String? {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("IOPlatformExpertDevice"))
+    public static var serialNumber: String? {
+        let service = IOServiceGetMatchingService(mach_port_t(MACH_PORT_NULL), IOServiceMatching("IOPlatformExpertDevice"))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
         let value = IORegistryEntryCreateCFProperty(service, "IOPlatformSerialNumber" as CFString, kCFAllocatorDefault, 0)
@@ -94,8 +96,8 @@ enum SystemReader {
     }
 
     /// Propriétés de `AppleSmartBattery` ; `nil` si aucune batterie (Mac de bureau).
-    static func batteryProperties() -> [String: Any]? {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOServiceMatching("AppleSmartBattery"))
+    public static func batteryProperties() -> [String: Any]? {
+        let service = IOServiceGetMatchingService(mach_port_t(MACH_PORT_NULL), IOServiceMatching("AppleSmartBattery"))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
         var props: Unmanaged<CFMutableDictionary>?
