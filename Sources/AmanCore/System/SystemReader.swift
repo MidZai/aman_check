@@ -72,8 +72,13 @@ public enum Shell {
         do { try process.run() } catch {
             DiagnosticLog.shared.log("shell", "échec du lancement de \(path) : \(error)")
             // Ferme les tubes pour libérer les deux lecteurs en attente de fin de fichier.
-            try? out.fileHandleForWriting.close()
-            try? err.fileHandleForWriting.close()
+            if #available(macOS 10.15, *) {
+                try? out.fileHandleForWriting.close()
+                try? err.fileHandleForWriting.close()
+            } else {
+                out.fileHandleForWriting.closeFile()
+                err.fileHandleForWriting.closeFile()
+            }
             return nil
         }
         let deadline = DispatchTime.now() + timeout
