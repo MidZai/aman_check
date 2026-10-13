@@ -22,7 +22,7 @@ public enum ProtocolDetector {
         }
 
         // Direct lookup by BSD name (instead of walking every IOMedia in the system).
-        let targetService = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, bsdName))
+        let targetService = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, bsdName))
 
         guard targetService != 0 else {
             return (.unknown, .unknown, .unsupported(reason: .noSmartInterface))

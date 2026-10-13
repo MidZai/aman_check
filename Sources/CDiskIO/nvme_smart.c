@@ -16,12 +16,14 @@ static int _cdiskio_do_nvme_operation(const char *bsd_name, unsigned char *smart
     SInt32 score = 0;
     IOReturn err = kIOReturnSuccess;
 
+    // MACH_PORT_NULL is the documented equivalent of kIOMainPortDefault, which only exists
+    // from macOS 12 on (Aman Legacy builds this code for macOS 10.13).
     // 1. IOMedia from the BSD name (IOServiceGetMatchingService consumes the dictionary).
-    CFMutableDictionaryRef matchingDict = IOBSDNameMatching(kIOMainPortDefault, 0, bsd_name);
+    CFMutableDictionaryRef matchingDict = IOBSDNameMatching(MACH_PORT_NULL, 0, bsd_name);
     if (!matchingDict) {
         return -1;
     }
-    service = IOServiceGetMatchingService(kIOMainPortDefault, matchingDict);
+    service = IOServiceGetMatchingService(MACH_PORT_NULL, matchingDict);
     if (service == MACH_PORT_NULL) {
         return -1;
     }

@@ -64,7 +64,7 @@ public enum VolumeDiscovery {
     }
     
     public static func getPhysicalDiskBSDNames(for volumeBSDName: String) -> [String] {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, volumeBSDName))
+        let service = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, volumeBSDName))
         guard service != 0 else { return [] }
         let node = IOKitRegistryNode(entry: service, shouldRelease: true)
         return PhysicalDiskResolver.resolvePhysicalDisks(from: node)

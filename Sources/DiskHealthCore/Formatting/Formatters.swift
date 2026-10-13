@@ -24,6 +24,9 @@ public enum TemperatureUnit: String, CaseIterable, Identifiable, Codable, Sendab
             if Locale.current.measurementSystem == .us {
                 return .fahrenheit
             }
+        } else if !Locale.current.usesMetricSystem {
+            // Before macOS 13 (Aman Legacy): only the US system isn't metric (the UK system is).
+            return .fahrenheit
         }
         return .celsius
     }

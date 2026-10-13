@@ -62,7 +62,7 @@ public enum IOKitDiagnostics {
     }
     
     public static func collectParentChain(bsdName: String) -> [IOKitNodeDiagnostic] {
-        let targetService = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, bsdName))
+        let targetService = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, bsdName))
         guard targetService != 0 else { return [] }
         
         var chain: [IOKitNodeDiagnostic] = []
@@ -96,7 +96,7 @@ public enum IOKitDiagnostics {
     }
 
     public static func collectProtocolCharacteristics(bsdName: String) -> [String: String]? {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, bsdName))
+        let service = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, bsdName))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
         
@@ -113,7 +113,7 @@ public enum IOKitDiagnostics {
     }
 
     public static func collectDeviceCharacteristics(bsdName: String) -> [String: String]? {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, bsdName))
+        let service = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, bsdName))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
         
@@ -130,7 +130,7 @@ public enum IOKitDiagnostics {
     }
 
     public static func collectUSBHostDevice(bsdName: String) -> USBHostDeviceDiagnostic? {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, bsdName))
+        let service = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, bsdName))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
         
@@ -198,7 +198,7 @@ public enum IOKitDiagnostics {
     }
 
     public static func detectStorageDriver(bsdName: String) -> String? {
-        let service = IOServiceGetMatchingService(kIOMainPortDefault, IOBSDNameMatching(kIOMainPortDefault, 0, bsdName))
+        let service = IOServiceGetMatchingService(ioMainPort, IOBSDNameMatching(ioMainPort, 0, bsdName))
         guard service != 0 else { return nil }
         defer { IOObjectRelease(service) }
         

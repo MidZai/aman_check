@@ -11,7 +11,7 @@ public enum DiskDiscovery {
         }
         
         var iterator: io_iterator_t = 0
-        guard IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("IOMedia"), &iterator) == kIOReturnSuccess else {
+        guard IOServiceGetMatchingServices(ioMainPort, IOServiceMatching("IOMedia"), &iterator) == kIOReturnSuccess else {
             return []
         }
         defer { IOObjectRelease(iterator) }
@@ -190,7 +190,7 @@ public enum DiskDiscovery {
     private static func getVolumeNames(for bsdName: String, session: DASession) -> [String] {
         var names: Set<String> = []
         var iterator: io_iterator_t = 0
-        guard IOServiceGetMatchingServices(kIOMainPortDefault, IOServiceMatching("IOMedia"), &iterator) == kIOReturnSuccess else { return [] }
+        guard IOServiceGetMatchingServices(ioMainPort, IOServiceMatching("IOMedia"), &iterator) == kIOReturnSuccess else { return [] }
         defer { IOObjectRelease(iterator) }
 
         var service = IOIteratorNext(iterator)

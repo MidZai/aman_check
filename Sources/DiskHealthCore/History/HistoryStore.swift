@@ -109,7 +109,9 @@ public final class HistoryStore: @unchecked Sendable {
         guard var line = try? encoder.encode(sample) else { return }
         line.append(UInt8(ascii: "\n"))
         let url = fileURL(for: key)
-        if let handle = try? FileHandle(forWritingTo: url) {
+        // Before macOS 10.15.4 (Aman Legacy), the older FileHandle API raises an Objective-C exception
+        // on a write error instead of throwing: full rewrite instead.
+        if #available(macOS 10.15.4, *), let handle = try? FileHandle(forWritingTo: url) {
             defer { try? handle.close() }
             do {
                 try handle.seekToEnd()
@@ -259,6 +261,7 @@ public final class HistoryStore: @unchecked Sendable {
     }
 
     /// Read without blocking the main thread.
+    @available(macOS 10.15, *)
     public func loadSamples(for key: String, since: Date) async -> [HistorySample] {
         await withCheckedContinuation { continuation in
             queue.async {

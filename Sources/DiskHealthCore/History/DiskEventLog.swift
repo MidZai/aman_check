@@ -52,14 +52,23 @@ public final class DiskEventLog: @unchecked Sendable {
             str.append("\n")
             
             let url = self.fileURL(for: key)
-            if let handle = try? FileHandle(forWritingTo: url) {
-                defer { try? handle.close() }
-                try? handle.seekToEnd()
-                if let lineData = str.data(using: .utf8) {
-                    try? handle.write(contentsOf: lineData)
+            if #available(macOS 10.15.4, *) {
+                if let handle = try? FileHandle(forWritingTo: url) {
+                    defer { try? handle.close() }
+                    try? handle.seekToEnd()
+                    if let lineData = str.data(using: .utf8) {
+                        try? handle.write(contentsOf: lineData)
+                    }
+                } else {
+                    try? str.write(to: url, atomically: true, encoding: .utf8)
                 }
             } else {
-                try? str.write(to: url, atomically: true, encoding: .utf8)
+                // macOS 10.13 to 10.15.3 (Aman Legacy): the older FileHandle API raises an Objective-C
+                // exception on a write error instead of throwing. The file is small: read it, add the
+                // line, write it back.
+                var contents = (try? Data(contentsOf: url)) ?? Data()
+                contents.append(Data(str.utf8))
+                try? contents.write(to: url, options: .atomic)
             }
         }
     }

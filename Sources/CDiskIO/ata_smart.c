@@ -49,11 +49,13 @@ static int open_handle(const char *bsd_name, ata_handle *out, int require_enable
     out->smart = NULL;
     if (!bsd_name) return -1;
 
-    CFMutableDictionaryRef matching = IOBSDNameMatching(kIOMainPortDefault, 0, bsd_name);
+    // MACH_PORT_NULL is the documented equivalent of kIOMainPortDefault, which only exists
+    // from macOS 12 on (Aman Legacy builds this code for macOS 10.13).
+    CFMutableDictionaryRef matching = IOBSDNameMatching(MACH_PORT_NULL, 0, bsd_name);
     if (!matching) return -2;
 
     // IOServiceGetMatchingService consumes the dictionary reference.
-    io_object_t media = IOServiceGetMatchingService(kIOMainPortDefault, matching);
+    io_object_t media = IOServiceGetMatchingService(MACH_PORT_NULL, matching);
     if (media == 0) return -3;
 
     // The ATA S.M.A.R.T. plug-in is published by an ancestor (IOAHCIBlockStorageDevice, etc.):
