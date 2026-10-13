@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import CoreAudio
+import AmanCore
 import AppKit
 
 /// Périphériques audio par défaut via Core Audio (correctifs §6.5).

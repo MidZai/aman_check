@@ -1,5 +1,6 @@
 import Foundation
 import IOKit
+import AmanCore
 
 /// Résultat d'une commande : sortie, erreurs et code de retour. `nil` en cas d'échec de lancement ou de délai dépassé.
 struct CommandResult: Sendable {
