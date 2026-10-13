@@ -14,7 +14,7 @@ public enum BatteryCollector {
         guard let props = SystemReader.batteryProperties() else { return [] }
         let registry = BatteryRegistry(properties: props)
         DiagnosticLog.shared.record("AppleSmartBattery", String(describing: registry))
-        let sp = Shell.runSync("/usr/sbin/system_profiler", ["SPPowerDataType", "-json"])
+        let sp = SystemProfiler.runSync("SPPowerDataType")
         if let sp { DiagnosticLog.shared.record("SPPowerDataType", sp.stdout) }
         let power = sp.flatMap { PowerProfile(systemProfilerJSON: Data($0.stdout.utf8)) }
         return BatteryAnalysis.analyze(registry: registry, power: power, ratedCyclesFromModel: profile.model?.ratedBatteryCycles)

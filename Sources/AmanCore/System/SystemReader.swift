@@ -6,6 +6,12 @@ public struct CommandResult: Sendable {
     public let stdout: String
     public let stderr: String
     public let exitCode: Int32
+
+    public init(stdout: String, stderr: String, exitCode: Int32) {
+        self.stdout = stdout
+        self.stderr = stderr
+        self.exitCode = exitCode
+    }
 }
 
 /// Commandes système sans API (spec §5) : délai maximal, stderr capturé, jamais sur le fil principal.
@@ -19,9 +25,9 @@ public enum Shell {
         }
     }
 
-    /// Plusieurs commandes en parallèle, chacune avec son délai ; résultats dans l'ordre des commandes.
+    /// Plusieurs commandes en parallèle (chacune garde son délai) ; résultats dans l'ordre des commandes.
     /// Synchrone : à appeler hors du fil principal.
-    public static func runAllSync(_ commands: [(path: String, arguments: [String])], timeout: TimeInterval = 15) -> [CommandResult?] {
+    public static func runAllSync(_ commands: [() -> CommandResult?]) -> [CommandResult?] {
         var results = [CommandResult?](repeating: nil, count: commands.count)
         let lock = NSLock()
         let group = DispatchGroup()
@@ -29,7 +35,7 @@ public enum Shell {
         // à deux cœurs, les commandes attendraient leur tour).
         for (index, command) in commands.enumerated() {
             DispatchQueue.global(qos: .userInitiated).async(group: group) {
-                let result = runSync(command.path, command.arguments, timeout: timeout)
+                let result = command()
                 lock.lock()
                 results[index] = result
                 lock.unlock()

@@ -1,0 +1,23 @@
+{
+  "SPHardwareDataType": [
+    {
+      "_name": "hardware_overview",
+      "activation_lock_status": "activation_lock_disabled",
+      "boot_rom_version": "2103.100.6.0.0 (iBridge: 23.16.14242.0.0,0)",
+      "cpu_type": "8-Core Intel Core i9",
+      "current_processor_speed": "2,4 GHz",
+      "l2_cache_core": "256 KB",
+      "l3_cache": "16 MB",
+      "machine_model": "MacBookPro16,1",
+      "machine_name": "MacBook Pro",
+      "number_processors": 8,
+      "os_loader_version": "583~5461",
+      "packages": 1,
+      "physical_memory": "32 GB",
+      "platform_cpu_htt": "htt_enabled",
+      "platform_UUID": "ANONYMIZED",
+      "provisioning_UDID": "ANONYMIZED",
+      "serial_number": "ANONYMIZED"
+    }
+  ]
+}

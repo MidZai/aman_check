@@ -11,16 +11,16 @@ public enum SecurityCollector {
     /// à appeler hors du fil principal.
     public static func collectSync(profile: DeviceProfile) -> [Measurement] {
         let results = Shell.runAllSync([
-            ("/usr/sbin/system_profiler", ["SPHardwareDataType", "-json"]),
-            ("/usr/bin/profiles", ["status", "-type", "enrollment"]),
-            ("/usr/bin/profiles", ["list"]),
-            ("/usr/bin/csrutil", ["status"]),
-            ("/usr/bin/fdesetup", ["status"]),
+            { SystemProfiler.runSync("SPHardwareDataType") },
+            { Shell.runSync("/usr/bin/profiles", ["status", "-type", "enrollment"]) },
+            { Shell.runSync("/usr/bin/profiles", ["list"]) },
+            { Shell.runSync("/usr/bin/csrutil", ["status"]) },
+            { Shell.runSync("/usr/bin/fdesetup", ["status"]) },
             // Compte Apple connecté : export plist du domaine MobileMeAccounts. Sa sortie contient l'identifiant du compte :
             // elle n'est ni journalisée ni conservée, seuls le nombre de comptes et l'état de Localiser en sont tirés.
-            ("/usr/bin/defaults", ["export", "MobileMeAccounts", "-"]),
+            { Shell.runSync("/usr/bin/defaults", ["export", "MobileMeAccounts", "-"]) },
             // Comptes utilisateurs locaux : la lecture du compte Apple ne couvre que la session en cours.
-            ("/usr/bin/dscl", [".", "-list", "/Users", "UniqueID"])
+            { Shell.runSync("/usr/bin/dscl", [".", "-list", "/Users", "UniqueID"]) }
         ])
         let (hw, enr, list, csr, fde, mm, dscl) = (results[0], results[1], results[2], results[3], results[4], results[5], results[6])
 

@@ -99,7 +99,7 @@ public enum IdentityCollector {
         }
 
         // Graphisme et écran (system_profiler : pas d'API publique équivalente).
-        let displays = Shell.runSync("/usr/sbin/system_profiler", ["SPDisplaysDataType", "-json"])
+        let displays = SystemProfiler.runSync("SPDisplaysDataType")
         if let displays { DiagnosticLog.shared.record("SPDisplaysDataType", displays.stdout) }
         let parsed = DisplaysParser.parse(displays?.stdout)
         if let gpu = parsed.gpu {
@@ -120,7 +120,7 @@ public enum IdentityCollector {
             result.append(Measurement(id: MetricID.securityChip, value: .text("apple-silicon"), status: .info, collectedAt: now,
                                       display: L("Apple silicon (Secure Enclave)", "Puce Apple (Secure Enclave)")))
         } else {
-            let bridge = Shell.runSync("/usr/sbin/system_profiler", ["SPiBridgeDataType", "-json"])
+            let bridge = SystemProfiler.runSync("SPiBridgeDataType")
             if let bridge { DiagnosticLog.shared.record("SPiBridgeDataType", bridge.stdout) }
             let name = DisplaysParser.bridgeModelName(bridge?.stdout)
             hasT2 = name.map { $0.contains("T2") }

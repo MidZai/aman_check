@@ -1,0 +1,100 @@
+{
+  "SPPowerDataType": [
+    {
+      "_name": "spbattery_information",
+      "sppower_battery_charge_info": {
+        "sppower_battery_at_warn_level": "FALSE",
+        "sppower_battery_fully_charged": "TRUE",
+        "sppower_battery_is_charging": "FALSE",
+        "sppower_battery_max_capacity": 7196,
+        "sppower_battery_state_of_charge": 100
+      },
+      "sppower_battery_health_info": {
+        "sppower_battery_cycle_count": 511,
+        "sppower_battery_health": "Good"
+      },
+      "sppower_battery_model_info": {
+        "sppower_battery_cell_revision": "0809",
+        "sppower_battery_device_name": "bq40z651",
+        "sppower_battery_firmware_version": "0b00",
+        "sppower_battery_hardware_revision": "0300",
+        "sppower_battery_manufacturer": "DSY",
+        "sppower_battery_pack_lot_code": "0000",
+        "sppower_battery_pcb_lot_code": "0000",
+        "sppower_battery_serial_number": "ANONYMIZED"
+      }
+    },
+    {
+      "_name": "sppower_information",
+      "AC Power": {
+        "Current Power Source": "TRUE",
+        "Disk Sleep Timer": 10,
+        "Display Sleep Timer": 60,
+        "Display Sleep Uses Dim": "Yes",
+        "Hibernate Mode": 3,
+        "LowPowerMode": "No",
+        "PrioritizeNetworkReachabilityOverSleep": "No",
+        "System Sleep Timer": 0,
+        "Wake On AC Change": "No",
+        "Wake On Clamshell Open": "Yes",
+        "Wake On LAN": "Yes"
+      },
+      "Battery Power": {
+        "Disk Sleep Timer": 10,
+        "Display Sleep Timer": 60,
+        "Display Sleep Uses Dim": "Yes",
+        "Hibernate Mode": 3,
+        "LowPowerMode": "No",
+        "PrioritizeNetworkReachabilityOverSleep": "No",
+        "ReduceBrightness": "No",
+        "System Sleep Timer": 1,
+        "Wake On AC Change": "No",
+        "Wake On Clamshell Open": "Yes",
+        "Wake On LAN": "Yes"
+      }
+    },
+    {
+      "_name": "sppower_hwconfig_information",
+      "sppower_ups_installed": "FALSE"
+    },
+    {
+      "_name": "sppower_ac_charger_information",
+      "sppower_ac_charger_family": "0xe000400a",
+      "sppower_ac_charger_ID": "0x0000",
+      "sppower_ac_charger_watts": "94",
+      "sppower_battery_charger_connected": "TRUE",
+      "sppower_battery_is_charging": "FALSE"
+    },
+    {
+      "_items": [
+        {
+          "_items": [
+            {
+              "appPID": 485,
+              "eventtype": "wake",
+              "scheduledby": "com.apple.alarm.user-invisible-com.apple.calaccessd.travelEngine.periodicRefreshTimer",
+              "time": "2026-10-13T12:42:53Z",
+              "UserVisible": false
+            },
+            {
+              "appPID": 78418,
+              "eventtype": "wake",
+              "scheduledby": "com.apple.alarm.user-invisible-com.apple.calaccessd.travelEngine.periodicRefreshTimer",
+              "time": "2026-10-13T13:26:40Z",
+              "UserVisible": false
+            },
+            {
+              "appPID": 101,
+              "eventtype": "wake",
+              "scheduledby": "com.apple.alarm.user-invisible-com.apple.osanalytics.hardhighengagementtimer",
+              "time": "2026-10-13T23:56:26Z",
+              "UserVisible": false
+            }
+          ],
+          "_name": "sppower_scheduled_events_info"
+        }
+      ],
+      "_name": "sppower_events_info"
+    }
+  ]
+}
