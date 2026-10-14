@@ -25,8 +25,8 @@ public enum ChipFamily: String, Codable, Sendable {
     case appleSilicon
 }
 
-/// Fiche d'un modèle de Mac. Seuls les modèles capables de faire tourner l'app
-/// (macOS 14 Sonoma ou plus récent, comme Aman Disk) sont listés.
+/// Fiche d'un modèle de Mac : modèles qui font tourner macOS 14 Sonoma ou plus récent (`laptops`, `desktops`),
+/// et modèles plus anciens, jusqu'à macOS 10.13 (`olderLaptops`, `olderDesktops` ; ceux de macOS 13 servent aussi à Aman Check).
 ///
 /// Sources : pages d'assistance Apple « Identifier votre MacBook Pro / MacBook Air / iMac /
 /// Mac mini / Mac Studio / Mac Pro » et listes de compatibilité de macOS 14, 15 et 26.
@@ -234,7 +234,7 @@ public enum MacModelCatalog {
 
     // MARK: - Mac antérieurs à macOS 14 (Aman Legacy)
 
-    // Mac qui font tourner macOS 10.13 High Sierra mais pas macOS 14. Jamais rencontrés par Aman Check (macOS 14+).
+    // Mac qui font tourner macOS 10.13 High Sierra mais pas macOS 14. Aman Check (macOS 13+) rencontre ceux de macOS 13.
     // Sources : pages Apple « Identifier votre MacBook Pro / MacBook Air / MacBook / iMac / Mac mini / Mac Pro »
     // (identifiants, dernier macOS), liste Ventura (MacBook 2017), cycles de batterie (support 102888), fiches
     // techniques de chaque modèle (caméra, clavier 78/79 touches avec 12 touches de fonction, Touch Bar et Touch ID).

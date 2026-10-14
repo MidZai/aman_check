@@ -25,7 +25,7 @@ macOS 15 Sequoia or later
   then go back to System Settings.
 
 
-macOS 14 Sonoma
+macOS 13 Ventura and macOS 14 Sonoma
 
   In the Applications folder, Control-click Aman Check, choose "Open",
   then click "Open".

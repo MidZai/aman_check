@@ -310,3 +310,16 @@ public enum SerialMasking {
         return "••••\(serial.suffix(4))"
     }
 }
+
+// MARK: - Animations de symboles
+
+/// Effets de symboles SF (macOS 14) ; sous macOS 13, le symbole reste fixe.
+public extension View {
+    @ViewBuilder func amanPulse(isActive: Bool) -> some View {
+        if #available(macOS 14, *) { symbolEffect(.pulse, isActive: isActive) } else { self }
+    }
+
+    @ViewBuilder func amanVariableColor(isActive: Bool) -> some View {
+        if #available(macOS 14, *) { symbolEffect(.variableColor.iterative, isActive: isActive) } else { self }
+    }
+}

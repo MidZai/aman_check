@@ -192,7 +192,7 @@ struct KeyboardTestView: View {
             gate.stop()
             model.stop()
         }
-        .onChange(of: gate.isBlocked) { _, blocked in
+        .onChange(of: gate.isBlocked) { blocked in
             // Clavier externe détecté : les touches déjà validées sont remises à zéro (comme le trackpad).
             if blocked { model.stop(); model.reset() } else { model.start() }
         }

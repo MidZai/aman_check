@@ -223,7 +223,7 @@ private struct SpeakersPicture: View {
             Image(systemName: on ? "speaker.wave.3.fill" : "speaker.fill")
                 .font(.system(size: 44))
                 .foregroundStyle(on ? AmanPalette.water : Color.secondary.opacity(0.5))
-                .symbolEffect(.variableColor.iterative, isActive: on)
+                .amanVariableColor(isActive: on)
                 .frame(width: 90, height: 70)
                 .scaleEffect(x: mirrored ? -1 : 1)
             Text(label).foregroundStyle(.secondary)

@@ -27,11 +27,11 @@ if [ "$UNIVERSAL" == "1" ]; then
     echo "Compilation (release, universel arm64 + x86_64)…"
     SLICES=()
     for ARCH in arm64 x86_64; do
-        swift build -c release --product AmanCheck --triple "$ARCH-apple-macosx14.0"
-        SLICES+=("$(swift build -c release --product AmanCheck --triple "$ARCH-apple-macosx14.0" --show-bin-path)/AmanCheck")
+        swift build -c release --product AmanCheck --triple "$ARCH-apple-macosx13.0"
+        SLICES+=("$(swift build -c release --product AmanCheck --triple "$ARCH-apple-macosx13.0" --show-bin-path)/AmanCheck")
     done
     lipo -create "${SLICES[@]}" -output "$BUILT_BINARY"
-    BIN_PATH="$(swift build -c release --product AmanCheck --triple "x86_64-apple-macosx14.0" --show-bin-path)"
+    BIN_PATH="$(swift build -c release --product AmanCheck --triple "x86_64-apple-macosx13.0" --show-bin-path)"
 else
     echo "Compilation (release, $(uname -m))…"
     swift build -c release --product AmanCheck
@@ -76,7 +76,7 @@ cat > "$CONTENTS/Info.plist" << PLIST
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
     <key>LSMinimumSystemVersion</key>
-    <string>14.0</string>
+    <string>13.0</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
     <key>NSHighResolutionCapable</key>

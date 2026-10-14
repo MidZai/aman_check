@@ -2,6 +2,14 @@
 
 All notable changes to Aman Check are documented here.
 
+## Unreleased
+
+### Compatibility
+- Runs on macOS 13 Ventura (was macOS 14). New Macs covered: MacBook Pro 2017, MacBook 2017 and iMac 2017, whose last macOS is Ventura.
+- On macOS 14 and later nothing changes. On macOS 13 the Touch ID and speaker symbols do not animate.
+- Not yet verified on a real Mac running macOS 13.
+- The README and the website still say macOS 14 until this version is released.
+
 ## 1.0.1 — 2026-10-12
 
 Corrections from a full review. The report says less when it knows less: nothing turns green without proof.

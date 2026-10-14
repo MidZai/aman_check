@@ -80,13 +80,7 @@ struct AmanDiskLink: View {
                 Image(systemName: "internaldrive").accessibilityHidden(true)
                     .font(.caption.weight(.semibold))
                     .foregroundStyle(AmanPalette.water)
-                Text(L("Go further on the disk: ", "Pour aller plus loin sur le disque : "))
-                    .foregroundStyle(.secondary)
-                + Text("Aman Disk")
-                    .foregroundStyle(isHovered ? AmanPalette.water : .primary)
-                    .fontWeight(.semibold)
-                + Text(L(" · free & open source", " · gratuit et open source"))
-                    .foregroundStyle(.secondary)
+                amanDiskText
                 Image(systemName: "arrow.up.right").accessibilityHidden(true)
                     .font(.caption2.weight(.semibold))
                     .foregroundStyle(.secondary)
@@ -105,5 +99,20 @@ struct AmanDiskLink: View {
             isHovered = hovering
             (hovering ? NSCursor.pointingHand : NSCursor.arrow).set()
         }
+    }
+
+    /// Texte en trois couleurs. `foregroundStyle` sur un `Text` demande macOS 14 ; sous 13, `foregroundColor`.
+    private var amanDiskText: Text {
+        let lead = Text(L("Go further on the disk: ", "Pour aller plus loin sur le disque : "))
+        let name = Text("Aman Disk").fontWeight(.semibold)
+        let tail = Text(L(" · free & open source", " · gratuit et open source"))
+        if #available(macOS 14, *) {
+            return lead.foregroundStyle(.secondary)
+                + name.foregroundStyle(isHovered ? AmanPalette.water : .primary)
+                + tail.foregroundStyle(.secondary)
+        }
+        return lead.foregroundColor(.secondary)
+            + name.foregroundColor(isHovered ? AmanPalette.water : .primary)
+            + tail.foregroundColor(.secondary)
     }
 }

@@ -19,7 +19,7 @@ struct TouchIDTestView: View {
                 Image(systemName: "touchid")
                     .font(.system(size: 88, weight: .thin))
                     .foregroundStyle(symbolColor)
-                    .symbolEffect(.pulse, isActive: state == .waiting)
+                    .amanPulse(isActive: state == .waiting)
                 switch state {
                 case .ready, .waiting:
                     HintRow(text: L("Use a finger already saved on this Mac. The test creates, changes and stores nothing.",

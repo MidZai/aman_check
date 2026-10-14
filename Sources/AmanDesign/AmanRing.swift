@@ -84,7 +84,7 @@ public struct AmanRing: View {
         }
         .aspectRatio(1, contentMode: .fit)
         .onAppear { animate() }
-        .onChange(of: fraction) { animate() }
+        .onChange(of: fraction) { _ in animate() }
         .accessibilityHidden(true)
         .environment(\.layoutDirection, .leftToRight)
     }

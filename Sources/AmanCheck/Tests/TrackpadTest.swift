@@ -210,7 +210,7 @@ struct TrackpadTestView: View {
         }
         .onAppear { gate.start() }
         .onDisappear { gate.stop() }
-        .onChange(of: gate.isBlocked) { _, blocked in
+        .onChange(of: gate.isBlocked) { blocked in
             if blocked { model.reset() }
         }
     }

@@ -18,6 +18,18 @@ struct OlderMacsCatalogTests {
         }
     }
 
+    @Test("Mac dont le dernier macOS est 13 (Aman Check) : MacBook Pro, MacBook et iMac 2017")
+    func ventura() {
+        let ids = Set((MacModelCatalog.olderLaptops + MacModelCatalog.olderDesktops)
+            .filter { $0.lastMacOS == 13 }.flatMap(\.identifiers))
+        #expect(ids == ["MacBookPro14,1", "MacBookPro14,2", "MacBookPro14,3", "MacBook10,1", "iMac18,1", "iMac18,2", "iMac18,3"])
+        // MacBook Pro 2017 à Touch Bar : tous les tests guidés, clavier sans touche Échap.
+        let p = DeviceProfile.make(modelIdentifier: "MacBookPro14,3", simulated: true)
+        #expect(p.isRecognized && p.kind == .laptop && !p.hasPhysicalEscape)
+        #expect(Set(TestID.applicable(to: p)) == Set(TestID.allCases))
+        #expect(MacOSRelease.name(13) == "macOS 13 Ventura")
+    }
+
     @Test("MacBook Pro 2016–2017 : Touch Bar et Touch ID seulement sur les modèles à quatre ports et 15 pouces")
     func touchBar() {
         for id in ["MacBookPro13,1", "MacBookPro14,1"] {

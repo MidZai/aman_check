@@ -10,8 +10,9 @@ let package = Package(
     name: "AmanCheck",
     defaultLocalization: "fr",
     platforms: [
-        // Même version minimale qu'Aman Disk.
-        .macOS(.v14)
+        // macOS 13 Ventura : dernière version des MacBook Pro, MacBook et iMac 2017.
+        // Aman Disk reste en macOS 14 ; ce qui demande macOS 14 passe par #available.
+        .macOS(.v13)
     ],
     products: [
         .executable(name: "AmanCheck", targets: ["AmanCheck"]),
