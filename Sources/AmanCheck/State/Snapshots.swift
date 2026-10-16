@@ -1,6 +1,7 @@
 import SwiftUI
 import AppKit
 import AmanCore
+import DiskHealthCore
 
 /// Mode de vérification visuelle (développement) : `--snapshot <dossier>` rend les écrans principaux
 /// en PNG et le rapport en PDF, puis quitte. Utilisé pour comparer avec les captures d'Aman Disk.
@@ -67,7 +68,10 @@ enum Snapshots {
     }
 
     private static func render<V: View>(_ view: V, size: CGSize, to url: URL) {
-        let hosting = NSHostingView(rootView: view.frame(width: size.width, height: size.height).background(Color(nsColor: .windowBackgroundColor)))
+        // Même environnement que la fenêtre principale (AmanCheckApp) : sens de lecture (arabe) et langue.
+        let hosting = NSHostingView(rootView: view.frame(width: size.width, height: size.height).background(Color(nsColor: .windowBackgroundColor))
+            .environment(\.layoutDirection, Localization.language.isRTL ? .rightToLeft : .leftToRight)
+            .environment(\.locale, Localization.language.locale))
         hosting.frame = CGRect(origin: .zero, size: size)
         let window = NSWindow(contentRect: CGRect(x: -20000, y: -20000, width: size.width, height: size.height),
                               styleMask: [.borderless], backing: .buffered, defer: false)
