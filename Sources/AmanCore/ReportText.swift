@@ -17,6 +17,12 @@ public enum ReportText {
           "Niveau 1 : instantané automatique et tests déclarés par la personne, générés sur ce Mac. Aucune certification.\nNiveau 2 (facultatif, payant) : le même rapport enregistré en ligne, consultable par lien ou QR code ; la page montre qu'il n'a pas été modifié depuis.\nNiveau 3 (plus tard) : contrôle réalisé par un réparateur partenaire qui en engage la responsabilité.")
     }
 
+    /// Légende du QR code hors ligne (page 1 du PDF de niveau 1).
+    public static var offlineQRCaption: String {
+        L("The code at the top right contains a summary of this report. It does not prove that the report is authentic.",
+          "Le code en haut à droite contient un résumé de ce rapport. Il ne prouve pas l'authenticité du rapport.")
+    }
+
     /// Rapport produit avec `--simulate-model` (développement) : affiché en tête du PDF.
     public static var simulatedWarning: String {
         L("Simulated profile (development): the model and its capabilities come from the catalog, the measurements from another Mac. This report does not describe a real Mac.",

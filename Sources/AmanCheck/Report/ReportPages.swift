@@ -49,6 +49,16 @@ struct ReportPage: View {
     /// Offre Pro : logo du magasin (PNG).
     var logo: Data? = nil
 
+    /// Réglage « QR code hors ligne dans le PDF » (activé par défaut).
+    static let offlineQRDefaultsKey = "report.offlineQR"
+    static var offlineQREnabled: Bool { UserDefaults.standard.object(forKey: offlineQRDefaultsKey) as? Bool ?? true }
+
+    /// Niveau 1, page 1 : QR code du résumé compact, sans URL (spec §8.4). Le niveau 2 garde son propre QR code.
+    private var offlineQR: NSImage? {
+        guard publication == nil, pageNumber == 1, Self.offlineQREnabled else { return nil }
+        return QRCode.image(for: OfflineSummary.text(for: report), moduleSize: 6)
+    }
+
     enum Palette {
         static let text = Color(red: 0.11, green: 0.11, blue: 0.12)
         static let secondary = Color(red: 0.40, green: 0.40, blue: 0.43)
@@ -131,6 +141,12 @@ struct ReportPage: View {
                     .resizable()
                     .frame(width: 76, height: 76)
                     .padding(.leading, 6)
+            } else if let qr = offlineQR {
+                Image(nsImage: qr)
+                    .interpolation(.none)
+                    .resizable()
+                    .frame(width: 76, height: 76)
+                    .padding(.leading, 6)
             }
         }
     }
@@ -142,6 +158,13 @@ struct ReportPage: View {
                 .font(.system(size: 7.5))
                 .foregroundStyle(Palette.secondary)
                 .fixedSize(horizontal: false, vertical: true)
+            if offlineQR != nil {
+                // Lexique (spec §3) : aucune promesse d'authenticité ni d'inviolabilité.
+                Text(ReportText.offlineQRCaption)
+                    .font(.system(size: 7.5, weight: .medium))
+                    .foregroundStyle(Palette.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             HStack {
                 Text(L("Report \(report.reportID)", "Rapport \(report.reportID)"))
                 if let publication {
@@ -336,7 +359,9 @@ struct ReportPage: View {
         let status = result?.status ?? .notTested
         return HStack(alignment: .firstTextBaseline, spacing: 5) {
             statusIcon(status)
-            Text(test.title).font(.system(size: 8.5, weight: .medium)).frame(width: 82, alignment: .leading)
+            // Assez large pour « Rétroéclairage du clavier » ; un nom plus long passe à la ligne au lieu d'être tronqué.
+            Text(test.title).font(.system(size: 8.5, weight: .medium)).fixedSize(horizontal: false, vertical: true)
+                .frame(width: 112, alignment: .leading)
             Text(result.map { $0.status == .notTested ? CheckStatus.notTested.label : $0.summary } ?? CheckStatus.notTested.label)
                 .font(.system(size: 8))
                 .foregroundStyle(status == .notTested ? Palette.secondary : Palette.text)
