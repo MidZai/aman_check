@@ -4,6 +4,11 @@ All notable changes to Aman Check are documented here.
 
 ## Unreleased
 
+### Performance
+- New "Performance" page: about a minute of full load (processor 30 s, graphics 20 s, memory 5 s), started only by the person, with a warning first, live temperature and fan speed, and a Cancel button ("not tested").
+- Reports whether the Mac keeps its performance as it heats up (stability: under 10% drop good, 10–25% to watch, over 25% problem), and whether the fans start under load. No score.
+- Comparison with a reference measured on the same chip when one exists (below 80%: to watch, never a problem). The table holds only real measurements; contributions welcome.
+
 ### Sensors
 - New "Sensors" section: number of fans, current fan speed and processor temperature, read from the SMC (read only, no password). Fanless Macs show "No fan on this model". A fan the model should have but the Mac does not report is "to watch"; a high temperature at rest is never more than "to watch".
 - New guided tests: lid sensor (sleep and wake detected automatically, or the person answers; adapted when an external display is connected), ambient light sensor (screen brightness measured on Intel Macs, otherwise the person answers; "automatic brightness off" is "not tested", not a failure), keyboard backlight.
