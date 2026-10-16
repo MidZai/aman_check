@@ -20,6 +20,10 @@ All notable changes to Aman Check are documented here.
 - New guided tests: lid sensor (sleep and wake detected automatically, or the person answers; adapted when an external display is connected), ambient light sensor (screen brightness measured on Intel Macs, otherwise the person answers; "automatic brightness off" is "not tested", not a failure), keyboard backlight.
 - Not yet verified on Apple silicon (see `docs/VERIFICATION.md`).
 
+### Documentation
+- `docs/LEGACY-MACOS-AUDIT.md`: what supporting macOS 12 Monterey would take (decision pending).
+- README: sensors, performance test, sharing, offline QR code, call for performance references, release process.
+
 ### Trust and first launch
 - First launch: a short notice says what Aman Check does and doesn't do (reads only, no connection, no password, no Apple Account needed). "Got It" hides it for good.
 - The "Apple Account signed in" line now says that the app itself needs no account: it checks whether the seller's account is still linked to the Mac.
