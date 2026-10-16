@@ -21,7 +21,7 @@ enum AppInfo {
 
 /// Étapes de l'analyse automatique, dans l'ordre (correctifs §4.2).
 enum AnalysisStep: String, CaseIterable, Identifiable {
-    case identity, locks, battery, storage, connectivity
+    case identity, locks, battery, storage, sensors, connectivity
     var id: String { rawValue }
 
     var title: String {
@@ -30,6 +30,7 @@ enum AnalysisStep: String, CaseIterable, Identifiable {
         case .locks: return L("Locks", "Verrouillages")
         case .battery: return L("Battery", "Batterie")
         case .storage: return L("SSD", "SSD")
+        case .sensors: return L("Fans and temperature", "Ventilateurs et température")
         case .connectivity: return L("Wi-Fi and Bluetooth", "Wi-Fi et Bluetooth")
         }
     }
@@ -163,6 +164,11 @@ final class CheckController: ObservableObject {
         steps[.storage] = .running
         measurements += StorageCollector.measurements(storage)
         steps[.storage] = .done
+
+        steps[.sensors] = .running
+        let sensors = await Task.detached(priority: .userInitiated) { SensorCollector.read() }.value
+        measurements += SensorAnalysis.measurements(sensors, expectsFan: profile.hasFan)
+        steps[.sensors] = .done
 
         steps[.connectivity] = .running
         measurements += await ConnectivityCollector.collect()

@@ -248,6 +248,7 @@ private struct ResultsView: View {
                                empty: L("Nothing left to check.", "Plus rien à vérifier."))
                 }
 
+                MetricSectionView(section: .sensors)
                 MetricSectionView(section: .connectivity)
                 AdvancedDetails(measurements: controller.measurements)
 

@@ -41,6 +41,14 @@ let package = Package(
                 .linkedFramework("CoreFoundation")
             ]
         ),
+        // Lecture seule du SMC (ventilateurs, températures), propre à Aman Check.
+        .target(
+            name: "CSMC",
+            publicHeadersPath: "include",
+            linkerSettings: [
+                .linkedFramework("IOKit")
+            ]
+        ),
         // Modèle de données, catalogues et analyses : aucune dépendance à l'interface,
         // entièrement testable avec des fixtures.
         .target(
@@ -62,7 +70,7 @@ let package = Package(
         ),
         .executableTarget(
             name: "AmanCheck",
-            dependencies: ["AmanCore", "AmanDesign", "AmanStorageKit", "DiskHealthCore"],
+            dependencies: ["AmanCore", "AmanDesign", "AmanStorageKit", "DiskHealthCore", "CSMC"],
             linkerSettings: [
                 .linkedFramework("IOKit"),
                 .linkedFramework("CoreWLAN"),
