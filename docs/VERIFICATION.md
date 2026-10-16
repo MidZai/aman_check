@@ -56,10 +56,10 @@ Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (fra
 | Test | Ce qu'il faut constater |
 |---|---|
 | Caméra | L'image s'affiche (la caméra FaceTime des Mac T2 est en transport « usb », elle était rejetée par erreur) |
-| Haut-parleurs | Un clic : son grave + balayage (4 s), puis 3 bips qui s'enchaînent seuls après chaque réponse |
+| Haut-parleurs | « Écouter » : un son qui monte, audible du début à la fin (3 s, barre de progression), puis 3 manches de bips qui partent seules ; image neutre pendant le quiz ; jamais d'écran bloqué (fin de son vérifiée sans bruit : 3,08 s et 0,67 s) |
 | Touch ID sans empreinte | « Ouvrir les réglages Touch ID » ; après ajout d'une empreinte, l'app revient au premier plan et demande le doigt d'elle-même |
 | Touch Bar | 10 zones visibles en entier ; bouton volume de la Control Strip + glissé → « extrémité droite OK » |
-| Angle de l'écran | L'angle suit l'écran en direct ; 30° de variation → réussi sans question |
+| Angle de l'écran | L'angle s'affiche et suit l'écran dès l'ouverture du test, sans bouton ; 30° de variation → réussi sans question |
 | Accueil | Bandeau « Processeur … °C · Ventilateurs … · en direct » mis à jour toutes les 2 s (vérifié dans la fenêtre réelle : 71 °C, 3 362 et 3 129 tr/min ; le mode `--snapshot` ne l'affiche pas, ses rendus bloquent la file principale) |
 
 ## Non validé (pas de machine disponible)

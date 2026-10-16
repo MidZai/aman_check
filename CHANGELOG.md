@@ -6,7 +6,7 @@ All notable changes to Aman Check are documented here.
 
 ### Guided tests
 - Camera: the built-in camera of Intel Macs with a T2 chip (connected through the chip's internal USB) is no longer mistaken for an external one.
-- Speakers: about a third of the time; the beeps follow one another without extra clicks.
+- Speakers, redone after a real try: one audible rising sound (250 Hz to 8 kHz, 3 s, with a progress bar) instead of a low tone that laptop speakers barely play, then three rounds of short beeps that start on their own; the picture stays neutral during the quiz, and the end of a sound is the sound actually played (never stuck on "playing").
 - Touch ID without a saved fingerprint: a button opens Touch ID settings, and the test resumes on its own once a fingerprint is added.
 - Touch Bar: the zones fit beside the Control Strip, and the right end is tested with the volume button (the app sees the volume change).
 
@@ -22,7 +22,7 @@ All notable changes to Aman Check are documented here.
 - Comparison with a reference measured on the same chip when one exists (below 80%: to watch, never a problem). The table holds only real measurements; contributions welcome.
 
 ### Sensors
-- New guided test, screen angle sensor: tilt the screen (no need to close it) and the app follows the hinge angle live; only on Macs where the sensor is detected.
+- New guided test, screen angle sensor: the angle is shown live as soon as the test opens; tilt the screen (no need to close it) and the test passes by itself; only on Macs where the sensor is detected.
 - Processor temperature and fan speeds shown live on the first screen and in the Sensors section.
 - New "Sensors" section: number of fans, current fan speed and processor temperature, read from the SMC (read only, no password). Fanless Macs show "No fan on this model". A fan the model should have but the Mac does not report is "to watch"; a high temperature at rest is never more than "to watch".
 - New guided tests: lid sensor (sleep and wake detected automatically, or the person answers; adapted when an external display is connected), ambient light sensor (screen brightness measured on Intel Macs, otherwise the person answers; "automatic brightness off" is "not tested", not a failure), keyboard backlight.

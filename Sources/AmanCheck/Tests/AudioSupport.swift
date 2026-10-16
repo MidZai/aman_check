@@ -84,14 +84,33 @@ enum AudioDevices {
 /// Générateur de sons stéréo déterministe : un seul canal porte le signal, l'autre est silencieux
 /// (indépendant du panoramique). Le lecteur et le moteur sont conservés tant que le test existe
 /// (un lecteur désalloué juste après `play()` est une cause classique de « pas de son »).
+///
+/// Sons choisis pour les haut-parleurs d'un portable : rien sous 250 Hz (un son grave à 110 Hz ne sortait
+/// presque pas, la personne entendait « un son, puis rien »). Fin d'un son = son réellement joué
+/// (`.dataPlayedBack`), et non mémoire consommée ; un garde-fou rend la main si la fin n'arrive jamais.
 @MainActor
 final class ToneGenerator {
     enum Side { case left, right, both }
+    enum Kind {
+        /// Balayage 250 Hz → 8 kHz, 3 s : vérifie toute la plage et révèle grésillements et vibrations.
+        case sweep
+        /// Trois petits bips nets à 1 kHz (0,6 s) : faciles à situer à gauche ou à droite.
+        case pips
+
+        var duration: Double {
+            switch self {
+            case .sweep: return 3
+            case .pips: return 0.6
+            }
+        }
+    }
 
     private let engine = AVAudioEngine()
     private let player = AVAudioPlayerNode()
     private let format: AVAudioFormat
     private let sampleRate: Double = 48_000
+    /// Numéro du son en cours : une fin (ou un garde-fou) d'un son précédent est ignorée.
+    private var generation = 0
 
     init() {
         format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 2)!
@@ -99,62 +118,80 @@ final class ToneGenerator {
         engine.connect(player, to: engine.mainMixerNode, format: format)
     }
 
+    /// Démarre le moteur à l'avance : le premier son ne commence pas en retard.
+    func prepare() {
+        do { try start() } catch { DiagnosticLog.shared.log("audio", "moteur : \(error)") }
+    }
+
     func start() throws {
-        if !engine.isRunning { try engine.start() }
+        if !engine.isRunning {
+            engine.prepare()
+            try engine.start()
+        }
         if !player.isPlaying { player.play() }
     }
 
     func stop() {
+        generation += 1
         player.stop()
         engine.stop()
     }
 
-    /// Joue un son et appelle `completion` à la fin (sur le fil principal).
+    /// Joue un son et appelle `completion` une fois, à la fin réelle du son (sur le fil principal).
     func play(_ kind: Kind, side: Side, completion: (() -> Void)? = nil) {
         do { try start() } catch {
             DiagnosticLog.shared.log("audio", "moteur : \(error)")
             completion?()
             return
         }
+        generation += 1
+        let current = generation
+        var done = false
+        let finish: () -> Void = { [weak self] in
+            guard let self, !done, current == self.generation else { return }
+            done = true
+            completion?()
+        }
         let buffer = makeBuffer(kind, side: side)
-        player.scheduleBuffer(buffer, at: nil, options: []) {
-            DispatchQueue.main.async { completion?() }
+        // Interrompt un son précédent éventuel : un seul son à la fois.
+        player.stop()
+        player.play()
+        player.scheduleBuffer(buffer, at: nil, options: [], completionCallbackType: .dataPlayedBack) { _ in
+            DispatchQueue.main.async { MainActor.assumeIsolated { finish() } }
+        }
+        // Garde-fou : jamais d'écran bloqué « son en cours » si la fin n'est pas signalée.
+        DispatchQueue.main.asyncAfter(deadline: .now() + kind.duration + 1.5) {
+            MainActor.assumeIsolated { finish() }
         }
         DiagnosticLog.shared.log("audio", "lecture \(kind) côté \(side)")
     }
 
-    enum Kind { case lowTone, sweep, beep }
-
     private func makeBuffer(_ kind: Kind, side: Side) -> AVAudioPCMBuffer {
-        let duration: Double
-        switch kind {
-        // Courts exprès : le test entier tient en une quinzaine de secondes.
-        case .lowTone: duration = 1.5
-        case .sweep: duration = 2.5
-        case .beep: duration = 0.7
-        }
+        let duration = kind.duration
         let frames = AVAudioFrameCount(duration * sampleRate)
         let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames)!
         buffer.frameLength = frames
         let left = buffer.floatChannelData![0]
         let right = buffer.floatChannelData![1]
-        // Volume prudent : amplitude limitée, montée et descente progressives (pas de claquement).
-        let amplitude: Float = 0.35
-        let fade = 0.08 * sampleRate
+        // Volume prudent : amplitude limitée, montées et descentes progressives (pas de claquement).
+        let amplitude: Float = 0.45
         var phase = 0.0
         for i in 0..<Int(frames) {
             let t = Double(i) / sampleRate
             let frequency: Double
+            var envelope: Double
             switch kind {
-            case .lowTone: frequency = 110
-            case .sweep: frequency = 100 * pow(100, t / duration)   // 100 Hz → 10 kHz, logarithmique
-            case .beep: frequency = 880
+            case .sweep:
+                frequency = 250 * pow(32, t / duration)   // 250 Hz → 8 kHz, logarithmique
+                envelope = min(1, t / 0.08, (duration - t) / 0.08)
+            case .pips:
+                frequency = 1000
+                // Trois bips de 0,12 s séparés de 0,08 s.
+                let slot = t.truncatingRemainder(dividingBy: 0.2)
+                envelope = slot < 0.12 ? min(1, slot / 0.01, (0.12 - slot) / 0.01) : 0
             }
             phase += 2 * .pi * frequency / sampleRate
-            var envelope = 1.0
-            if Double(i) < fade { envelope = Double(i) / fade }
-            if Double(Int(frames) - i) < fade { envelope = Double(Int(frames) - i) / fade }
-            let sample = Float(sin(phase) * envelope) * amplitude
+            let sample = Float(sin(phase) * max(0, envelope)) * amplitude
             left[i] = side == .right ? 0 : sample
             right[i] = side == .left ? 0 : sample
         }

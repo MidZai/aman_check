@@ -3,90 +3,117 @@ import AmanCore
 import AmanDesign
 import DiskHealthCore
 
-/// Haut-parleurs : sortie vérifiée, son grave, balayage, gauche/droite, puis quiz au hasard
-/// pour qu'on ne puisse pas valider sans écouter (correctifs §6.5).
+/// Haut-parleurs (correctifs §6.5), refait après essai réel : un son qui monte du grave à l'aigu (3 s), puis
+/// 3 manches de petits bips d'un côté tiré au hasard (impossible de réussir sans écouter), puis la netteté.
+/// L'image ne s'allume que pendant le son de l'étape 1 ; pendant le quiz elle reste neutre.
 struct SpeakerTestView: View {
     let finish: (TestResult) -> Void
 
-    private enum Stage: Equatable { case check, demo, quiz(round: Int), quality }
+    private enum Stage: Equatable { case ready, sweep, quiz(round: Int), quality }
 
-    @State private var stage: Stage = .check
+    @State private var stage: Stage = .ready
     @State private var output: AudioDevices.Device?
     @State private var generator = ToneGenerator()
-    @State private var playing: ToneGenerator.Side?
-    @State private var demoDone = false
+    /// Un son est en cours (boutons de réponse désactivés).
+    @State private var playing = false
+    @State private var sweepProgress = 0.0
+    @State private var progressTimer: Timer?
     @State private var quizSides: [ToneGenerator.Side] = []
     @State private var answers: [Bool] = []
-    @State private var quizPlayed = false
 
     private static let rounds = 3
 
     var body: some View {
         TestScaffold(title: L("Speakers", "Haut-parleurs"), instruction: instruction) {
-            VStack(spacing: 24) {
-                if let output, !output.isInternalSpeakers {
-                    Callout(tint: .orange, symbol: "speaker.slash") {
-                        Text(L("The current sound output is “\(output.name)”. Switch to this Mac's speakers.",
-                               "La sortie audio actuelle est « \(output.name) ». Passez sur les haut-parleurs du Mac."))
-                            .fixedSize(horizontal: false, vertical: true)
-                        HStack {
-                            Button(L("Open Sound Settings", "Ouvrir les réglages Son")) { AudioDevices.openSoundSettings() }
-                            Button(L("Check Again", "Vérifier à nouveau")) { refreshOutput() }
-                        }
-                    }
-                } else if let output, output.isMuted == true || (output.volume ?? 1) < 0.25 {
-                    Callout(tint: .orange, symbol: "speaker.wave.1") {
-                        Text(output.isMuted == true
-                             ? L("Sound is muted. Turn it on and raise the volume to about half.", "Le son est coupé. Réactivez-le et montez le volume à la moitié environ.")
-                             : L("The volume is low. Raise it to about half.", "Le volume est faible. Montez-le à la moitié environ."))
-                        Button(L("Check Again", "Vérifier à nouveau")) { refreshOutput() }
-                    }
-                }
-                SpeakersPicture(active: playing)
-                    .frame(height: 170)
+            VStack(spacing: 22) {
+                outputWarning
+                SpeakersPicture(active: stage == .sweep && playing ? .both : nil, hidden: isQuiz)
+                    .frame(height: 150)
                 stageContent
-                if case .quiz = stage {
-                    HintRow(text: L("The side is drawn at random each round: the test cannot be passed without listening. The picture stays neutral on purpose.",
-                                    "Le côté est tiré au hasard à chaque manche : impossible de réussir sans écouter. L'image reste neutre exprès."))
-                } else if stage != .quality {
-                    HintRow(text: L("The low tone reveals buzzing or rattling; the sweep checks every frequency. On Macs with several speakers, left/right is approximate.",
-                                    "Le son grave révèle grésillements et vibrations ; le balayage vérifie toutes les fréquences. Sur les Mac à plusieurs haut-parleurs, gauche/droite reste approximatif."))
-                }
             }
             .frame(maxWidth: 640)
         } actions: {
             actions
         }
-        .onAppear { refreshOutput() }
-        .onDisappear { generator.stop() }
+        .onAppear {
+            refreshOutput()
+            generator.prepare()
+        }
+        .onDisappear {
+            progressTimer?.invalidate()
+            generator.stop()
+        }
     }
+
+    private var isQuiz: Bool { if case .quiz = stage { return true } else { return false } }
 
     private var instruction: String {
         switch stage {
-        case .check, .demo:
-            return L("Raise the volume to about half. You will hear a low tone and a sweep (4 seconds), then 3 short beeps: say where each one came from.",
-                     "Montez le volume à la moitié environ. Vous allez entendre un son grave et un balayage (4 secondes), puis 3 bips courts : dites d'où vient chacun.")
+        case .ready, .sweep:
+            return L("Check that the sound comes out of both speakers, clearly, and that you can tell left from right.",
+                     "Vérifiez que le son sort des deux haut-parleurs, net, et que vous distinguez la gauche de la droite.")
         case .quiz(let round):
-            return L("Round \(round + 1) of \(Self.rounds): where did you hear the sound?", "Manche \(round + 1) sur \(Self.rounds) : de quel côté avez-vous entendu le son ?")
+            return L("Round \(round + 1) of \(Self.rounds): where did the beeps come from?", "Manche \(round + 1) sur \(Self.rounds) : d'où venaient les bips ?")
         case .quality:
             return L("Was the sound clear, without crackling or buzzing?", "Le son était-il net, sans grésillement ni vibration ?")
         }
     }
 
     @ViewBuilder
+    private var outputWarning: some View {
+        if let output, !output.isInternalSpeakers {
+            Callout(tint: .orange, symbol: "speaker.slash") {
+                Text(L("The current sound output is “\(output.name)”. Switch to this Mac's speakers.",
+                       "La sortie audio actuelle est « \(output.name) ». Passez sur les haut-parleurs du Mac."))
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack {
+                    Button(L("Open Sound Settings", "Ouvrir les réglages Son")) { AudioDevices.openSoundSettings() }
+                    Button(L("Check Again", "Vérifier à nouveau")) { refreshOutput() }
+                }
+            }
+        } else if let output, output.isMuted == true || (output.volume ?? 1) < 0.25 {
+            Callout(tint: .orange, symbol: "speaker.wave.1") {
+                Text(output.isMuted == true
+                     ? L("Sound is muted. Turn it on and raise the volume to about half.", "Le son est coupé. Réactivez-le et montez le volume à la moitié environ.")
+                     : L("The volume is low. Raise it to about half.", "Le volume est faible. Montez-le à la moitié environ."))
+                Button(L("Check Again", "Vérifier à nouveau")) { refreshOutput() }
+            }
+        }
+    }
+
+    @ViewBuilder
     private var stageContent: some View {
         switch stage {
-        case .check, .demo:
-            EmptyView()
-        case .quiz:
-            HStack(spacing: 12) {
-                answerButton(L("Left", "Gauche"), .left)
-                answerButton(L("Right", "Droite"), .right)
-                answerButton(L("Both", "Les deux"), .both)
-                Button(L("I heard nothing", "Je n'ai rien entendu")) { answer(nil) }
-                    .disabled(!quizPlayed || playing != nil)
+        case .ready:
+            NumberedSteps(steps: [
+                .init(text: L("Raise the volume to about half.", "Montez le volume à la moitié environ.")),
+                .init(text: L("Click Listen: a sound rises from low to high (3 seconds), from both speakers.",
+                              "Cliquez sur Écouter : un son monte du grave à l'aigu (3 secondes), sur les deux haut-parleurs.")),
+                .init(text: L("Then 3 short beeps, three times: say whether they come from the left, the right or both sides.",
+                              "Puis 3 petits bips, trois fois : dites s'ils viennent de gauche, de droite ou des deux côtés."))
+            ])
+        case .sweep:
+            VStack(spacing: 10) {
+                Text(L("The sound rises from low to high…", "Le son monte du grave à l'aigu…"))
+                    .font(.title3.weight(.medium))
+                ProgressView(value: sweepProgress)
+                    .tint(AmanPalette.water)
+                    .frame(maxWidth: 360)
             }
-            .controlSize(.large)
+        case .quiz:
+            VStack(spacing: 16) {
+                Text(playing ? L("Listen…", "Écoutez…") : L("Where did the beeps come from?", "D'où venaient les bips ?"))
+                    .font(.title3.weight(.medium))
+                HStack(spacing: 12) {
+                    answerButton(L("Left", "Gauche"), .left)
+                    answerButton(L("Both Sides", "Des deux côtés"), .both)
+                    answerButton(L("Right", "Droite"), .right)
+                }
+                .controlSize(.large)
+                Button(L("I heard nothing", "Je n'ai rien entendu")) { answer(nil) }
+                    .buttonStyle(.link)
+                    .disabled(playing)
+            }
         case .quality:
             EmptyView()
         }
@@ -95,15 +122,18 @@ struct SpeakerTestView: View {
     @ViewBuilder
     private var actions: some View {
         switch stage {
-        case .check, .demo:
-            Button(L("Play the Sounds", "Jouer les sons")) { runDemo() }
+        case .ready:
+            Button(L("Listen", "Écouter")) { playSweep() }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
-                .disabled(playing != nil)
+        case .sweep:
+            EmptyView()
         case .quiz:
             Button(L("Play Again", "Rejouer")) { playQuiz() }
-                .disabled(playing != nil)
+                .disabled(playing)
         case .quality:
+            Button(L("Listen Again", "Réécouter")) { playSweep(thenQuiz: false) }
+                .disabled(playing)
             Button(L("No, It Crackles", "Non, ça grésille")) { complete(clean: false) }
             Button(L("Yes, It's Clear", "Oui, c'est net")) { complete(clean: true) }
                 .buttonStyle(.borderedProminent)
@@ -113,66 +143,57 @@ struct SpeakerTestView: View {
 
     private func answerButton(_ title: String, _ side: ToneGenerator.Side) -> some View {
         Button(title) { answer(side) }
-            .disabled(!quizPlayed || playing != nil)
+            .frame(minWidth: 120)
+            .disabled(playing)
     }
 
     private func refreshOutput() {
         output = AudioDevices.defaultDevice(input: false)
     }
 
-    /// Son grave puis balayage (4 s), et le quiz enchaîne de lui-même : plus de démonstration gauche/droite
-    /// ni de clic « Jouer » à chaque manche (le test prenait trop de temps).
-    private func runDemo() {
+    /// Étape 1 : le balayage sur les deux haut-parleurs, avec sa barre de progression ; le quiz suit seul.
+    private func playSweep(thenQuiz: Bool = true) {
         refreshOutput()
-        stage = .demo
-        demoDone = false
-        let sequence: [(ToneGenerator.Kind, ToneGenerator.Side)] = [(.lowTone, .both), (.sweep, .both)]
-        playSequence(sequence[...]) {
-            demoDone = true
-            startQuiz()
+        if thenQuiz { stage = .sweep }
+        playing = true
+        sweepProgress = 0
+        let started = Date()
+        progressTimer?.invalidate()
+        progressTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { _ in
+            MainActor.assumeIsolated { sweepProgress = min(1, Date().timeIntervalSince(started) / ToneGenerator.Kind.sweep.duration) }
         }
-    }
-
-    private func playSequence(_ items: ArraySlice<(ToneGenerator.Kind, ToneGenerator.Side)>, done: @escaping () -> Void) {
-        guard let (kind, side) = items.first else {
-            playing = nil
-            done()
-            return
-        }
-        playing = side
-        generator.play(kind, side: side) {
-            playSequence(items.dropFirst(), done: done)
+        generator.play(.sweep, side: .both) {
+            progressTimer?.invalidate()
+            sweepProgress = 1
+            playing = false
+            if thenQuiz { startQuiz() }
         }
     }
 
     private func startQuiz() {
-        // Les trois réponses proposées sont toutes possibles : « Les deux » n'est pas un piège toujours faux.
+        // Les trois réponses proposées sont toutes possibles : « Des deux côtés » n'est pas un piège toujours faux.
         let sides: [ToneGenerator.Side] = [.left, .right, .both]
         quizSides = (0..<Self.rounds).map { _ in sides.randomElement()! }
         answers = []
-        quizPlayed = false
         stage = .quiz(round: 0)
-        playQuiz()
+        // Un court silence entre le balayage et le premier bip.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { playQuiz() }
     }
 
     private func playQuiz() {
-        guard case .quiz(let round) = stage else { return }
-        // Pas d'animation pendant le quiz : la réponse ne doit pas se lire à l'écran.
-        playing = .both
-        generator.play(.beep, side: quizSides[round]) {
-            playing = nil
-            quizPlayed = true
+        guard case .quiz(let round) = stage, !playing else { return }
+        playing = true
+        generator.play(.pips, side: quizSides[round]) {
+            playing = false
         }
     }
 
     private func answer(_ side: ToneGenerator.Side?) {
-        guard case .quiz(let round) = stage else { return }
+        guard case .quiz(let round) = stage, !playing else { return }
         answers.append(side == quizSides[round])
-        quizPlayed = false
         if round + 1 < Self.rounds {
             stage = .quiz(round: round + 1)
-            // Petit silence pour que le bip suivant ne se confonde pas avec le clic.
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { playQuiz() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { playQuiz() }
         } else {
             stage = .quality
         }
@@ -204,14 +225,16 @@ struct SpeakerTestView: View {
 /// Deux haut-parleurs qui s'allument selon le côté joué.
 private struct SpeakersPicture: View {
     let active: ToneGenerator.Side?
+    /// Quiz : aucun haut-parleur allumé, un « ? » au centre (l'image ne doit pas donner la réponse).
+    var hidden = false
 
     var body: some View {
         HStack(spacing: 80) {
-            speaker(on: active == .left || active == .both, label: L("Left", "Gauche"), mirrored: true)
-            Image(systemName: "laptopcomputer")
+            speaker(on: !hidden && (active == .left || active == .both), label: L("Left", "Gauche"), mirrored: true)
+            Image(systemName: hidden ? "questionmark.circle" : "laptopcomputer")
                 .font(.system(size: 60, weight: .thin))
                 .foregroundStyle(.secondary)
-            speaker(on: active == .right || active == .both, label: L("Right", "Droite"))
+            speaker(on: !hidden && (active == .right || active == .both), label: L("Right", "Droite"))
         }
     }
 

@@ -572,66 +572,52 @@ private struct LidAngleDiagram: View {
     }
 }
 
+/// Lecture en direct dès l'ouverture : la personne voit l'angle bouger avec l'écran, sans bouton à chercher.
 struct LidAngleTestView: View {
     let finish: (TestResult) -> Void
 
-    private enum Phase: Equatable { case ready, running(Int), noReaction, done }
-
     @State private var sensor = LidAngleSensor()
-    @State private var phase: Phase = .ready
     @State private var current: Double?
     @State private var samples: [Double] = []
     @State private var result: TestResult?
     @State private var timer: Timer?
-
-    private let seconds = 30
+    @State private var elapsed = 0.0
 
     var body: some View {
         TestScaffold(title: TestID.lidAngle.title,
-                     instruction: L("A sensor in the hinge measures how far the screen is open. Tilt the screen slowly forward, then back: no need to close it.",
-                                    "Un capteur dans la charnière mesure l'ouverture de l'écran. Inclinez lentement l'écran vers l'avant, puis vers l'arrière : inutile de le fermer.")) {
+                     instruction: L("Your Mac has a sensor in the hinge that measures how far the screen is open. Move the screen: the angle below should follow.",
+                                    "Votre Mac a, dans la charnière, un capteur qui mesure l'ouverture de l'écran. Bougez l'écran : l'angle ci-dessous doit suivre.")) {
             VStack(spacing: 18) {
                 LidAngleDiagram(degrees: current)
                 Text(current.map { "\(Int($0.rounded()))°" } ?? "—")
                     .font(.system(size: 44, weight: .semibold, design: .rounded))
                     .monospacedDigit()
-                switch phase {
-                case .ready:
-                    HintRow(text: L("Click Start, then move the screen by about a quarter turn (30° or more). The app follows the angle by itself.",
-                                    "Cliquez sur Commencer, puis bougez l'écran d'un quart de tour environ (30° ou plus). L'app suit l'angle d'elle-même."))
-                case .running(let left):
-                    Text(L("Tilt the screen now… \(left)", "Inclinez l'écran maintenant… \(left)"))
-                        .font(.title3.weight(.medium))
-                        .monospacedDigit()
-                case .noReaction:
-                    StatusLabel(.watch, text: L("The angle did not change.", "L'angle n'a pas changé."), font: .headline)
-                case .done:
-                    StatusLabel(.good, text: result?.summary ?? "", font: .headline)
+                if let result {
+                    StatusLabel(result.status, text: result.summary, font: .headline)
+                } else {
+                    NumberedSteps(steps: [
+                        .init(text: L("Tilt the screen slowly towards you by about a third, without closing it.",
+                                      "Rabattez lentement l'écran vers vous d'environ un tiers, sans le fermer.")),
+                        .init(text: L("Open it again. The test passes by itself as soon as the angle has moved by 30°.",
+                                      "Rouvrez-le. Le test se valide tout seul dès que l'angle a bougé de 30°."))
+                    ])
                 }
             }
             .frame(maxWidth: 560)
         } actions: {
-            switch phase {
-            case .ready:
-                Button(L("Start", "Commencer")) { start() }
+            if let result {
+                Button(L("Continue", "Continuer")) { finish(result) }
                     .buttonStyle(.borderedProminent)
                     .keyboardShortcut(.defaultAction)
-            case .running:
-                Button(L("Cancel", "Annuler")) { stop(); phase = .ready }
-            case .noReaction:
+            } else if elapsed >= 15 {
+                // Proposé seulement après un moment, pour ne pas conclure trop vite.
                 Button(L("I Moved It, Nothing Changed", "Je l'ai bougé, rien n'a changé")) {
+                    stop()
                     finish(SensorTests.lidAngleNoReaction(samples: samples))
                 }
-                Button(L("Try Again", "Réessayer")) { start() }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
-            case .done:
-                Button(L("Continue", "Continuer")) { if let result { finish(result) } }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
             }
         }
-        .onAppear { current = sensor?.degrees() }
+        .onAppear(perform: start)
         .onDisappear(perform: stop)
     }
 
@@ -643,29 +629,19 @@ struct LidAngleTestView: View {
     private func start() {
         stop()
         samples = []
-        var ticks = 0
-        phase = .running(seconds)
+        elapsed = 0
+        current = sensor?.degrees()
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { t in
             MainActor.assumeIsolated {
-                ticks += 1
+                elapsed += 0.1
                 if let value = sensor?.degrees() {
                     current = value
                     samples.append(value)
                 }
-                if let detected = SensorTests.lidAngleResult(samples: samples) {
+                if result == nil, let detected = SensorTests.lidAngleResult(samples: samples) {
                     t.invalidate()
                     DiagnosticLog.shared.log("lidAngle", detected.summary)
                     result = detected
-                    phase = .done
-                    return
-                }
-                let left = seconds - ticks / 10
-                if left <= 0 {
-                    t.invalidate()
-                    DiagnosticLog.shared.log("lidAngle", "aucune variation nette : \(samples.suffix(20))")
-                    phase = .noReaction
-                } else if ticks % 10 == 0 {
-                    phase = .running(left)
                 }
             }
         }
