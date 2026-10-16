@@ -4,6 +4,12 @@ All notable changes to Aman Check are documented here.
 
 ## Unreleased
 
+### Trust and first launch
+- First launch: a short notice says what Aman Check does and doesn't do (reads only, no connection, no password, no Apple Account needed). "Got It" hides it for good.
+- The "Apple Account signed in" line now says that the app itself needs no account: it checks whether the seller's account is still linked to the Mac.
+- Website: a trust line under the download button, an "Is it safe?" section with the Gatekeeper steps, a FAQ, and a French version.
+- Notarization ready but not active (no Apple Developer ID yet): `scripts/notarize.sh`, `scripts/make-dmg.sh --notarize`, release process in `docs/RELEASE.md`. Releases stay signed ad hoc by default.
+
 ### Compatibility
 - Runs on macOS 13 Ventura (was macOS 14). New Macs covered: MacBook Pro 2017, MacBook 2017 and iMac 2017, whose last macOS is Ventura.
 - On macOS 14 and later nothing changes. On macOS 13 the Touch ID and speaker symbols do not animate.

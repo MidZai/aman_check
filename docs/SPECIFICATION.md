@@ -293,6 +293,9 @@ Chaque test se termine par un état : **Réussi · Échoué · Ignoré · Interr
 ## 10. Distribution, signature, permissions
 
 - **Distribution directe (site web)** avec compte Apple Developer : signature **Developer ID Application**, **Hardened Runtime**, notarisation (`xcrun notarytool submit … --wait`), puis `xcrun stapler staple` sur le `.dmg`. Distribuer un `.dmg` notarisé et agrafé.
+- **État actuel (octobre 2026) :** pas encore de Developer ID (coût annuel). Les versions publiées sont signées ad hoc avec Hardened Runtime ; la notarisation est prête mais inactive : `scripts/notarize.sh`, `scripts/make-dmg.sh --notarize`, procédure complète dans `docs/RELEASE.md`. La signature ad hoc reste le comportement par défaut.
+- **Premier lancement :** l'accueil affiche un encadré « Ce que fait et ne fait pas Aman Check » (lecture seule, aucune connexion, aucun mot de passe, aucun compte Apple nécessaire). « Compris » le masque définitivement (préférence locale `trustNotice.acknowledged`). Raison : l'avertissement Gatekeeper est le premier point d'abandon d'un public non technique.
+- **Ligne « Compte Apple connecté » :** son aide précise que l'app elle-même n'a besoin d'aucun compte ; la ligne vérifie si le compte du vendeur est encore lié au Mac.
 - **Mac App Store :** non visé. L'App Sandbox restreint l'accès IOKit aux contrôleurs de stockage nécessaires. On ne passe pas de temps à ça pour l'instant.
 - **Expérience Gatekeeper :** avec signature + notarisation, l'utilisateur voit au plus **une** fenêtre de confirmation « app téléchargée depuis Internet — Ouvrir ? » au premier lancement. Ne pas promettre « zéro alerte ». Ne pas passer par une clé USB non signée : l'app non notarisée oblige à passer par Réglages Système > Confidentialité et sécurité.
 - **Permissions à déclarer :**

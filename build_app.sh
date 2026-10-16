@@ -4,7 +4,7 @@
 #   UNIVERSAL=1 ./build_app.sh   → binaire universel, puis scripts/make-dmg.sh pour le DMG
 #
 # Signature : ad hoc par défaut (pas de compte développeur). Pour une distribution,
-# SIGN_IDENTITY="Developer ID Application: …" puis notarisation (spec §10).
+# scripts/notarize.sh (Developer ID + notarisation, docs/RELEASE.md). Ne pas changer ce défaut.
 # Hardened Runtime activé (--options runtime) : sans lui, les entitlements caméra / micro
 # n'ont aucun effet, ce qui empêchait la caméra de s'afficher dans la version précédente.
 set -e
