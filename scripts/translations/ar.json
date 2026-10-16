@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "استرشادي: قد يسخن المعالج كثيرًا تحت الحمل الكامل دون أن يكون معطّلًا.",
 "{0} s, {1}": "{0} ث، {1}",
 "Reference: {0}": "المرجع: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "على البطارية قد يحدّ macOS من الأداء: أعد الاختبار على الشاحن قبل أن تحكم."
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "على البطارية قد يحدّ macOS من الأداء: أعد الاختبار على الشاحن قبل أن تحكم.",
+"Summary QR code in the PDF": "رمز QR للملخّص في ملف PDF",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "يحتوي رمز QR في الصفحة الأولى على ملخّص نصي قصير للتقرير (بلا رابط، ولا يُرسَل أي شيء). لا يثبت أن التقرير أصلي.",
+"Share…": "مشاركة…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "يحتوي الرمز أعلى الصفحة على ملخّص لهذا التقرير. لا يثبت أن التقرير أصلي."
 }

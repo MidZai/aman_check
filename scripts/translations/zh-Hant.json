@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "僅供參考：滿載的處理器溫度很高也不一定有故障。",
 "{0} s, {1}": "{0} 秒，{1}",
 "Reference: {0}": "參考：{0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "使用電池時 macOS 可能會限制效能：請在接上電源轉接器後重新測試，再下結論。"
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "使用電池時 macOS 可能會限制效能：請在接上電源轉接器後重新測試，再下結論。",
+"Summary QR code in the PDF": "PDF 中的摘要 QR 碼",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "第一頁上的 QR 碼包含報告的簡短文字摘要（沒有連結，不會傳送任何內容）。它無法證明報告的真實性。",
+"Share…": "分享⋯",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "右上角的 QR 碼包含本報告的摘要。它無法證明報告的真實性。"
 }

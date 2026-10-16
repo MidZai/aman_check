@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "Gösterge niteliğinde: tam yükteki bir işlemci arızalı olmadan çok ısınabilir.",
 "{0} s, {1}": "{0} sn, {1}",
 "Reference: {0}": "Referans: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Pildeyken macOS performansı sınırlayabilir: sonuca varmadan önce testi şarj aletinde yineleyin."
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Pildeyken macOS performansı sınırlayabilir: sonuca varmadan önce testi şarj aletinde yineleyin.",
+"Summary QR code in the PDF": "PDF'te özet QR kodu",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "İlk sayfadaki QR kodu raporun kısa bir metin özetini içerir (bağlantı yok, hiçbir şey gönderilmez). Raporun gerçek olduğunu kanıtlamaz.",
+"Share…": "Paylaş…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "Sağ üstteki kod bu raporun bir özetini içerir. Raporun gerçek olduğunu kanıtlamaz."
 }

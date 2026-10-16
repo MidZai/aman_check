@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "참고용: 최대 부하의 프로세서는 고장이 아니어도 매우 뜨거워질 수 있습니다.",
 "{0} s, {1}": "{0}초, {1}",
 "Reference: {0}": "기준값: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "배터리 사용 시 macOS가 성능을 제한할 수 있습니다. 결론을 내리기 전에 전원 어댑터를 연결하고 다시 테스트하세요."
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "배터리 사용 시 macOS가 성능을 제한할 수 있습니다. 결론을 내리기 전에 전원 어댑터를 연결하고 다시 테스트하세요.",
+"Summary QR code in the PDF": "PDF의 요약 QR 코드",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "첫 페이지의 QR 코드에는 보고서의 짧은 텍스트 요약이 들어 있습니다(링크 없음, 아무것도 전송되지 않음). 보고서가 진짜임을 증명하지는 않습니다.",
+"Share…": "공유…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "오른쪽 위의 코드에는 이 보고서의 요약이 들어 있습니다. 보고서가 진짜임을 증명하지는 않습니다."
 }

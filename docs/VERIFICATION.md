@@ -1,6 +1,6 @@
 # Aman Check — à vérifier à la main sur le MacBookPro16,1
 
-Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (119 tests).
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (124 tests).
 Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
 
 | Test | Ce qu'il faut constater | Critère |
@@ -40,6 +40,16 @@ Mesuré sur le MacBookPro16,1 (2026-10-16, sur secteur) avec `--snapshot <dossie
 | Lancement | Rien ne démarre sans clic ; progression, mesure en direct, température et ventilateurs mis à jour toutes les 2 s |
 | Annulation | « Annuler » arrête en moins de 2 s ; la ligne Stabilité devient « Non testé » (« Test annulé avant la fin. ») |
 | Batterie | Débrancher le chargeur avant le test : « Conditions du test » dit « sur batterie » et recommande de refaire le test sur secteur |
+
+## Partage (§8.4)
+
+Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (français, allemand) est relu par CoreImage (`CIDetector`), 335–337 caractères, contenu conforme.
+
+| Vérification | Ce qu'il faut constater |
+|---|---|
+| Partager | Rapport › « Partager… » : la feuille de partage s'ouvre sous le bouton ; AirDrop vers un iPhone reçoit le PDF ; Mail le joint |
+| QR code | Scanner la page 1 imprimée avec l'appareil photo d'un iPhone et d'un Android : le texte s'affiche sans app dédiée |
+| Réglage | Réglages › décocher « QR code de résumé dans le PDF » : plus de QR ni de légende ; un rapport publié (niveau 2) garde son QR code |
 
 ## Non validé (pas de machine disponible)
 - Performance sur Apple Silicon : débit de `cblas_dgemm` (coprocesseur matriciel), noyau Metal, ventilateurs à 0 tr/min sous charge courte, aucune référence ; MacBook Air sans ventilateur (pas de ligne « Ventilateurs sous charge »).

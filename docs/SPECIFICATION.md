@@ -300,7 +300,7 @@ Objectif : **détecter un Mac qui ne tient pas ses performances** sous charge (v
 4. **Quatre cartes chiffrées :** Batterie (santé % · cycles), Stockage (heures SSD · données écrites · santé), Configuration, Tests (« 6 / 8 réalisés »).
 5. **Tests interactifs** : liste avec ✅ / ❌ / ⏭ non testé, et mention *mesuré* ou *constaté*.
 6. **« À vérifier avant l'achat »** : liste auto-générée de tout ce qui est `unavailable`, `manualRequired`, `notTested` ou `watch`.
-7. **Pied de page :** bandeau de la section 3, identifiant du rapport, (plus tard) QR code.
+7. **Pied de page :** bandeau de la section 3, identifiant du rapport, légende du QR code hors ligne (§8.4).
 
 **Règle :** aucun badge global flatteur. Si des tests manquent, le dire en haut du rapport.
 
@@ -308,6 +308,33 @@ Objectif : **détecter un Mac qui ne tient pas ses performances** sous charge (v
 - PDF natif depuis le `ReportModel` (rendu SwiftUI → PDF, ou `NSView` → PDF). Mise en page A4, polices embarquées, couleurs adaptées à l'impression noir et blanc (ne pas dépendre de la couleur seule : icône + texte avec chaque statut).
 - Export PDF + aperçu avant impression. Sauvegarde du rapport au format JSON local (pour archivage et phase 4).
 - Langues : français en premier ; structure i18n dès le départ (anglais ensuite ; arabe éventuel plus tard — prévoir le support RTL dans l'architecture).
+
+### 8.4 Partage hors ligne (niveau 1)
+
+Le niveau 2 (rapport publié en ligne, signé, QR code vers une page publique) est un sujet séparé (`docs/LEVEL2-SPECIFICATION.md`). Au niveau 1, rien ne quitte le Mac sans action de la personne.
+
+- **Bouton « Partager… » / « Share… »** sur l'écran Rapport : feuille de partage de macOS (`NSSharingServicePicker`) avec le PDF (AirDrop, Messages, Mail…), écrit au clic dans un dossier temporaire avec les options en cours (simple ou détaillé). Réponse au besoin « je veux l'envoyer à l'acheteur depuis le Mac ».
+- **Export JSON :** écran Rapport, menu de la barre d'outils et menu Contrôle › « Exporter le rapport en JSON… ».
+- **QR code hors ligne :** page 1 du PDF de niveau 1, en haut à droite (la place du QR code du niveau 2, qui reste prioritaire quand le rapport est publié). Il contient un **résumé compact en texte brut**, une clé=valeur par ligne, lisible par n'importe quel lecteur de QR code, **sans URL ni serveur**, moins de 500 caractères (`AmanCore/OfflineSummary.swift`, testé) :
+  ```
+  AMAN CHECK SUMMARY v1
+  date=2026-10-16T14:49:48+01:00
+  report=AC-T9PG-TSX8
+  model=MacBookPro16,1
+  name=MacBook Pro (16 pouces, 2019)
+  serial_last4=MD6R
+  battery_cycles=512
+  battery_capacity=83%
+  ssd_hours=3572
+  activation_lock=off
+  mdm=no signal
+  apple_account=SIGNED IN
+  counts=good 7, watch 1, problem 0, not tested 13, check manually 2
+  tests=0/12
+  ```
+  Clés et valeurs en anglais (le nom commercial suit la langue du rapport). Une valeur absente vaut `n/a` ; un verrou non jugé vaut `not verified`. Seuls les 4 derniers caractères du numéro de série y figurent ; le nom du vendeur n'y figure pas. Généré avec `CIFilter.qrCodeGenerator` (CoreImage, correction M).
+- **Légende obligatoire** au pied de la page 1 : « Le code en haut à droite contient un résumé de ce rapport. Il ne prouve pas l'authenticité du rapport. » (lexique §3 : aucune promesse d'inviolabilité).
+- **Réglage** (⌘,) « QR code de résumé dans le PDF », activé par défaut (préférence `report.offlineQR`).
 
 ---
 

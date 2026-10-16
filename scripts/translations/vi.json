@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "Tham khảo: bộ xử lý ở tải tối đa có thể rất nóng mà không bị hỏng.",
 "{0} s, {1}": "{0} giây, {1}",
 "Reference: {0}": "Tham chiếu: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Khi dùng pin, macOS có thể giới hạn hiệu năng: hãy chạy lại khi cắm sạc trước khi kết luận."
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Khi dùng pin, macOS có thể giới hạn hiệu năng: hãy chạy lại khi cắm sạc trước khi kết luận.",
+"Summary QR code in the PDF": "Mã QR tóm tắt trong PDF",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "Mã QR ở trang đầu chứa bản tóm tắt ngắn dạng văn bản của báo cáo (không có liên kết, không gửi gì cả). Mã này không chứng minh báo cáo là xác thực.",
+"Share…": "Chia sẻ…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "Mã ở góc trên bên phải chứa bản tóm tắt của báo cáo này. Mã này không chứng minh báo cáo là xác thực."
 }

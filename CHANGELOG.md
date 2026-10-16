@@ -4,6 +4,12 @@ All notable changes to Aman Check are documented here.
 
 ## Unreleased
 
+### Report
+- "Share…" button on the report screen: AirDrop, Messages, Mail and the other macOS share services, with the PDF.
+- Offline QR code on the first page of the PDF: a short plain-text summary (model, last 4 characters of the serial number, battery, SSD hours, locks, counters), no link, no server. Its caption says it does not prove the report is authentic. Can be turned off in Settings.
+- "Export Report as JSON…" also in the Check menu.
+- Guided test names are no longer cut off on the first page of the PDF.
+
 ### Performance
 - New "Performance" page: about a minute of full load (processor 30 s, graphics 20 s, memory 5 s), started only by the person, with a warning first, live temperature and fan speed, and a Cancel button ("not tested").
 - Reports whether the Mac keeps its performance as it heats up (stability: under 10% drop good, 10–25% to watch, over 25% problem), and whether the fans start under load. No score.

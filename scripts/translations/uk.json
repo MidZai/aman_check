@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "Орієнтовно: процесор під повним навантаженням може сильно нагріватися й не бути несправним.",
 "{0} s, {1}": "{0} с, {1}",
 "Reference: {0}": "Еталон: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Від акумулятора macOS може обмежувати продуктивність: повторіть тест від мережі, перш ніж робити висновки."
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Від акумулятора macOS може обмежувати продуктивність: повторіть тест від мережі, перш ніж робити висновки.",
+"Summary QR code in the PDF": "QR-код із підсумком у PDF",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "QR-код на першій сторінці містить короткий текстовий підсумок звіту (без посилання, нічого не надсилається). Він не доводить справжність звіту.",
+"Share…": "Поділитися…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "Код у правому верхньому куті містить підсумок цього звіту. Він не доводить справжність звіту."
 }

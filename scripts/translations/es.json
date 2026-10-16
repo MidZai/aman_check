@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "Orientativo: un procesador a plena carga puede calentarse mucho sin estar averiado.",
 "{0} s, {1}": "{0} s, {1}",
 "Reference: {0}": "Referencia: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Con batería, macOS puede limitar el rendimiento: repite la prueba con el cargador antes de sacar conclusiones."
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "Con batería, macOS puede limitar el rendimiento: repite la prueba con el cargador antes de sacar conclusiones.",
+"Summary QR code in the PDF": "Código QR de resumen en el PDF",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "Un código QR en la primera página contiene un breve resumen en texto del informe (sin enlace, no se envía nada). No demuestra que el informe sea auténtico.",
+"Share…": "Compartir…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "El código de arriba a la derecha contiene un resumen de este informe. No demuestra que el informe sea auténtico."
 }

@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "सांकेतिक: पूरे लोड पर प्रोसेसर बिना खराबी के भी बहुत गर्म हो सकता है।",
 "{0} s, {1}": "{0} से., {1}",
 "Reference: {0}": "संदर्भ: {0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "बैटरी पर macOS प्रदर्शन सीमित कर सकता है: निष्कर्ष निकालने से पहले चार्जर पर परीक्षण दोबारा करें।"
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "बैटरी पर macOS प्रदर्शन सीमित कर सकता है: निष्कर्ष निकालने से पहले चार्जर पर परीक्षण दोबारा करें।",
+"Summary QR code in the PDF": "PDF में सारांश QR कोड",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "पहले पृष्ठ पर एक QR कोड में रिपोर्ट का छोटा पाठ सारांश होता है (कोई लिंक नहीं, कुछ भी नहीं भेजा जाता)। यह साबित नहीं करता कि रिपोर्ट प्रामाणिक है।",
+"Share…": "शेयर करें…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "ऊपर दाईं ओर का कोड इस रिपोर्ट का सारांश रखता है। यह साबित नहीं करता कि रिपोर्ट प्रामाणिक है।"
 }

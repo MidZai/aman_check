@@ -793,5 +793,9 @@
 "Indicative: a processor under full load can run hot without being faulty.": "目安：全負荷のプロセッサは故障していなくても高温になることがあります。",
 "{0} s, {1}": "{0} 秒、{1}",
 "Reference: {0}": "基準値：{0}",
-"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "バッテリー駆動では macOS が性能を制限することがあります。結論を出す前に、電源アダプタを接続してもう一度テストしてください。"
+"On battery, macOS can limit performance: run the test again on the power adapter before concluding.": "バッテリー駆動では macOS が性能を制限することがあります。結論を出す前に、電源アダプタを接続してもう一度テストしてください。",
+"Summary QR code in the PDF": "PDF の概要 QR コード",
+"A QR code on the first page holds a short text summary of the report (no link, nothing sent). It does not prove that the report is authentic.": "1 ページ目の QR コードには、レポートの短いテキスト概要が入っています（リンクなし、何も送信されません）。レポートが本物であることを証明するものではありません。",
+"Share…": "共有…",
+"The code at the top right contains a summary of this report. It does not prove that the report is authentic.": "右上のコードには、このレポートの概要が入っています。レポートが本物であることを証明するものではありません。"
 }
