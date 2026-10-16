@@ -234,6 +234,8 @@ Section « Capteurs » de l'analyse automatique (ventilateurs, température), et
 - Rétroéclairage : oui → *Bon*, non → *Problème* (constaté).
 - Tout test sauté ou interrompu → *Non testé*.
 
+**Consignes (public non technique) :** personne ne sait où est le capteur de luminosité. L'écran montre un schéma du haut de l'écran (caméra au centre, zone à couvrir entourée, main qui descend pendant le test) et demande de poser la main à plat en haut et au milieu de l'écran, sur la caméra : la main couvre le capteur sans qu'on ait à le trouver. Étapes numérotées ; boutons qui ouvrent la page de Réglages Système concernée (Moniteurs pour la luminosité automatique, Clavier pour l'éclairage en faible lumière) sans rien modifier ; luminosité de l'écran affichée en direct quand elle est lisible ; pour le rétroéclairage, chemin Touch Bar ou Centre de contrôle selon le modèle ; pour le capot, rappel que le Mac peut demander le mot de passe à la réouverture.
+
 **Hors périmètre :** Touch ID (déjà testé), accéléromètre / capteur de mouvement (absent des Mac récents), capteur de charnière (trop incertain).
 
 ---

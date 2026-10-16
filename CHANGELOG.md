@@ -18,6 +18,7 @@ All notable changes to Aman Check are documented here.
 ### Sensors
 - New "Sensors" section: number of fans, current fan speed and processor temperature, read from the SMC (read only, no password). Fanless Macs show "No fan on this model". A fan the model should have but the Mac does not report is "to watch"; a high temperature at rest is never more than "to watch".
 - New guided tests: lid sensor (sleep and wake detected automatically, or the person answers; adapted when an external display is connected), ambient light sensor (screen brightness measured on Intel Macs, otherwise the person answers; "automatic brightness off" is "not tested", not a failure), keyboard backlight.
+- The sensor tests show where to act: a drawing of the top of the screen with the area to cover (no need to find the light sensor: the whole hand covers it), numbered steps, buttons that open the right System Settings page, live screen brightness on Intel Macs, and a reminder that the Mac may ask for the password when the lid is opened again.
 - Not yet verified on Apple silicon (see `docs/VERIFICATION.md`).
 
 ### Documentation
