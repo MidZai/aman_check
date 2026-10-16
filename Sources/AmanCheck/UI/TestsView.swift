@@ -269,6 +269,9 @@ struct TestHost: View {
         case .microphone: MicrophoneTestView(finish: finish)
         case .camera: CameraTestView(finish: finish)
         case .touchID: TouchIDTestView(finish: finish)
+        case .lid: LidTestView(finish: finish)
+        case .ambientLight: AmbientLightTestView(finish: finish)
+        case .keyboardBacklight: KeyboardBacklightTestView(profile: profile, finish: finish)
         case .ports: PortsTestView(profile: profile, finish: finish)
         }
     }

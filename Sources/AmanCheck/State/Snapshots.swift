@@ -26,7 +26,7 @@ enum Snapshots {
             await controller.runAnalysis()
             render(OverviewView().environmentObject(controller).environmentObject(publisher), size: CGSize(width: 1100, height: 2700), to: dir.appendingPathComponent("2-resultats.png"))
             render(TestsView().environmentObject(controller).environmentObject(publisher), size: CGSize(width: 1040, height: 1100), to: dir.appendingPathComponent("3-tests.png"))
-            for test in [TestID.screen, .keyboard, .touchBar, .trackpad, .speakers, .microphone, .ports] {
+            for test in [TestID.screen, .keyboard, .touchBar, .trackpad, .speakers, .microphone, .lid, .ambientLight, .keyboardBacklight, .ports] {
                 render(TestHost(test: test, profile: controller.profile) { _ in }.environmentObject(controller),
                        size: CGSize(width: 1040, height: 720), to: dir.appendingPathComponent("4-test-\(test.rawValue).png"))
             }
