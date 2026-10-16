@@ -628,7 +628,6 @@
 "good": "جيد",
 "not tested": "لم يُختبر",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "مرتبط بحساب Apple الخاص بالمالك وبخدمة «تحديد الموقع». لا يمكن لأي شخص آخر إعداد Mac مقفل بعد مسحه.",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "حساب Apple ‏(iCloud) مسجَّل الدخول في الجلسة الحالية. هو الذي يتحكم في «تحديد الموقع» وقفل التنشيط، لذا يجب على البائع تسجيل الخروج ومسح الـ Mac قبل تسليمه. يُقرأ عدد الحسابات فقط، ولا يُقرأ الحساب نفسه أبداً.",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "يمكن للمؤسسة قفل أو مسح Mac مملوك لشركة أو مدرسة عن بُعد.",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "كلمة سر مسجّلة في البرنامج الثابت للـ Mac تمنع الإقلاع من قرص آخر ووضع الاستعادة.",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "مفعّلة افتراضياً على كل Mac. إذا كانت مطفأة، فهذه علامة على العبث بالنظام.",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "تم العثور على الكاميرا لكنها لا ترسل أي صورة.",
 "Ran {0} when this version of Aman Check was released.": "كان يعمل بنظام {0} عند صدور هذا الإصدار من Aman Check.",
 "21.5-inch": "21.5 بوصة",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "فقط مع بطاقة رسومات تدعم Metal؛ وإلا فـ macOS 10.13 High Sierra."
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "فقط مع بطاقة رسومات تدعم Metal؛ وإلا فـ macOS 10.13 High Sierra.",
+"What Aman Check does, and doesn't do": "ما يفعله Aman Check وما لا يفعله",
+"Reads only: nothing is changed on this Mac.": "قراءة فقط: لا يُغيَّر أي شيء على هذا الـ Mac.",
+"No connection: nothing leaves this Mac.": "لا اتصال: لا شيء يغادر هذا الـ Mac.",
+"No password asked, no Apple Account needed.": "لا تُطلب كلمة سر، ولا حاجة إلى حساب Apple.",
+"Got It": "فهمت",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "يتحقق مما إذا كان حساب Apple ‏(iCloud) الخاص بالبائع لا يزال مسجَّلًا على هذا الـ Mac. لا يحتاج Aman Check نفسه إلى أي حساب. هذا الحساب هو الذي يتحكم في «تحديد الموقع» وقفل التنشيط، لذا يجب على البائع تسجيل الخروج ومسح الـ Mac قبل تسليمه. يُقرأ عدد الحسابات فقط، وليس الحساب نفسه أبدًا."
 }

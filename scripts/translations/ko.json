@@ -628,7 +628,6 @@
 "good": "양호",
 "not tested": "테스트 안 함",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "소유자의 Apple 계정 및 나의 찾기와 연결되어 있습니다. 잠긴 Mac은 지운 후 다른 사람이 설정할 수 없습니다.",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "현재 세션에 로그인된 Apple 계정(iCloud)입니다. 나의 찾기와 활성화 잠금을 제어하므로 판매자는 넘기기 전에 로그아웃하고 Mac을 지워야 합니다. 계정 수만 읽으며 계정 자체는 읽지 않습니다.",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "회사나 학교 소유의 Mac은 해당 조직이 원격으로 잠그거나 지울 수 있습니다.",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "Mac 펌웨어에 설정된 암호는 다른 디스크에서의 시동과 복구 모드를 차단합니다.",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "모든 Mac에서 기본적으로 켜져 있습니다. 꺼져 있다면 시스템을 손댄 징후입니다.",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "카메라가 발견되었지만 이미지를 보내지 않습니다.",
 "Ran {0} when this version of Aman Check was released.": "이 Aman Check 버전이 출시되었을 때 {0}을(를) 실행하고 있었습니다.",
 "21.5-inch": "21.5형",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Metal 지원 그래픽 카드가 있는 경우에만. 그렇지 않으면 macOS 10.13 High Sierra."
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Metal 지원 그래픽 카드가 있는 경우에만. 그렇지 않으면 macOS 10.13 High Sierra.",
+"What Aman Check does, and doesn't do": "Aman Check가 하는 일과 하지 않는 일",
+"Reads only: nothing is changed on this Mac.": "읽기 전용: 이 Mac에서 아무것도 변경하지 않습니다.",
+"No connection: nothing leaves this Mac.": "연결 없음: 아무것도 이 Mac 밖으로 나가지 않습니다.",
+"No password asked, no Apple Account needed.": "암호를 묻지 않으며 Apple 계정이 필요 없습니다.",
+"Got It": "확인",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "판매자의 Apple 계정(iCloud)이 이 Mac에 아직 로그인되어 있는지 확인합니다. Aman Check 자체는 계정이 필요 없습니다. 이 계정이 나의 찾기와 활성화 잠금을 제어하므로, 판매자는 인도 전에 로그아웃하고 Mac을 지워야 합니다. 계정 수만 읽으며, 계정 자체는 절대 읽지 않습니다."
 }

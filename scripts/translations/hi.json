@@ -628,7 +628,6 @@
 "good": "अच्छे",
 "not tested": "परीक्षण नहीं हुए",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "मालिक के Apple Account और Find My से जुड़ा। लॉक किया गया Mac मिटाने के बाद कोई और सेटअप नहीं कर सकता।",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "वर्तमान सत्र में साइन इन Apple Account (iCloud)। यह Find My और Activation Lock को नियंत्रित करता है, इसलिए विक्रेता को सौंपने से पहले साइन आउट करके Mac मिटाना होगा। केवल खातों की संख्या पढ़ी जाती है, खाता कभी नहीं।",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "किसी कंपनी या स्कूल के स्वामित्व वाला Mac उसके संगठन द्वारा दूर से लॉक या मिटाया जा सकता है।",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "Mac के फ़र्मवेयर में सेट पासवर्ड दूसरी डिस्क से स्टार्टअप और रिकवरी मोड को रोकता है।",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "हर Mac पर डिफ़ॉल्ट रूप से सक्षम। बंद होना सिस्टम से छेड़छाड़ का संकेत है।",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "कैमरा मिला, लेकिन कोई तस्वीर नहीं भेज रहा।",
 "Ran {0} when this version of Aman Check was released.": "जब Aman Check का यह संस्करण जारी हुआ, तब {0} चला रहा था।",
 "21.5-inch": "21.5 इंच",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "केवल Metal-सक्षम ग्राफ़िक्स कार्ड के साथ; अन्यथा macOS 10.13 High Sierra।"
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "केवल Metal-सक्षम ग्राफ़िक्स कार्ड के साथ; अन्यथा macOS 10.13 High Sierra।",
+"What Aman Check does, and doesn't do": "Aman Check क्या करता है और क्या नहीं करता",
+"Reads only: nothing is changed on this Mac.": "केवल पढ़ता है: इस Mac पर कुछ भी नहीं बदला जाता।",
+"No connection: nothing leaves this Mac.": "कोई कनेक्शन नहीं: कुछ भी इस Mac से बाहर नहीं जाता।",
+"No password asked, no Apple Account needed.": "कोई पासवर्ड नहीं माँगा जाता, Apple खाते की ज़रूरत नहीं।",
+"Got It": "समझ गया",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "जाँचता है कि विक्रेता का Apple खाता (iCloud) अब भी इस Mac पर साइन इन है या नहीं। Aman Check को स्वयं किसी खाते की ज़रूरत नहीं है। वही खाता Find My और एक्टिवेशन लॉक को नियंत्रित करता है, इसलिए विक्रेता को Mac सौंपने से पहले साइन आउट करके उसे मिटाना होगा। केवल खातों की संख्या पढ़ी जाती है, खाता स्वयं कभी नहीं।"
 }

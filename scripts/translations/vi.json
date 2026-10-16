@@ -628,7 +628,6 @@
 "good": "tốt",
 "not tested": "chưa kiểm tra",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "Gắn với Tài khoản Apple của chủ sở hữu và Tìm. Máy Mac bị khóa không thể được người khác thiết lập sau khi xóa.",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "Tài khoản Apple (iCloud) đang đăng nhập trong phiên hiện tại. Nó điều khiển Tìm và Khóa kích hoạt, nên người bán phải đăng xuất và xóa máy Mac trước khi giao. Chỉ đọc số lượng tài khoản, không bao giờ đọc chính tài khoản.",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "Máy Mac thuộc sở hữu của công ty hoặc trường học có thể bị tổ chức khóa hoặc xóa từ xa.",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "Mật khẩu đặt trong firmware của máy Mac chặn khởi động từ ổ đĩa khác và chế độ khôi phục.",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "Mặc định bật trên mọi máy Mac. Nếu tắt, đó là dấu hiệu hệ thống đã bị can thiệp.",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "Đã tìm thấy camera nhưng không gửi hình ảnh.",
 "Ran {0} when this version of Aman Check was released.": "Chạy {0} khi phiên bản Aman Check này được phát hành.",
 "21.5-inch": "21,5 inch",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Chỉ khi có card đồ họa hỗ trợ Metal; nếu không thì macOS 10.13 High Sierra."
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Chỉ khi có card đồ họa hỗ trợ Metal; nếu không thì macOS 10.13 High Sierra.",
+"What Aman Check does, and doesn't do": "Aman Check làm gì và không làm gì",
+"Reads only: nothing is changed on this Mac.": "Chỉ đọc: không có gì bị thay đổi trên máy Mac này.",
+"No connection: nothing leaves this Mac.": "Không kết nối: không có gì rời khỏi máy Mac này.",
+"No password asked, no Apple Account needed.": "Không hỏi mật khẩu, không cần Tài khoản Apple.",
+"Got It": "Đã hiểu",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "Kiểm tra xem Tài khoản Apple (iCloud) của người bán có còn đăng nhập trên máy Mac này không. Bản thân Aman Check không cần tài khoản nào. Chính tài khoản đó điều khiển Tìm và Khóa kích hoạt, vì vậy người bán phải đăng xuất và xóa máy Mac trước khi bàn giao. Chỉ số lượng tài khoản được đọc, không bao giờ đọc chính tài khoản."
 }

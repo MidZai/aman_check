@@ -628,7 +628,6 @@
 "good": "gut",
 "not tested": "nicht getestet",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "Mit dem Apple Account des Besitzers und „Wo ist?“ verknüpft. Ein gesperrter Mac kann nach dem Löschen von niemand anderem eingerichtet werden.",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "In der aktuellen Sitzung angemeldeter Apple Account (iCloud). Er steuert „Wo ist?“ und die Aktivierungssperre, daher muss sich der Verkäufer abmelden und den Mac vor der Übergabe löschen. Nur die Anzahl der Accounts wird gelesen, nie der Account selbst.",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "Ein Mac, der einer Firma oder Schule gehört, kann von der Organisation aus der Ferne gesperrt oder gelöscht werden.",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "Ein in der Firmware des Mac gesetztes Passwort blockiert den Start von einem anderen Laufwerk und den Wiederherstellungsmodus.",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "Auf jedem Mac standardmäßig aktiviert. Ausgeschaltet ist sie ein Zeichen dafür, dass am System manipuliert wurde.",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "Die Kamera wurde gefunden, sendet aber kein Bild.",
 "Ran {0} when this version of Aman Check was released.": "Lief mit {0}, als diese Version von Aman Check erschien.",
 "21.5-inch": "21,5 Zoll",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Nur mit einer Metal-fähigen Grafikkarte, sonst macOS 10.13 High Sierra."
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Nur mit einer Metal-fähigen Grafikkarte, sonst macOS 10.13 High Sierra.",
+"What Aman Check does, and doesn't do": "Was Aman Check tut und was nicht",
+"Reads only: nothing is changed on this Mac.": "Nur Lesen: An diesem Mac wird nichts verändert.",
+"No connection: nothing leaves this Mac.": "Keine Verbindung: Nichts verlässt diesen Mac.",
+"No password asked, no Apple Account needed.": "Kein Passwort, kein Apple Account nötig.",
+"Got It": "Verstanden",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "Prüft, ob der Apple Account (iCloud) des Verkäufers auf diesem Mac noch angemeldet ist. Aman Check selbst braucht keinen Account. Dieser Account steuert „Wo ist?“ und die Aktivierungssperre, daher muss der Verkäufer sich abmelden und den Mac vor der Übergabe löschen. Gelesen wird nur die Anzahl der Accounts, nie der Account selbst."
 }

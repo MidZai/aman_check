@@ -628,7 +628,6 @@
 "good": "良好",
 "not tested": "未測試",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "與機主的 Apple 帳號和「尋找」關聯。被鎖定的 Mac 在清除後無法由他人設定。",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "目前工作階段中登入的 Apple 帳號（iCloud）。它控制「尋找」和啟用鎖定，因此賣家在交付前必須登出並清除 Mac。只讀取帳號數量，絕不讀取帳號本身。",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "屬於公司或學校的 Mac 可被其組織遠端鎖定或清除。",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "在 Mac 韌體中設定的密碼會阻止從其他磁碟開機和進入復原模式。",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "所有 Mac 預設開啟。若已關閉，表示系統被動過手腳。",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "已找到相機，但沒有傳送影像。",
 "Ran {0} when this version of Aman Check was released.": "在此版本 Aman Check 發布時執行 {0}。",
 "21.5-inch": "21.5 吋",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "僅限配備支援 Metal 的顯示卡；否則為 macOS 10.13 High Sierra。"
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "僅限配備支援 Metal 的顯示卡；否則為 macOS 10.13 High Sierra。",
+"What Aman Check does, and doesn't do": "Aman Check 會做什麼，不會做什麼",
+"Reads only: nothing is changed on this Mac.": "唯讀：不會更改這台 Mac 上的任何內容。",
+"No connection: nothing leaves this Mac.": "不連網：沒有任何資料離開這台 Mac。",
+"No password asked, no Apple Account needed.": "不要求密碼，也不需要 Apple 帳號。",
+"Got It": "知道了",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "檢查賣家的 Apple 帳號（iCloud）是否仍在這台 Mac 上登入。Aman Check 本身不需要任何帳號。該帳號控制「尋找」和啟用鎖定，因此賣家必須在交付前登出並清除這台 Mac。只讀取帳號數量，從不讀取帳號本身。"
 }

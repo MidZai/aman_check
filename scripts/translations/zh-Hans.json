@@ -628,7 +628,6 @@
 "good": "良好",
 "not tested": "未测试",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "与机主的 Apple 账户和“查找”关联。被锁定的 Mac 在抹掉后无法由他人设置。",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "当前会话中登录的 Apple 账户（iCloud）。它控制“查找”和激活锁，因此卖家在交付前必须退出登录并抹掉 Mac。只读取账户数量，绝不读取账户本身。",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "属于公司或学校的 Mac 可被其组织远程锁定或抹掉。",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "在 Mac 固件中设置的密码会阻止从其他磁盘启动和进入恢复模式。",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "所有 Mac 默认开启。若已关闭，说明系统被动过手脚。",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "已找到摄像头，但没有发送图像。",
 "Ran {0} when this version of Aman Check was released.": "在此版本 Aman Check 发布时运行 {0}。",
 "21.5-inch": "21.5 英寸",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "仅限配备支持 Metal 的显卡；否则为 macOS 10.13 High Sierra。"
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "仅限配备支持 Metal 的显卡；否则为 macOS 10.13 High Sierra。",
+"What Aman Check does, and doesn't do": "Aman Check 会做什么，不会做什么",
+"Reads only: nothing is changed on this Mac.": "只读：不会更改这台 Mac 上的任何内容。",
+"No connection: nothing leaves this Mac.": "不联网：没有任何数据离开这台 Mac。",
+"No password asked, no Apple Account needed.": "不要求密码，也不需要 Apple 账户。",
+"Got It": "知道了",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "检查卖家的 Apple 账户（iCloud）是否仍在这台 Mac 上登录。Aman Check 本身不需要任何账户。该账户控制“查找”和激活锁，因此卖家必须在交付前退出登录并抹掉这台 Mac。只读取账户数量，从不读取账户本身。"
 }

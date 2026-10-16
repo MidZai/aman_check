@@ -628,7 +628,6 @@
 "good": "良好",
 "not tested": "未テスト",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "所有者のAppleアカウントと「探す」に紐づいています。ロックされたMacは消去後、他の人が設定することはできません。",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "現在のセッションでサインイン中のAppleアカウント（iCloud）。「探す」とアクティベーションロックを制御するため、販売者は引き渡し前にサインアウトしてMacを消去する必要があります。読み取るのはアカウント数のみで、アカウント自体は読み取りません。",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "企業や学校が所有するMacは、その組織によって遠隔でロックまたは消去される可能性があります。",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "Macのファームウェアに設定されたパスワードは、他のディスクからの起動と復旧モードを妨げます。",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "すべてのMacでデフォルトで有効です。無効になっている場合、システムが改変された兆候です。",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "カメラは検出されましたが、映像を送信していません。",
 "Ran {0} when this version of Aman Check was released.": "この Aman Check のバージョンがリリースされた時点で {0} が動作していました。",
 "21.5-inch": "21.5インチ",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Metal対応のグラフィックスカードがある場合のみ。それ以外はmacOS 10.13 High Sierra。"
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Metal対応のグラフィックスカードがある場合のみ。それ以外はmacOS 10.13 High Sierra。",
+"What Aman Check does, and doesn't do": "Aman Check がすること、しないこと",
+"Reads only: nothing is changed on this Mac.": "読み取りのみ：この Mac 上の何も変更しません。",
+"No connection: nothing leaves this Mac.": "通信なし：この Mac から何も送信されません。",
+"No password asked, no Apple Account needed.": "パスワードは求めず、Apple アカウントも不要です。",
+"Got It": "了解",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "販売者の Apple アカウント（iCloud）がこの Mac にまだサインインしているかを確認します。Aman Check 自体はアカウントを必要としません。このアカウントが「探す」とアクティベーションロックを制御するため、販売者は引き渡し前にサインアウトして Mac を消去する必要があります。読み取るのはアカウントの数だけで、アカウントそのものは読み取りません。"
 }

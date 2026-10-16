@@ -628,7 +628,6 @@
 "good": "в нормі",
 "not tested": "не тестувалося",
 "Linked to the owner's Apple Account and Find My. A locked Mac cannot be set up by anyone else after it is erased.": "Пов'язане з Обліковим записом Apple власника та Локатором. Заблокований Mac після стирання не зможе налаштувати ніхто інший.",
-"Apple Account (iCloud) signed in in the current session. It drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "Обліковий запис Apple (iCloud), який виконав вхід у поточному сеансі. Він керує Локатором і блокуванням активації, тому продавець має вийти та стерти Mac перед передачею. Зчитується лише кількість облікових записів, ніколи сам обліковий запис.",
 "A Mac owned by a company or a school can be locked or wiped remotely by its organization.": "Mac, що належить компанії або школі, може бути віддалено заблокований або стертий організацією.",
 "A password set in the Mac's firmware blocks startup from another disk and recovery mode.": "Пароль, заданий у прошивці Mac, блокує запуск з іншого диска та режим відновлення.",
 "Enabled on every Mac by default. Turned off, it is a sign that the system has been tinkered with.": "Увімкнений за замовчуванням на кожному Mac. Вимкнений — ознака втручання в систему.",
@@ -674,5 +673,11 @@
 "The camera was found but sends no image.": "Камеру знайдено, але вона не передає зображення.",
 "Ran {0} when this version of Aman Check was released.": "Працював на {0} на момент виходу цієї версії Aman Check.",
 "21.5-inch": "21,5 дюйма",
-"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Лише з відеокартою, що підтримує Metal; інакше macOS 10.13 High Sierra."
+"Only with a Metal-capable graphics card; otherwise macOS 10.13 High Sierra.": "Лише з відеокартою, що підтримує Metal; інакше macOS 10.13 High Sierra.",
+"What Aman Check does, and doesn't do": "Що робить і чого не робить Aman Check",
+"Reads only: nothing is changed on this Mac.": "Лише читання: на цьому Mac нічого не змінюється.",
+"No connection: nothing leaves this Mac.": "Без з'єднання: ніщо не залишає цей Mac.",
+"No password asked, no Apple Account needed.": "Пароль не запитується, обліковий запис Apple не потрібен.",
+"Got It": "Зрозуміло",
+"Checks whether the seller's Apple Account (iCloud) is still signed in on this Mac. Aman Check itself needs no account. That account drives Find My and Activation Lock, so the seller must sign out and erase the Mac before handing it over. Only the number of accounts is read, never the account itself.": "Перевіряє, чи на цьому Mac досі виконано вхід в обліковий запис Apple (iCloud) продавця. Самому Aman Check обліковий запис не потрібен. Саме цей обліковий запис керує «Локатором» і блокуванням активації, тож продавець має вийти з нього й стерти Mac перед передачею. Зчитується лише кількість облікових записів, ніколи сам запис."
 }

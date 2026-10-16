@@ -49,6 +49,9 @@ private struct WelcomeView: View {
                     .keyboardShortcut(.defaultAction)
                 }
 
+                TrustNotice()
+                    .frame(maxWidth: 760)
+
                 HStack(alignment: .top, spacing: AmanDesign.gridSpacing) {
                     Feature(symbol: "lock.shield", title: L("Locks", "Verrouillages"),
                             text: L("iCloud, company management, firmware", "iCloud, gestion d'entreprise, firmware"))
@@ -91,6 +94,39 @@ private struct WelcomeView: View {
                         .fixedSize(horizontal: false, vertical: true)
                 }
             }
+        }
+    }
+}
+
+/// Premier lancement : ce que fait et ne fait pas l'app (retours Reddit, l'avertissement Gatekeeper inquiète).
+/// « Compris » le masque pour de bon (préférence locale). Toujours affiché en mode --snapshot.
+private struct TrustNotice: View {
+    @AppStorage("trustNotice.acknowledged") private var acknowledged = false
+
+    var body: some View {
+        if !acknowledged || Snapshots.directory != nil {
+            Callout(tint: AmanPalette.water, symbol: "hand.raised") {
+                Text(L("What Aman Check does, and doesn't do", "Ce que fait et ne fait pas Aman Check"))
+                    .font(.headline)
+                VStack(alignment: .leading, spacing: 4) {
+                    line("eye", L("Reads only: nothing is changed on this Mac.", "Lecture seule : rien n'est modifié sur ce Mac."))
+                    line("wifi.slash", L("No connection: nothing leaves this Mac.", "Aucune connexion : rien ne quitte ce Mac."))
+                    line("person.crop.circle.badge.xmark", L("No password asked, no Apple Account needed.", "Aucun mot de passe demandé, aucun compte Apple nécessaire."))
+                }
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                HStack {
+                    Spacer()
+                    Button(L("Got It", "Compris")) { acknowledged = true }
+                }
+            }
+        }
+    }
+
+    private func line(_ symbol: String, _ text: String) -> some View {
+        HStack(spacing: 8) {
+            Image(systemName: symbol).frame(width: 22).accessibilityHidden(true)
+            Text(text)
         }
     }
 }
