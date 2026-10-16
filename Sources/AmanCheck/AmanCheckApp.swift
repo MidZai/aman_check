@@ -74,6 +74,10 @@ struct AmanCheckApp: App {
                 }
                 .keyboardShortcut("e", modifiers: .command)
                 .disabled(controller.phase != .results)
+                Button(L("Export Report as JSON…", "Exporter le rapport en JSON…")) {
+                    ReportExporter.exportJSON(controller.report)
+                }
+                .disabled(controller.phase != .results)
                 // Niveau 2 : rien n'est envoyé avant la feuille de confirmation.
                 Button(L("Publish the Report…", "Publier le rapport…")) {
                     controller.selection = .report

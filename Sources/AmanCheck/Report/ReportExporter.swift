@@ -108,6 +108,22 @@ enum ReportExporter {
         } catch { showError(error) }
     }
 
+    /// PDF à partager (AirDrop, Messages, Mail…) : écrit dans un dossier temporaire propre à l'app, sous le même
+    /// nom qu'un export. Rien n'est envoyé tant que la personne n'a pas choisi un service et un destinataire.
+    static func shareablePDF(_ report: ConditionReport, detailed: Bool, archive: PublishedReportArchive? = nil, logo: Data? = nil) -> URL? {
+        let report = archive?.report ?? report
+        let folder = FileManager.default.temporaryDirectory.appendingPathComponent("Aman Check – share", isDirectory: true)
+        try? FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let url = folder.appendingPathComponent(fileName(report, ext: "pdf"))
+        do {
+            try writePDF(report, detailed: detailed, publication: archive?.publication, logo: logo, to: url)
+            return url
+        } catch {
+            showError(error)
+            return nil
+        }
+    }
+
     /// Impression / aperçu avant impression via un PDF temporaire ouvert dans Aperçu.
     static func preview(_ report: ConditionReport, detailed: Bool, archive: PublishedReportArchive? = nil, logo: Data? = nil) {
         let report = archive?.report ?? report

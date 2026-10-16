@@ -98,6 +98,11 @@ struct ReportScreen: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .controlSize(.large)
+                // Envoi direct à l'acheteur depuis ce Mac : AirDrop, Messages, Mail… (retour Reddit).
+                ShareButton(title: L("Share…", "Partager…")) {
+                    publisher.shareablePDF(report, detailed: detailed).map { [$0] } ?? []
+                }
+                .frame(maxWidth: .infinity)
                 Button(L("Open in Preview to Print", "Ouvrir dans Aperçu pour imprimer")) {
                     ReportExporter.preview(report, detailed: detailed, archive: archive, logo: logo)
                 }

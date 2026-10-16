@@ -215,6 +215,11 @@ final class PublishController: ObservableObject {
 extension PublishController {
     /// Export PDF unique pour le menu Contrôle, la barre d'outils et l'écran Rapport : si le rapport a été publié,
     /// le PDF porte le QR code et le lien de vérification (archive) et, en Pro, le logo de la boutique.
+    func shareablePDF(_ report: ConditionReport, detailed: Bool = true) -> URL? {
+        ReportExporter.shareablePDF(report, detailed: detailed, archive: published[report.reportID],
+                                    logo: license?.isPro == true ? license?.logoData : nil)
+    }
+
     func exportPDF(_ report: ConditionReport, detailed: Bool = true) {
         ReportExporter.exportPDF(report, detailed: detailed, archive: published[report.reportID],
                                  logo: license?.isPro == true ? license?.logoData : nil)
