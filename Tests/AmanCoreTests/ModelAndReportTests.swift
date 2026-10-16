@@ -27,7 +27,7 @@ struct MeasurementTests {
                    MetricID.storageMediaErrors, MetricID.storageTemperature, MetricID.storageModel,
                    MetricID.storageInterface, MetricID.wifi, MetricID.bluetooth,
                    MetricID.batteryPresence, MetricID.cameraPresence, MetricID.touchIDPresence,
-                   MetricID.fanCount, MetricID.fanSpeed, MetricID.cpuTemperature,
+                   MetricID.fanCount, MetricID.fanSpeed, MetricID.cpuTemperature, MetricID.ambientLight,
                    MetricID.performanceStability, MetricID.performanceCPU, MetricID.performanceGPU, MetricID.performanceMemory,
                    MetricID.performanceFans, MetricID.performancePeakTemperature, MetricID.performanceConditions]
         #expect(Set(ids).count == MetricCatalog.allIDs.count)

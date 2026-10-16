@@ -26,10 +26,10 @@ Profils simulés (sans ces Mac) : `Aman Check.app/Contents/MacOS/AmanCheck --sim
 | Ventilateurs | Section « Capteurs » : 2 ventilateurs, vitesses plausibles, température du processeur ; Avancé : clés lues (`FNum, F0Ac, F1Ac, TCXC`) | §6.6 |
 | Capot | Commencer, fermer le capot 5 s, rouvrir : « Fermeture et ouverture du capot détectées par le capteur » sans question | §6.6 |
 | Capot + écran externe | Écran externe branché : consigne « le Mac ne se mettra pas en veille… », capot fermé/rouvert détecté quand même | §6.6 |
-| Luminosité | Luminosité automatique activée, capteur couvert : « Luminosité de l'écran passée de X à Y » (lecture IODisplay sur Intel) ; désactivée : question, « La luminosité automatique est désactivée » → Non testé | §6.6 |
+| Luminosité | Torche du téléphone sur le haut de l'écran : « Le capteur de luminosité est passé de X lux à Y lux » sans question, quel que soit le réglage de luminosité automatique ; torche éloignée 20 s : « Le capteur n'a vu aucun changement » | §6.6 |
 | Rétroéclairage | Consigne adaptée à la Touch Bar ; Oui / Non | §6.6 |
 
-Vérifié automatiquement sur le MacBookPro16,1 : lecture du SMC sans droits (2 ventilateurs en `flt`, sondes en `sp78`), `AppleClamshellState` lisible (« No » capot ouvert), luminosité de l'écran lisible par IODisplay. Pas vérifié à la main : la fermeture réelle du capot pendant le test, la luminosité capteur couvert.
+Vérifié automatiquement sur le MacBookPro16,1 : capteur de luminosité lu par l'app elle-même, sans demande d'autorisation (périphérique USB interne « Ambient Light Sensor », 5,8 lux), lecture du SMC sans droits (2 ventilateurs en `flt`, sondes en `sp78`), `AppleClamshellState` lisible (« No » capot ouvert), luminosité de l'écran lisible par IODisplay. Pas vérifié à la main : la fermeture réelle du capot pendant le test, la luminosité capteur couvert.
 
 ## Performance (§7.8)
 
@@ -53,7 +53,7 @@ Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (fra
 
 ## Non validé (pas de machine disponible)
 - Performance sur Apple Silicon : débit de `cblas_dgemm` (coprocesseur matriciel), noyau Metal, ventilateurs à 0 tr/min sous charge courte, aucune référence ; MacBook Air sans ventilateur (pas de ligne « Ventilateurs sous charge »).
-- Capteurs sur Apple Silicon : clés de température `Tp*` (M1, M2 ; M3 et M4 peuvent utiliser d'autres préfixes → « Non disponible »), type des clés de ventilateur, `AppleClamshellState`, et luminosité par IODisplay (probablement illisible : la question est alors posée). MacBook Air M1+ : « Pas de ventilateur sur ce modèle ». Mac de bureau : section Capteurs sans test du capot.
+- Capteurs sur Apple Silicon : clés de température `Tp*` (M1, M2 ; M3 et M4 peuvent utiliser d'autres préfixes → « Non disponible »), type des clés de ventilateur, `AppleClamshellState`, luminosité par IODisplay (probablement illisible : la question est alors posée), et surtout le capteur de luminosité par HID (sur Apple Silicon il passe par le SPU et peut ne pas apparaître : l'analyse dit alors « Non disponible »). Mac Intel sans T2 et iMac : capteur HID non vérifié. MacBook Air M1+ : « Pas de ventilateur sur ce modèle ». Mac de bureau : section Capteurs sans test du capot.
 - Apple Silicon : clés batterie (`MaxCapacity` en %, `NominalChargeCapacity`), « Capacité maximale » de SPPowerDataType, `sppci_cores`, classes des ports USB, `UsbCPortNumber`.
 - Mac de bureau réels, Mac Intel sans T2 (Activation Lock non lisible).
 - Touches F1–F12 physiques (keyCodes média, Mission Control 160, Launchpad 131), lecteur SD, HDMI.

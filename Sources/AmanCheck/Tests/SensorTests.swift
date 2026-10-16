@@ -218,9 +218,9 @@ struct NumberedSteps: View {
 }
 
 /// Le haut de l'écran du Mac : la caméra au centre et, juste à côté, le capteur de luminosité.
-/// La zone à couvrir est entourée ; la main descend dessus pendant le test.
+/// La zone entourée est celle à éclairer à la torche (ou à couvrir) ; pendant le test, la torche l'éclaire.
 struct TopOfScreenDiagram: View {
-    let covering: Bool
+    let active: Bool
 
     var body: some View {
         ZStack(alignment: .top) {
@@ -231,168 +231,262 @@ struct TopOfScreenDiagram: View {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(LinearGradient(colors: [Color(red: 0.27, green: 0.52, blue: 0.78), Color(red: 0.42, green: 0.66, blue: 0.9)],
                                      startPoint: .top, endPoint: .bottom))
-                .opacity(covering ? 0.55 : 1)
+                .brightness(active ? 0.12 : 0)
                 .frame(width: 336, height: 118)
                 .offset(y: 24)
+            // Faisceau de la torche.
+            Triangle()
+                .fill(LinearGradient(colors: [Color.yellow.opacity(active ? 0.55 : 0.18), Color.yellow.opacity(0)],
+                                     startPoint: .top, endPoint: .bottom))
+                .frame(width: 130, height: 70)
+                .offset(y: -52)
+                .animation(.easeInOut(duration: 0.4), value: active)
             // Caméra.
             Circle().fill(Color.black)
                 .overlay(Circle().strokeBorder(Color(white: 0.35), lineWidth: 1))
                 .frame(width: 9, height: 9)
                 .offset(y: 8)
-            // Zone à couvrir.
+            // Zone visée.
             Capsule()
                 .strokeBorder(AmanPalette.water, style: StrokeStyle(lineWidth: 2.5, dash: [5, 4]))
                 .frame(width: 120, height: 34)
                 .offset(y: -4)
-            Image(systemName: "hand.raised.fill")
-                .font(.system(size: 54))
-                .foregroundStyle(Color(red: 0.93, green: 0.78, blue: 0.64))
-                .shadow(color: .black.opacity(0.35), radius: 4, y: 2)
-                .offset(y: covering ? -10 : -78)
-                .animation(.easeInOut(duration: 0.5), value: covering)
+            Image(systemName: "flashlight.on.fill")
+                .font(.system(size: 40))
+                .foregroundStyle(Color(white: 0.85))
+                .rotationEffect(.degrees(180))
+                .offset(y: active ? -78 : -92)
+                .animation(.easeInOut(duration: 0.4), value: active)
         }
         .frame(width: 360, height: 150)
-        .padding(.top, 70)
+        .padding(.top, 96)
         .overlay(alignment: .topTrailing) {
             Text(L("camera and sensor", "caméra et capteur"))
                 .font(.caption.weight(.medium))
                 .foregroundStyle(AmanPalette.water)
-                .offset(x: -6, y: 56)
+                .offset(x: -6, y: 82)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(L("The light sensor is at the top of the screen, next to the camera.",
                               "Le capteur de luminosité est en haut de l'écran, à côté de la caméra."))
     }
+
+    private struct Triangle: Shape {
+        func path(in rect: CGRect) -> Path {
+            Path { p in
+                p.move(to: CGPoint(x: rect.midX - 8, y: rect.minY))
+                p.addLine(to: CGPoint(x: rect.midX + 8, y: rect.minY))
+                p.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+                p.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+                p.closeSubpath()
+            }
+        }
+    }
 }
 
 // MARK: - Capteur de luminosité ambiante
 
+/// Trois cas, du plus automatique au moins automatique (spec §6.6) :
+/// 1. le capteur se lit (HID) : la personne éclaire ou couvre, l'app voit le changement de lux, rien à répondre ;
+/// 2. seule la luminosité de l'écran se lit (Intel) : la luminosité automatique doit être activée, l'app voit
+///    l'écran changer dans un sens ou dans l'autre ;
+/// 3. rien ne se lit (Apple Silicon, a priori) : la personne dit si l'écran a changé.
 struct AmbientLightTestView: View {
     let profile: DeviceProfile
     let finish: (TestResult) -> Void
 
-    private enum Phase: Equatable { case ready, covering(Int), asking, measured }
+    private enum Source { case sensor, brightness, observation }
+    private enum Phase: Equatable { case ready, running(Int), noReaction, asking, done }
+
+    @State private var sensor: AmbientLightSensor?
+    @State private var source: Source = .observation
     @State private var phase: Phase = .ready
-    @State private var before: Double?
-    @State private var lowest: Double?
+    @State private var baseline: Double?
     @State private var current: Double?
+    @State private var samples: [Double] = []
+    @State private var result: TestResult?
     @State private var timer: Timer?
-    @State private var measured: TestResult?
 
-    /// Main posée 5 s : la luminosité automatique met 2 à 3 s à réagir.
-    private let seconds = 5
-
-    private var isCovering: Bool { if case .covering = phase { return true } else { return false } }
+    /// Capteur lu : jusqu'à 20 s pour sortir la torche (le test s'arrête dès que le changement est vu).
+    private var seconds: Int { source == .sensor ? 20 : 8 }
 
     var body: some View {
         TestScaffold(title: TestID.ambientLight.title,
-                     instruction: L("The sensor is hidden at the top of the screen, next to the camera. No need to find it: your hand covers it.",
-                                    "Le capteur est caché en haut de l'écran, à côté de la caméra. Inutile de le chercher : votre main le couvre.")) {
+                     instruction: source == .sensor
+                        ? L("Shine your phone's flashlight on the top of the screen, next to the camera, or cover it with your hand: the app sees the change by itself.",
+                            "Éclairez le haut de l'écran, à côté de la caméra, avec la torche de votre téléphone, ou couvrez-le avec la main : l'app voit le changement d'elle-même.")
+                        : L("Shine your phone's flashlight on the top of the screen, next to the camera: the screen should brighten by itself.",
+                            "Éclairez le haut de l'écran, à côté de la caméra, avec la torche de votre téléphone : l'écran doit s'éclaircir de lui-même.")) {
             VStack(spacing: 22) {
-                TopOfScreenDiagram(covering: isCovering)
-                switch phase {
-                case .ready:
-                    NumberedSteps(steps: [
-                        .init(text: L("Check that automatic brightness is on: “Automatically adjust brightness” in the display settings.",
-                                      "Vérifiez que la luminosité automatique est activée : « Régler la luminosité automatiquement » dans les réglages des moniteurs."),
-                              buttonTitle: L("Open Display Settings", "Ouvrir les réglages des moniteurs"),
-                              action: { SystemSettingsPage.displays.open() }),
-                        .init(text: L("Click Start, then lay your hand flat over the top middle of the screen, over the camera.",
-                                      "Cliquez sur Commencer, puis posez la main à plat en haut et au milieu de l'écran, sur la caméra.")),
-                        .init(text: L("Keep it there until the countdown ends, and watch the screen: it should dim.",
-                                      "Gardez-la jusqu'à la fin du compte à rebours en regardant l'écran : il doit s'assombrir."))
-                    ])
-                    .frame(maxWidth: 560)
-                case .covering(let left):
-                    VStack(spacing: 8) {
-                        Text(L("Cover the top of the screen now… \(left)", "Couvrez le haut de l'écran maintenant… \(left)"))
-                            .font(.title2.weight(.semibold))
-                            .monospacedDigit()
-                        if let before, let current {
-                            Text(L("Screen brightness: \(Self.percent(before)) → \(Self.percent(current))",
-                                   "Luminosité de l'écran : \(Self.percent(before)) → \(Self.percent(current))"))
-                                .font(.callout)
-                                .foregroundStyle(.secondary)
-                                .monospacedDigit()
-                        }
-                    }
-                case .asking:
-                    VStack(spacing: 8) {
-                        Text(L("You can take your hand away.", "Vous pouvez retirer la main."))
-                            .foregroundStyle(.secondary)
-                        Text(L("Did the screen (or the keyboard backlight) get darker while your hand was there?",
-                               "L'écran (ou le rétroéclairage du clavier) s'est-il assombri pendant que votre main était posée ?"))
-                            .font(.title3.weight(.medium))
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: 560)
-                case .measured:
-                    VStack(spacing: 8) {
-                        Text(L("You can take your hand away.", "Vous pouvez retirer la main."))
-                            .foregroundStyle(.secondary)
-                        StatusLabel(.good, text: measured?.summary ?? "", font: .headline)
-                    }
-                }
+                TopOfScreenDiagram(active: { if case .running = phase { return true } else { return false } }())
+                content
             }
         } actions: {
-            switch phase {
-            case .ready:
-                Button(L("Start", "Commencer")) { start() }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
-            case .covering:
-                EmptyView()
-            case .asking:
-                Button(L("Automatic Brightness Is Off", "La luminosité automatique est désactivée")) { answer(.automaticBrightnessOff) }
-                Button(L("Try Again", "Réessayer")) { phase = .ready }
-                Button(L("No, Nothing Changed", "Non, rien n'a changé")) { answer(.noChange) }
-                Button(L("Yes, It Got Darker", "Oui, il s'est assombri")) { answer(.changed) }
-                    .buttonStyle(.borderedProminent)
-            case .measured:
-                Button(L("Continue", "Continuer")) { if let measured { finish(measured) } }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
-            }
+            actions
         }
+        .onAppear(perform: detect)
         .onDisappear { timer?.invalidate() }
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch phase {
+        case .ready:
+            NumberedSteps(steps: steps).frame(maxWidth: 560)
+        case .running(let left):
+            VStack(spacing: 8) {
+                Text(source == .sensor
+                     ? L("Shine the light on it now… \(left)", "Éclairez-le maintenant… \(left)")
+                     : L("Shine the light on it now and watch the screen… \(left)", "Éclairez-le maintenant en regardant l'écran… \(left)"))
+                    .font(.title2.weight(.semibold))
+                    .monospacedDigit()
+                if let current {
+                    Text(source == .sensor
+                         ? L("Light measured: \(SensorTests.lux(current))", "Lumière mesurée : \(SensorTests.lux(current))")
+                         : L("Screen brightness: \(Self.percent(current))", "Luminosité de l'écran : \(Self.percent(current))"))
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                        .monospacedDigit()
+                }
+            }
+        case .noReaction:
+            VStack(spacing: 8) {
+                StatusLabel(.watch, text: L("The sensor did not see any change.", "Le capteur n'a vu aucun changement."), font: .headline)
+                Text(L("Bring the flashlight closer, right next to the camera, and try again.",
+                       "Approchez la torche, juste à côté de la caméra, et réessayez."))
+                    .foregroundStyle(.secondary)
+            }
+        case .asking:
+            Text(L("Did the screen brightness change by itself while the light was on it?",
+                   "La luminosité de l'écran a-t-elle changé d'elle-même pendant que la lumière était dessus ?"))
+                .font(.title3.weight(.medium))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: 560)
+        case .done:
+            StatusLabel(.good, text: result?.summary ?? "", font: .headline)
+        }
+    }
+
+    @ViewBuilder
+    private var actions: some View {
+        switch phase {
+        case .ready:
+            Button(L("Start", "Commencer")) { start() }
+                .buttonStyle(.borderedProminent)
+                .keyboardShortcut(.defaultAction)
+        case .running:
+            Button(L("Cancel", "Annuler")) { stop(); phase = .ready }
+        case .noReaction:
+            Button(L("It Did Not React", "Il n'a pas réagi")) {
+                finish(SensorTests.ambientSensorNoReaction(baseline: baseline ?? 0))
+            }
+            Button(L("Try Again", "Réessayer")) { start() }
+                .buttonStyle(.borderedProminent)
+                .keyboardShortcut(.defaultAction)
+        case .asking:
+            Button(L("Automatic Brightness Is Off", "La luminosité automatique est désactivée")) { answer(.automaticBrightnessOff) }
+            Button(L("Try Again", "Réessayer")) { start() }
+            Button(L("No, Nothing Changed", "Non, rien n'a changé")) { answer(.noChange) }
+            Button(L("Yes, It Changed", "Oui, elle a changé")) { answer(.changed) }
+                .buttonStyle(.borderedProminent)
+        case .done:
+            Button(L("Continue", "Continuer")) { if let result { finish(result) } }
+                .buttonStyle(.borderedProminent)
+                .keyboardShortcut(.defaultAction)
+        }
+    }
+
+    private var steps: [NumberedSteps.Step] {
+        let flashlight = NumberedSteps.Step(text: L("Click Start, then shine your phone's flashlight on the top middle of the screen, where the camera is.",
+                                                    "Cliquez sur Commencer, puis éclairez avec la torche de votre téléphone le haut et le milieu de l'écran, là où se trouve la caméra."))
+        if source == .sensor {
+            return [flashlight,
+                    .init(text: L("No flashlight? Cover the top of the screen with your hand instead (works in a lit room).",
+                                  "Pas de torche ? Couvrez plutôt le haut de l'écran avec la main (dans une pièce éclairée)."))]
+        }
+        return [.init(text: L("Check that automatic brightness is on: “Automatically adjust brightness” in the display settings.",
+                              "Vérifiez que la luminosité automatique est activée : « Régler la luminosité automatiquement » dans les réglages des moniteurs."),
+                      buttonTitle: L("Open Display Settings", "Ouvrir les réglages des moniteurs"),
+                      action: { SystemSettingsPage.displays.open() }),
+                flashlight]
     }
 
     private static func percent(_ value: Double) -> String { Formatters.percentage((value * 100).rounded()) }
 
+    /// Ce que ce Mac permet de mesurer, une fois à l'ouverture de l'écran.
+    private func detect() {
+        if let sensor = AmbientLightSensor(), sensor.lux() != nil {
+            self.sensor = sensor
+            source = .sensor
+        } else if SensorCollector.builtInBrightness() != nil {
+            source = .brightness
+        } else {
+            source = .observation
+        }
+        DiagnosticLog.shared.log("ambient", "source : \(source)")
+    }
+
+    private func read() -> Double? {
+        switch source {
+        case .sensor: return sensor?.lux()
+        case .brightness: return SensorCollector.builtInBrightness()
+        case .observation: return nil
+        }
+    }
+
+    private func stop() {
+        timer?.invalidate()
+        timer = nil
+    }
+
     private func start() {
-        before = SensorCollector.builtInBrightness()
-        lowest = before
-        current = before
-        DiagnosticLog.shared.log("ambient", "luminosité avant : \(before.map { String(format: "%.3f", $0) } ?? "illisible")")
+        stop()
+        baseline = read()
+        current = baseline
+        samples = []
+        DiagnosticLog.shared.log("ambient", "départ : \(baseline.map { String(format: "%.3f", $0) } ?? "illisible")")
         var ticks = 0
-        phase = .covering(seconds)
+        phase = .running(seconds)
         timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { t in
             MainActor.assumeIsolated {
                 ticks += 1
-                if let level = SensorCollector.builtInBrightness() {
-                    current = level
-                    lowest = min(lowest ?? level, level)
+                if let value = read() {
+                    current = value
+                    samples.append(value)
+                }
+                // Capteur lu : on s'arrête dès que le changement est net.
+                if source == .sensor, let baseline, let reaction = SensorTests.ambientLuxReaction(baseline: baseline, samples: samples) {
+                    t.invalidate()
+                    DiagnosticLog.shared.log("ambient", "réaction : \(reaction.from) → \(reaction.to) lux")
+                    result = SensorTests.ambientSensorResult(from: reaction.from, to: reaction.to)
+                    phase = .done
+                    return
                 }
                 let left = seconds - ticks / 5
-                if left <= 0 {
-                    t.invalidate()
-                    DiagnosticLog.shared.log("ambient", "luminosité la plus basse : \(lowest.map { String(format: "%.3f", $0) } ?? "illisible")")
-                    if let result = SensorTests.ambientResult(brightnessBefore: before, brightnessLowest: lowest, answer: nil) {
-                        measured = result
-                        phase = .measured
+                guard left <= 0 else {
+                    phase = .running(left)
+                    return
+                }
+                t.invalidate()
+                DiagnosticLog.shared.log("ambient", "fin sans réaction nette ; valeurs : \(samples.prefix(40).map { String(format: "%.2f", $0) })")
+                switch source {
+                case .sensor:
+                    phase = .noReaction
+                case .brightness, .observation:
+                    if let measured = SensorTests.ambientResult(brightnessBefore: baseline, brightnessSamples: samples, answer: nil) {
+                        result = measured
+                        phase = .done
                     } else {
                         phase = .asking
                     }
-                } else {
-                    phase = .covering(left)
                 }
             }
         }
     }
 
     private func answer(_ answer: SensorTests.AmbientAnswer) {
-        if let result = SensorTests.ambientResult(brightnessBefore: before, brightnessLowest: lowest, answer: answer) {
+        if let result = SensorTests.ambientResult(brightnessBefore: baseline, brightnessSamples: samples, answer: answer) {
             finish(result)
         }
     }

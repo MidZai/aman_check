@@ -142,20 +142,53 @@ struct SensorGuidedTests {
         #expect(!SensorTests.lidNeedsExternalDisplayUnplugged(stateReadable: false, externalDisplay: false))
     }
 
-    @Test("Luminosité : baisse mesurée → bon ; sinon la réponse décide, désactivée → non testé")
-    func ambient() {
-        let measured = SensorTests.ambientResult(brightnessBefore: 0.81, brightnessLowest: 0.45, answer: nil)
-        #expect(measured?.status == .good)
-        #expect(measured?.provenance == .measuredAuto)
-        // Baisse trop faible ou luminosité illisible (Apple Silicon) : la question est posée.
-        #expect(SensorTests.ambientResult(brightnessBefore: 0.81, brightnessLowest: 0.79, answer: nil) == nil)
-        #expect(SensorTests.ambientResult(brightnessBefore: nil, brightnessLowest: nil, answer: nil) == nil)
-        #expect(SensorTests.ambientResult(brightnessBefore: nil, brightnessLowest: nil, answer: .changed)?.provenance == .userObserved)
-        let none = SensorTests.ambientResult(brightnessBefore: nil, brightnessLowest: nil, answer: .noChange)
-        #expect(none?.status == .watch)
-        let off = SensorTests.ambientResult(brightnessBefore: nil, brightnessLowest: nil, answer: .automaticBrightnessOff)
+    @Test("Capteur lu : couvert ou éclairé à la torche, un écart net suffit, dans les deux sens")
+    func ambientLux() {
+        // Mesuré sur le MacBookPro16,1 : pièce à 5,8 lux.
+        let torch = SensorTests.ambientLuxReaction(baseline: 5.8, samples: [6, 40, 480, 470])
+        #expect(torch?.from == 5.8)
+        #expect(torch?.to == 480)
+        let covered = SensorTests.ambientLuxReaction(baseline: 300, samples: [280, 40, 3])
+        #expect(covered?.to == 3)
+        // Pièce sombre, main posée : 5,8 → 0,3 lux reste un écart net (la plus faible valeur compte pour 1 lux).
+        #expect(SensorTests.ambientLuxReaction(baseline: 5.8, samples: [2, 0.3]) != nil)
+        // Bruit de mesure : rien.
+        #expect(SensorTests.ambientLuxReaction(baseline: 5.8, samples: [5.3, 6.1, 5.9]) == nil)
+        #expect(SensorTests.ambientLuxReaction(baseline: 300, samples: [250, 320]) == nil)
+        // Pièce presque noire, main posée : pas assez d'écart, la torche est nécessaire.
+        #expect(SensorTests.ambientLuxReaction(baseline: 1, samples: [0]) == nil)
+        let result = SensorTests.ambientSensorResult(from: 5.8, to: 480)
+        #expect(result.status == .good)
+        #expect(result.provenance == .measuredAuto)
+        let none = SensorTests.ambientSensorNoReaction(baseline: 5.8)
+        #expect(none.status == .watch)
+        #expect(none.provenance == .measuredAuto)
+    }
+
+    @Test("Repli sur la luminosité de l'écran : changement mesuré dans un sens ou dans l'autre, sinon la réponse")
+    func ambientBrightness() {
+        let up = SensorTests.ambientResult(brightnessBefore: 0.45, brightnessSamples: [0.5, 0.7, 0.81], answer: nil)
+        #expect(up?.status == .good)
+        #expect(up?.provenance == .measuredAuto)
+        let down = SensorTests.ambientResult(brightnessBefore: 0.81, brightnessSamples: [0.6, 0.45], answer: nil)
+        #expect(down?.status == .good)
+        // Changement trop faible ou luminosité illisible (Apple Silicon) : la question est posée.
+        #expect(SensorTests.ambientResult(brightnessBefore: 0.81, brightnessSamples: [0.79, 0.83], answer: nil) == nil)
+        #expect(SensorTests.ambientResult(brightnessBefore: nil, brightnessSamples: [], answer: nil) == nil)
+        #expect(SensorTests.ambientResult(brightnessBefore: nil, brightnessSamples: [], answer: .changed)?.provenance == .userObserved)
+        #expect(SensorTests.ambientResult(brightnessBefore: nil, brightnessSamples: [], answer: .noChange)?.status == .watch)
+        let off = SensorTests.ambientResult(brightnessBefore: nil, brightnessSamples: [], answer: .automaticBrightnessOff)
         #expect(off?.status == .notTested)
         #expect(off?.outcome == .skipped)
+    }
+
+    @Test("Analyse : capteur de luminosité lu (information), illisible (non disponible), absent (aucune ligne)")
+    func ambientMeasurement() {
+        let read = SensorAnalysis.ambientLightMeasurement(lux: 5.832, expected: true)
+        #expect(read?.status == .info)
+        #expect(read?.value == .double(5.8))
+        #expect(SensorAnalysis.ambientLightMeasurement(lux: nil, expected: true)?.status == .unavailable)
+        #expect(SensorAnalysis.ambientLightMeasurement(lux: 5, expected: false) == nil)
     }
 
     @Test("Rétroéclairage : constaté par la personne")

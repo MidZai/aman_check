@@ -2,6 +2,7 @@ import Foundation
 import AppKit
 import IOKit
 import IOKit.graphics
+import IOKit.hid
 import AmanCore
 import CSMC
 
@@ -147,5 +148,55 @@ enum SensorCollector {
             service = IOIteratorNext(iterator)
         }
         return nil
+    }
+}
+
+/// Capteur de luminosité intégré, lu par l'interface HID publique (norme HID « Sensors » : page 0x20,
+/// usage Lumière ambiante 0x41, champ Éclairement 0x4D1, en lux). Lecture seule : aucun rapport n'est
+/// envoyé au capteur, sa configuration ne change pas.
+/// Constaté sur le MacBookPro16,1 (T2) : périphérique USB interne « Ambient Light Sensor ».
+/// TODO: à valider sur machine réelle : Apple Silicon (capteur derrière le SPU, peut-être invisible ici),
+/// Mac Intel sans T2, iMac. Un écran externe Apple a aussi un capteur : seul le capteur intégré est lu.
+final class AmbientLightSensor {
+    private let manager: IOHIDManager
+    private let device: IOHIDDevice
+    private let element: IOHIDElement
+
+    init?() {
+        let manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
+        IOHIDManagerSetDeviceMatching(manager, [kIOHIDPrimaryUsagePageKey: 0x20, kIOHIDPrimaryUsageKey: 0x41] as CFDictionary)
+        guard IOHIDManagerOpen(manager, IOOptionBits(kIOHIDOptionsTypeNone)) == kIOReturnSuccess,
+              let devices = IOHIDManagerCopyDevices(manager) as? Set<IOHIDDevice>,
+              let device = devices.first(where: { (IOHIDDeviceGetProperty($0, "Built-In" as CFString) as? NSNumber)?.boolValue == true }),
+              let element = (IOHIDDeviceCopyMatchingElements(device, [kIOHIDElementUsagePageKey: 0x20, kIOHIDElementUsageKey: 0x4D1] as CFDictionary,
+                                                             IOOptionBits(kIOHIDOptionsTypeNone)) as? [IOHIDElement])?.first
+        else {
+            IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
+            return nil
+        }
+        self.manager = manager
+        self.device = device
+        self.element = element
+    }
+
+    deinit {
+        IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
+    }
+
+    /// Valeur actuelle, en lux (lue sur le capteur à chaque appel).
+    func lux() -> Double? {
+        var value = Unmanaged.passRetained(IOHIDValueCreateWithIntegerValue(kCFAllocatorDefault, element, 0, 0))
+        defer { value.release() }
+        // Option 1 (kIOHIDDeviceGetValueWithUpdate) : interroge le capteur au lieu de rendre la dernière valeur reçue.
+        guard IOHIDDeviceGetValueWithOptions(device, element, &value, 1) == kIOReturnSuccess else { return nil }
+        let lux = IOHIDValueGetScaledValue(value.takeUnretainedValue(), IOHIDValueScaleType(kIOHIDValueScaleTypeExponent))
+        return lux.isFinite && lux >= 0 ? lux : nil
+    }
+
+    /// Une lecture, pour l'analyse automatique.
+    static func readOnce() -> Double? {
+        let value = AmbientLightSensor()?.lux()
+        DiagnosticLog.shared.log("capteurs", "capteur de luminosité : \(value.map { String(format: "%.3f lux", $0) } ?? "illisible")")
+        return value
     }
 }

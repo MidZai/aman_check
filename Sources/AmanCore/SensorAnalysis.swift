@@ -150,6 +150,23 @@ public enum SensorAnalysis {
         return result
     }
 
+    /// Capteur de luminosité lu pendant l'analyse : il répond (information). Sa réaction se juge dans le
+    /// test guidé. `expected` : le modèle en a un ; `nil` si le Mac n'en a pas (aucune ligne).
+    public static func ambientLightMeasurement(lux: Double?, expected: Bool, now: Date = Date()) -> Measurement? {
+        guard expected else { return nil }
+        let method = "IOHIDManager · Sensor page 0x20, Ambient Light 0x41, Illuminance 0x4D1"
+        guard let lux, lux.isFinite, lux >= 0 else {
+            return .unavailable(MetricID.ambientLight,
+                                note: L("This Mac does not let the app read the light sensor: the guided test asks you to look at the screen instead.",
+                                        "Ce Mac ne laisse pas l'app lire le capteur de luminosité : le test guidé vous demande plutôt de regarder l'écran."),
+                                method: method)
+        }
+        return Measurement(id: MetricID.ambientLight, value: .double((lux * 10).rounded() / 10), unit: "lux", status: .info, method: method,
+                           collectedAt: now, display: SensorTests.lux(lux),
+                           detail: L("Light measured next to the camera. Its reaction is checked by the guided test.",
+                                     "Lumière mesurée près de la caméra. Sa réaction se vérifie dans le test guidé."))
+    }
+
     /// « 1 812 tr/min ».
     public static func fanSpeedText(_ rpm: Double) -> String {
         "\(Formatters.integer(Int(rpm.rounded())))\(Formatters.unitSpace)\(L("rpm", "tr/min"))"
@@ -215,36 +232,79 @@ public enum SensorTests {
                                       "Un capteur de capot défectueux laisse le Mac éveillé capot fermé, ou endormi une fois ouvert.")])
     }
 
-    /// Réponse au test de luminosité ambiante.
+    /// Réponse au test de luminosité ambiante, quand l'app ne peut rien mesurer elle-même.
     public enum AmbientAnswer: Sendable {
         case changed, noChange, automaticBrightnessOff
     }
 
-    /// Baisse de luminosité (0–1) à partir de laquelle l'app considère que le capteur a réagi.
-    public static let ambientMinimumDrop = 0.05
+    // Capteur lu directement (HID, page Capteurs 0x20, usage 0x41, champ Éclairement 0x4D1), en lux.
+    // Le geste peut être de couvrir le capteur ou de l'éclairer à la torche : on cherche un écart net
+    // dans un sens ou dans l'autre. Constaté sur le MacBookPro16,1 : pièce à 5,8 lux, la main ne fait
+    // presque rien baisser, la torche fait monter.
 
-    /// `brightnessBefore` / `brightnessLowest` : luminosité de l'écran intégré lue avant et pendant le test
-    /// (`nil` : illisible, cas des Mac Apple Silicon par l'interface publique).
-    public static func ambientResult(brightnessBefore: Double?, brightnessLowest: Double?, answer: AmbientAnswer?) -> TestResult? {
-        if let before = brightnessBefore, let lowest = brightnessLowest, before - lowest >= ambientMinimumDrop {
+    /// Écart minimal entre la plus forte et la plus faible valeur, en lux.
+    public static let ambientMinimumLuxChange = 3.0
+    /// Rapport minimal entre elles (la plus faible est comptée au moins 1 lux, pour les pièces très sombres).
+    public static let ambientMinimumLuxRatio = 3.0
+
+    /// Écart net vu par le capteur depuis le début : `(départ, valeur la plus éloignée)`, sinon `nil`.
+    public static func ambientLuxReaction(baseline: Double, samples: [Double]) -> (from: Double, to: Double)? {
+        let values = [baseline] + samples.filter { $0.isFinite && $0 >= 0 }
+        guard let high = values.max(), let low = values.min() else { return nil }
+        guard high - low >= ambientMinimumLuxChange, high / max(low, 1) >= ambientMinimumLuxRatio else { return nil }
+        // La valeur la plus éloignée du départ (couvert : la plus basse ; éclairé : la plus haute).
+        let to = abs(high - baseline) >= abs(baseline - low) ? high : low
+        return (baseline, to)
+    }
+
+    /// Le capteur a réagi : bon, mesuré automatiquement.
+    public static func ambientSensorResult(from: Double, to: Double) -> TestResult {
+        TestResult(test: .ambientLight, outcome: .passed, provenance: .measuredAuto,
+                   summary: L("The light sensor went from \(lux(from)) to \(lux(to))", "Le capteur de luminosité est passé de \(lux(from)) à \(lux(to))"))
+    }
+
+    /// Le capteur se lit mais n'a pas réagi alors que la personne dit l'avoir éclairé ou couvert : à surveiller.
+    public static func ambientSensorNoReaction(baseline: Double) -> TestResult {
+        TestResult(test: .ambientLight, outcome: .failed, status: .watch, provenance: .measuredAuto,
+                   summary: L("The light sensor stayed at about \(lux(baseline))", "Le capteur de luminosité est resté vers \(lux(baseline))"),
+                   details: [L("It did not react to the light or to the hand. It may be covered (sticker, screen protector) or faulty.",
+                               "Il n'a réagi ni à la lumière ni à la main. Il peut être masqué (autocollant, film de protection) ou défectueux.")])
+    }
+
+    /// Changement de luminosité de l'écran (0–1) à partir duquel l'app considère que le capteur a réagi.
+    public static let ambientMinimumBrightnessChange = 0.05
+
+    /// Repli quand le capteur ne se lit pas : luminosité de l'écran intégré au début et valeurs relevées
+    /// pendant le test, dans les deux sens (`nil` : illisible, cas des Mac Apple Silicon par l'interface
+    /// publique). Sinon la réponse de la personne.
+    public static func ambientResult(brightnessBefore: Double?, brightnessSamples: [Double], answer: AmbientAnswer?) -> TestResult? {
+        if let before = brightnessBefore,
+           let farthest = brightnessSamples.max(by: { abs($0 - before) < abs($1 - before) }),
+           abs(farthest - before) >= ambientMinimumBrightnessChange {
             return TestResult(test: .ambientLight, outcome: .passed, provenance: .measuredAuto,
-                              summary: L("Screen brightness went from \(percent(before)) to \(percent(lowest)) with the sensor covered",
-                                         "Luminosité de l'écran passée de \(percent(before)) à \(percent(lowest)) capteur couvert"))
+                              summary: L("Screen brightness went from \(percent(before)) to \(percent(farthest)) by itself",
+                                         "La luminosité de l'écran est passée d'elle-même de \(percent(before)) à \(percent(farthest))"))
         }
         switch answer {
         case nil:
             return nil
         case .changed?:
             return TestResult(test: .ambientLight, outcome: .passed, provenance: .userObserved,
-                              summary: L("Brightness changed with the sensor covered", "La luminosité a changé capteur couvert"))
+                              summary: L("Screen brightness changed by itself", "La luminosité de l'écran a changé d'elle-même"))
         case .noChange?:
             return TestResult(test: .ambientLight, outcome: .failed, status: .watch, provenance: .userObserved,
-                              summary: L("No brightness change with the sensor covered", "Aucun changement de luminosité capteur couvert"),
-                              details: [L("The sensor may be faulty, or the room too dark for a change to show. Try again in a brighter place.",
-                                          "Le capteur peut être défectueux, ou la pièce trop sombre pour voir un changement. Réessayez dans un endroit plus lumineux.")])
+                              summary: L("Screen brightness did not change", "La luminosité de l'écran n'a pas changé"),
+                              details: [L("The sensor may be faulty, or covered by a sticker or a screen protector.",
+                                          "Le capteur peut être défectueux, ou masqué par un autocollant ou un film de protection.")])
         case .automaticBrightnessOff?:
             return .notTested(.ambientLight, reason: L("Automatic brightness is off: check by hand", "Luminosité automatique désactivée : à vérifier à la main"))
         }
+    }
+
+    /// « 5,8 lux », « 480 lux ».
+    public static func lux(_ value: Double) -> String {
+        let text = value < 10 ? Formatters.decimal((value * 10).rounded() / 10) : Formatters.integer(Int(value.rounded()))
+        return "\(text)\(Formatters.unitSpace)lux"
     }
 
     public static func keyboardBacklightResult(works: Bool) -> TestResult {

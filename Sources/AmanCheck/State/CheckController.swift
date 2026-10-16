@@ -176,6 +176,9 @@ final class CheckController: ObservableObject {
         steps[.sensors] = .running
         let sensors = await Task.detached(priority: .userInitiated) { SensorCollector.read() }.value
         measurements += SensorAnalysis.measurements(sensors, expectsFan: profile.hasFan)
+        if let light = SensorAnalysis.ambientLightMeasurement(lux: AmbientLightSensor.readOnce(), expected: profile.hasAmbientLightSensor) {
+            measurements.append(light)
+        }
         steps[.sensors] = .done
 
         steps[.connectivity] = .running

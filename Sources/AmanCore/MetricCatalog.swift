@@ -57,6 +57,7 @@ public enum MetricID {
     public static let fanCount = "sensors.fan_count"
     public static let fanSpeed = "sensors.fan_speed"
     public static let cpuTemperature = "sensors.cpu_temperature"
+    public static let ambientLight = "sensors.ambient_light"
 
     // Performance (lancée par la personne)
     public static let performanceStability = "performance.stability"
@@ -228,6 +229,9 @@ public enum MetricCatalog {
               help: ("Read from the processor's sensors at the time of the check. A single reading is only indicative: it is never a problem on its own.",
                      "Lue sur les sondes du processeur au moment du contrôle. Une seule mesure n'est qu'indicative : elle n'est jamais un problème à elle seule.")),
 
+            m(MetricID.ambientLight, "Light sensor", "Capteur de luminosité", .sensors, .essential, judged: false,
+              help: ("The sensor next to the camera that adjusts the screen brightness. Here, the light it measures now.",
+                     "Le capteur près de la caméra qui règle la luminosité de l'écran. Ici, la lumière qu'il mesure en ce moment.")),
             m(MetricID.performanceStability, "Stability under load", "Stabilité sous charge", .performance, .essential, judged: true,
               help: ("Compares the first seconds of the test with the last ones. A Mac that cools badly slows down as it heats up.",
                      "Compare les premières secondes du test aux dernières. Un Mac qui refroidit mal ralentit à mesure qu'il chauffe.")),
