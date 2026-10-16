@@ -185,12 +185,19 @@ final class AmbientLightSensor {
 
     /// Valeur actuelle, en lux (lue sur le capteur à chaque appel).
     func lux() -> Double? {
-        var value = Unmanaged.passRetained(IOHIDValueCreateWithIntegerValue(kCFAllocatorDefault, element, 0, 0))
-        defer { value.release() }
+        // `IOHIDDeviceGetValueWithOptions` remplace le pointeur par une valeur qui appartient à l'élément (règle
+        // « Get ») : elle ne doit jamais être libérée ici. La libérer faisait planter l'app au bout de quelques
+        // dizaines de lectures (objet libéré puis réutilisé par IOHIDLib). La valeur de départ, elle, est gérée
+        // par Swift et reste vivante pendant l'appel.
+        let placeholder = IOHIDValueCreateWithIntegerValue(kCFAllocatorDefault, element, 0, 0)
+        var value = Unmanaged.passUnretained(placeholder)
         // Option 1 (kIOHIDDeviceGetValueWithUpdate) : interroge le capteur au lieu de rendre la dernière valeur reçue.
-        guard IOHIDDeviceGetValueWithOptions(device, element, &value, 1) == kIOReturnSuccess else { return nil }
-        let lux = IOHIDValueGetScaledValue(value.takeUnretainedValue(), IOHIDValueScaleType(kIOHIDValueScaleTypeExponent))
-        return lux.isFinite && lux >= 0 ? lux : nil
+        let status = IOHIDDeviceGetValueWithOptions(device, element, &value, 1)
+        return withExtendedLifetime(placeholder) {
+            guard status == kIOReturnSuccess else { return nil }
+            let lux = IOHIDValueGetScaledValue(value.takeUnretainedValue(), IOHIDValueScaleType(kIOHIDValueScaleTypeExponent))
+            return lux.isFinite && lux >= 0 ? lux : nil
+        }
     }
 
     /// Une lecture, pour l'analyse automatique.
