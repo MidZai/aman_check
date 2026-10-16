@@ -48,7 +48,7 @@ enum SensorCollector {
         return reading
     }
 
-    /// Relevés répétés pendant le test de performance : une connexion, et les clés de température
+    /// Relevés répétés (température et ventilateurs en direct) : une connexion, et les clés de température
     /// trouvées une fois (sur Apple Silicon, parcourir toutes les clés à chaque relevé serait trop lent).
     final class Session {
         private let connection: UInt32
@@ -66,12 +66,6 @@ enum SensorCollector {
         /// Vitesse de chaque ventilateur, en tr/min (`nil` : illisible) ; vide sans ventilateur.
         func fanSpeeds() -> [Double?] {
             (0..<min(fanCount, 4)).map { SensorCollector.value(connection, "F\($0)Ac").flatMap { SMCValue.isPlausibleFanSpeed($0) ? $0 : nil } }
-        }
-
-        /// Ventilateur le plus rapide, en tr/min ; `nil` : illisible ou pas de ventilateur.
-        func fastestFan() -> Double? {
-            (0..<min(fanCount, 4)).compactMap { SensorCollector.value(connection, "F\($0)Ac") }
-                .filter(SMCValue.isPlausibleFanSpeed).max()
         }
 
         func cpuTemperature() -> Double? {

@@ -49,8 +49,6 @@ for bundle in "$BIN_PATH"/*.bundle; do
     [ -e "$bundle" ] && cp -R "$bundle" "$CONTENTS/Resources/"
 done
 cp "Sources/DiskHealthCore/Resources/usb-bridges.json" "$CONTENTS/Resources/"
-# Table de référence du test de performance (lue par Bundle.main, voir PerformanceView.swift).
-cp "Sources/AmanCheck/Performance/PerformanceReference.json" "$CONTENTS/Resources/"
 
 cat > "$CONTENTS/Info.plist" << PLIST
 <?xml version="1.0" encoding="UTF-8"?>

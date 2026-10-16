@@ -5,7 +5,7 @@
 <h1 align="center">Aman Check</h1>
 
 <p align="center"><b>A dated, honest condition report for a used Mac, readable by anyone.</b><br>
-Locks, battery, SSD, sensors, configuration, then guided tests of the screen, keyboard, trackpad, speakers, camera, lid sensor and ports, and an optional performance test. Native macOS app · Nothing leaves your Mac.</p>
+Locks, battery, SSD, sensors, configuration, then guided tests of the screen, keyboard, trackpad, speakers, camera, lid sensor and ports. Native macOS app · Nothing leaves your Mac.</p>
 
 <p align="center">
   <a href="https://github.com/MidZai/aman_check/releases/latest">
@@ -54,12 +54,6 @@ It is written for non-technical people: plain words, one status per line, and a 
 - **Touch Bar**, **trackpad** (click, secondary click, scroll, pinch, rotate, force click, 8×5 grid), **speakers** (left and right), **microphone** (level meter and a 3‑second playback), **camera** (live preview, nothing recorded), **Touch ID**.
 - **Ports**: a USB stick validates each port without a click; charging, video output, headphone jack and SD card reader are checked too.
 - **Lid sensor** (close the lid, wait, open it: sleep and wake are detected), **ambient light sensor** (cover it and watch the brightness) and **keyboard backlight**. A faulty lid sensor was the case that started this, reported on Reddit.
-
-**Performance test** (optional, about a minute, started by you)
-
-- Full load on the processor (30 s), the graphics (20 s) and the memory (5 s), with the temperature and the fan speed shown live. The point is not a score: it is to see whether the Mac **keeps its performance as it heats up** (dead fan, dried thermal paste).
-- Stability: under 10% drop is good, 10–25% needs attention, over 25% is a problem. Fans that stay stopped while the processor reaches 90 °C are a problem.
-- When a reference measured on the same chip exists, the result is compared with it (below 80% needs attention, never a problem). Cancelled or not run: "Not tested".
 
 An external keyboard or mouse is detected before the keyboard and trackpad tests, so the built‑in hardware is what gets tested.
 
@@ -131,7 +125,6 @@ Useful launch arguments during development:
 open -n "Aman Check.app" --args --simulate-model Macmini9,1   # profile of another Mac
 open -n "Aman Check.app" --args --snapshot ~/Desktop/shots     # render every screen to PNG and the report to PDF
 open -n "Aman Check.app" --args --language ja                  # force a language
-open -n "Aman Check.app" --args --snapshot ~/Desktop/shots --performance   # also run the performance test (about a minute)
 ```
 
 ## Compatibility
@@ -139,7 +132,7 @@ open -n "Aman Check.app" --args --snapshot ~/Desktop/shots --performance   # als
 - **macOS 14 Sonoma** or later.
 - **Apple Silicon** and **Intel** Macs. The model catalog covers Macs released up to early 2025 that can run macOS 14.
 - Tests adapt to the machine: Touch Bar, Touch ID, headphone jack, SD card reader, HDMI, MagSafe and battery only appear when the model has them.
-- Developed and verified on an Intel MacBook Pro with a T2 chip. Some readings specific to Apple Silicon and to desktop Macs (sensor keys, performance test) are listed as not yet verified in [docs/VERIFICATION.md](docs/VERIFICATION.md). Reports from other machines are welcome.
+- Developed and verified on an Intel MacBook Pro with a T2 chip. Some readings specific to Apple Silicon and to desktop Macs (sensor keys) are listed as not yet verified in [docs/VERIFICATION.md](docs/VERIFICATION.md). Reports from other machines are welcome.
 
 ## Verifiable online report (level 2)
 
@@ -154,12 +147,6 @@ The service is **not deployed yet** (the domain has not been chosen), so the pub
 | Public page (valid) | Replaced | Withdrawn |
 |---|---|---|
 | <img src="docs/screenshots/online-page/1-valide.png" alt="Public page, valid report" width="260"> | <img src="docs/screenshots/online-page/2-remplace.png" alt="Public page, replaced report" width="260"> | <img src="docs/screenshots/online-page/4-retire.png" alt="Public page, withdrawn report" width="260"> |
-
-## Help fill the performance reference table
-
-The performance test compares a Mac only with a reference measured **on the same chip**, and the table ships with real measurements only: today, one Intel Core i9-9980HK. If you run the test on another Mac, export the report as JSON (**Check › Export Report as JSON…**) and attach it to [an issue](https://github.com/MidZai/aman_check/issues/new). Run it on the power adapter, after the Mac has cooled down. The JSON contains the measured slices, the chip name and the conditions of the test; the serial number is limited to its last 4 characters, and no e-mail or account name is in it.
-
-The table lives in [`Sources/AmanCheck/Performance/PerformanceReference.json`](Sources/AmanCheck/Performance/PerformanceReference.json).
 
 ## Languages
 

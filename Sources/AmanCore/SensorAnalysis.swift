@@ -125,8 +125,8 @@ public enum SensorAnalysis {
                 let text = speeds.map { $0.map { fanSpeedText($0) } ?? "—" }.joined(separator: ", ")
                 result.append(Measurement(id: MetricID.fanSpeed, value: .int(Int64(readable.max()!.rounded())), unit: "rpm", status: .info,
                                           method: method, collectedAt: now, display: text,
-                                          note: L("At rest, fans can be slow or even stopped. Their reaction under load is checked by the performance test.",
-                                                  "Au repos, les ventilateurs peuvent tourner lentement, voire être arrêtés. Leur réaction sous charge se vérifie avec le test de performance.")))
+                                          note: L("At rest, fans can be slow or even stopped.",
+                                                  "Au repos, les ventilateurs peuvent tourner lentement, voire être arrêtés.")))
             }
         }
 

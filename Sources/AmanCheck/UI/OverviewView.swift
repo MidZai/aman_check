@@ -251,9 +251,8 @@ private struct ResultsView: View {
                 }
 
                 MetricSectionView(section: .sensors)
-                MetricSectionView(section: .performance)
                 MetricSectionView(section: .connectivity)
-                AdvancedDetails(measurements: controller.allMeasurements)
+                AdvancedDetails(measurements: controller.measurements)
 
                 Text(ReportText.disclaimer)
                     .font(.caption)

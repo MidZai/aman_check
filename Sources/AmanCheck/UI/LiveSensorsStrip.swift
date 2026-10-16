@@ -4,8 +4,8 @@ import AmanDesign
 import DiskHealthCore
 
 /// Température du processeur et vitesse des ventilateurs, en direct (toutes les 2 s) : lecture du SMC hors du
-/// fil principal, sur sa propre connexion (le test de performance garde la sienne). S'arrête quand l'écran
-/// disparaît ; rien n'est affiché si le SMC ne se lit pas.
+/// fil principal, sur sa propre connexion. S'arrête quand l'écran disparaît ; rien n'est affiché si le SMC
+/// ne se lit pas.
 @MainActor
 final class LiveSensors: ObservableObject {
     @Published private(set) var temperature: Double?

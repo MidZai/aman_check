@@ -1,6 +1,6 @@
 # Aman Check — à vérifier à la main sur le MacBookPro16,1
 
-Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (128 tests).
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (117 tests).
 Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
 
 | Test | Ce qu'il faut constater | Critère |
@@ -31,16 +31,6 @@ Profils simulés (sans ces Mac) : `Aman Check.app/Contents/MacOS/AmanCheck --sim
 
 Vérifié automatiquement sur le MacBookPro16,1 : capteur de luminosité lu par l'app elle-même, sans demande d'autorisation (périphérique USB interne « Ambient Light Sensor », 5,8 lux), lecture du SMC sans droits (2 ventilateurs en `flt`, sondes en `sp78`), `AppleClamshellState` lisible (« No » capot ouvert), luminosité de l'écran lisible par IODisplay. Pas vérifié à la main : la fermeture réelle du capot pendant le test, la luminosité capteur couvert.
 
-## Performance (§7.8)
-
-Mesuré sur le MacBookPro16,1 (2026-10-16, sur secteur) avec `--snapshot <dossier> --performance` : processeur 171 GFLOPS (tranches 150–191), GPU 4 002 GFLOPS (Radeon Pro 5500M), copie mémoire 6,7 Go/s, ventilateurs 4 871 → 5 649 tr/min, 95 °C au plus fort, stabilité −7 % (*Bon*). Un deuxième passage enchaîné, Mac encore chaud : −66 % (*Problème*), d'où le conseil de refaire le test après refroidissement. Quatrième passage, ~10 min plus tard mais Mac occupé par d'autres travaux (charge système 9,5) : processeur 156 GFLOPS (91 % de la référence, *Bon*), GPU stable 12 s autour de 4 000 GFLOPS puis chute nette à 1 340 → −66 % (*Problème*). **À trancher :** ce décrochage du GPU (Radeon Pro 5500M connue pour baisser sa fréquence à chaud) peut faire classer « problème » un MacBook Pro 16 pouces 2019 sain.
-
-| Vérification | Ce qu'il faut constater |
-|---|---|
-| Lancement | Rien ne démarre sans clic ; progression, mesure en direct, température et ventilateurs mis à jour toutes les 2 s |
-| Annulation | « Annuler » arrête en moins de 2 s ; la ligne Stabilité devient « Non testé » (« Test annulé avant la fin. ») |
-| Batterie | Débrancher le chargeur avant le test : « Conditions du test » dit « sur batterie » et recommande de refaire le test sur secteur |
-
 ## Partage (§8.4)
 
 Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (français, allemand) est relu par CoreImage (`CIDetector`), 335–337 caractères, contenu conforme.
@@ -62,7 +52,6 @@ Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (fra
 | Accueil | Bandeau « Processeur … °C · Ventilateurs … · en direct » mis à jour toutes les 2 s, absent de la page des résultats (vérifié dans la fenêtre réelle : 71 °C, 3 362 et 3 129 tr/min ; le mode `--snapshot` ne l'affiche pas, ses rendus bloquent la file principale) |
 
 ## Non validé (pas de machine disponible)
-- Performance sur Apple Silicon : débit de `cblas_dgemm` (coprocesseur matriciel), noyau Metal, ventilateurs à 0 tr/min sous charge courte, aucune référence ; MacBook Air sans ventilateur (pas de ligne « Ventilateurs sous charge »).
 - Capteurs sur Apple Silicon : clés de température `Tp*` (M1, M2 ; M3 et M4 peuvent utiliser d'autres préfixes → « Non disponible »), type des clés de ventilateur, `AppleClamshellState`, luminosité par IODisplay (probablement illisible : la question est alors posée), et surtout le capteur de luminosité par HID (sur Apple Silicon il passe par le SPU et peut ne pas apparaître : l'analyse dit alors « Non disponible »). Mac Intel sans T2 et iMac : capteur HID non vérifié. MacBook Air M1+ : « Pas de ventilateur sur ce modèle ». Mac de bureau : section Capteurs sans test du capot.
 - Apple Silicon : clés batterie (`MaxCapacity` en %, `NominalChargeCapacity`), « Capacité maximale » de SPPowerDataType, `sppci_cores`, classes des ports USB, `UsbCPortNumber`.
 - Mac de bureau réels, Mac Intel sans T2 (Activation Lock non lisible).

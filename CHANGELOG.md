@@ -16,11 +16,6 @@ All notable changes to Aman Check are documented here.
 - "Export Report as JSON…" also in the Check menu.
 - Guided test names are no longer cut off on the first page of the PDF.
 
-### Performance
-- New "Performance" page: about a minute of full load (processor 30 s, graphics 20 s, memory 5 s), started only by the person, with a warning first, live temperature and fan speed, and a Cancel button ("not tested").
-- Reports whether the Mac keeps its performance as it heats up (stability: under 10% drop good, 10–25% to watch, over 25% problem), and whether the fans start under load. No score.
-- Comparison with a reference measured on the same chip when one exists (below 80%: to watch, never a problem). The table holds only real measurements; contributions welcome.
-
 ### Sensors
 - Processor temperature and fan speeds shown live on the first screen, before the check (the results keep the values measured during the check).
 - New "Sensors" section: number of fans, current fan speed and processor temperature, read from the SMC (read only, no password). Fanless Macs show "No fan on this model". A fan the model should have but the Mac does not report is "to watch"; a high temperature at rest is never more than "to watch".
@@ -31,7 +26,7 @@ All notable changes to Aman Check are documented here.
 
 ### Documentation
 - `docs/LEGACY-MACOS-AUDIT.md`: what supporting macOS 12 Monterey would take (decision pending).
-- README: sensors, performance test, sharing, offline QR code, call for performance references, release process.
+- README: sensors, sharing, offline QR code, release process.
 
 ### Trust and first launch
 - First launch: a short notice says what Aman Check does and doesn't do (reads only, no connection, no password, no Apple Account needed). "Got It" hides it for good.
