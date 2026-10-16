@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Aman Check : dix minutes pour contrôler un Mac d'occasion</title>
+<meta name="description" content="App macOS gratuite et open source. Lancez-la sur le Mac que vous allez acheter : verrouillages, batterie, SSD, puis tests guidés de l'écran, du clavier, du trackpad, des haut-parleurs, de la caméra et des ports. Un rapport daté en dix minutes. Rien ne quitte le Mac.">
+<link rel="icon" href="../site/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../site/icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aman Check : dix minutes pour contrôler un Mac d'occasion">
+<meta property="og:description" content="App macOS gratuite et open source. Verrouillages, batterie, SSD et tests guidés du matériel, dans un rapport daté lisible par tous. Rien ne quitte le Mac.">
+<meta property="og:image" content="https://midzai.github.io/aman_check/site/app.png">
+<meta property="og:url" content="https://midzai.github.io/aman_check/fr/">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" hreflang="en" href="https://midzai.github.io/aman_check/">
+<link rel="alternate" hreflang="fr" href="https://midzai.github.io/aman_check/fr/">
+<link rel="preload" href="../site/fonts/Jost-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+  /* Jost (SIL Open Font License, ../site/fonts/OFL.txt): variable file, weights 400–600, latin subset, hosted here. */
+  @font-face {
+    font-family: "Jost";
+    src: url("../site/fonts/Jost-latin.woff2") format("woff2");
+    font-weight: 400 600;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+  }
+  :root {
+    --ink: #0B2230;
+    --ink-deep: #071A26;
+    --line: rgba(173, 203, 221, 0.16);
+    --rail: rgba(46, 159, 214, 0.35);
+    --water: #2E9FD6;
+    --water-ink: #04212F;
+    --text: #E9F1F6;
+    --muted: #A9BAC6;
+    --good: #3DD07A;
+    --watch: #E8A33D;
+    --bad: #E5534B;
+    --kofi: #FF5E5B;
+    --shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.75), 0 8px 18px -8px rgba(0, 0, 0, 0.5);
+  }
+  /* Dark displays: the same tokens, tuned (deeper ink, brighter secondary text: 10.3:1 on the background). */
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --ink: #071A26;
+      --ink-deep: #04121B;
+      --line: rgba(173, 203, 221, 0.2);
+      --rail: rgba(46, 159, 214, 0.4);
+      --water: #3AA9DF;
+      --water-ink: #04212F;
+      --text: #EEF4F8;
+      --muted: #B8C8D3;
+      --good: #3DD07A;
+      --watch: #E8A33D;
+      --bad: #E5534B;
+      --kofi: #FF5E5B;
+      --shadow: 0 30px 60px -24px rgba(0, 0, 0, 0.9), 0 8px 18px -8px rgba(0, 0, 0, 0.6);
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--text);
+    font-family: "Jost", "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+    font-size: 18px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: var(--water); text-decoration: none; }
+  a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--water); outline-offset: 4px; border-radius: 6px; }
+  img { max-width: 100%; height: auto; display: block; }
+  h1, h2, h3 { font-weight: 600; line-height: 1.08; margin: 0; letter-spacing: -0.015em; text-wrap: balance; }
+  p { margin: 0; }
+  .wrap { width: min(1140px, 100% - 40px); margin-inline: auto; }
+  @media (max-width: 600px) { .wrap { width: calc(100% - 32px); } }
+
+  /* Top bar */
+  .top { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; gap: 16px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 12px; color: var(--text); font-weight: 600; font-size: 21px; }
+  .brand:hover { text-decoration: none; }
+  .brand img { width: 36px; height: 36px; border-radius: 9px; }
+  .top nav { display: flex; gap: 24px; font-size: 16.5px; }
+  .top nav a { color: var(--muted); }
+  .top nav a:hover { color: var(--text); text-decoration: none; }
+  .top nav a svg { width: 15px; height: 15px; vertical-align: -2px; margin-right: 6px; }
+  @media (max-width: 600px) {
+    /* Kept on phones as one horizontally scrollable row: no hamburger, no script. */
+    .top nav { min-width: 0; flex: 1 1 auto; overflow-x: auto; white-space: nowrap; gap: 18px; font-size: 15px; padding-bottom: 2px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .top nav::-webkit-scrollbar { display: none; }
+  }
+
+  /* Hero */
+  .hero { padding: 16px 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 36px; }
+  .hero h1 { font-size: clamp(38px, 5.2vw, 64px); max-width: 20ch; }
+  .hero .lead { font-size: clamp(18px, 2.1vw, 22px); color: var(--muted); max-width: 48ch; margin-top: 12px; }
+  .cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 20px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 15px 26px; border-radius: 999px; font-weight: 600; font-size: 17px; line-height: 1;
+    border: 1px solid transparent; transition: transform .12s ease, background .12s ease;
+  }
+  .btn:hover { text-decoration: none; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: var(--water); color: var(--water-ink); }
+  .btn-primary:hover { background: #4DB2E4; }
+  .btn-ghost { background: transparent; color: var(--text); border-color: var(--line); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.05); }
+  .btn svg { width: 18px; height: 18px; flex: none; }
+  .fine { color: var(--muted); font-size: 15.5px; margin-top: 12px; max-width: 60ch; }
+  .fine a { color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+  .fine a:hover { color: var(--text); }
+  .trust { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 16.5px; }
+  .trust li { display: flex; align-items: center; gap: 9px; }
+  .trust svg { width: 18px; height: 18px; color: var(--good); flex: none; }
+
+  /* Is it safe? and FAQ */
+  .safe { border-top: 1px solid var(--line); padding: 72px 0 24px; }
+  .safe h2, .faq h2 { font-size: clamp(28px, 3.6vw, 44px); max-width: 22ch; }
+  .safe .intro, .faq .intro { color: var(--muted); max-width: 64ch; margin-top: 16px; font-size: 19px; }
+  .safe .rules { margin-top: 34px; }
+  .gate { margin-top: 44px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  .safe h3.sub { font-size: clamp(22px, 2.6vw, 30px); margin-top: 56px; max-width: 30ch; }
+  .gate p.first { margin-top: 0; }
+  .gate > div { background: var(--ink-deep); border: 1px solid var(--line); border-radius: 14px; padding: 22px 24px; min-width: 0; }
+  .gate h3 { font-size: 19px; margin-bottom: 12px; }
+  .gate ol { margin: 0; padding-left: 20px; color: var(--muted); font-size: 16.5px; display: grid; gap: 8px; }
+  .gate ol b { color: var(--text); font-weight: 500; }
+  .gate p { color: var(--muted); font-size: 16px; margin-top: 10px; }
+  .gate pre { margin: 12px 0 0; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.28); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.5; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
+  @media (max-width: 900px) { .gate { grid-template-columns: 1fr; } }
+  .kofi-note { margin-top: 26px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 17px; max-width: 72ch; }
+  .faq { padding: 56px 0 24px; }
+  .faq dl { margin: 26px 0 0; max-width: 72ch; border-top: 1px solid var(--line); }
+  .faq details { border-bottom: 1px solid var(--line); }
+  .faq summary { cursor: pointer; list-style: none; padding: 18px 34px 18px 0; position: relative; font-weight: 500; font-size: 19px; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: "+"; position: absolute; right: 4px; top: 14px; font-size: 26px; color: var(--water); font-weight: 400; }
+  .faq details[open] summary::after { content: "–"; }
+  .faq summary:focus-visible { outline: 3px solid var(--water); outline-offset: 4px; border-radius: 6px; }
+  .faq details p { color: var(--muted); padding: 0 0 20px; font-size: 17px; }
+  .lang { color: var(--muted); }
+
+  /* The plan: time rail */
+  .plan { margin-top: 24px; padding-bottom: 40px; }
+  .step {
+    display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 0 40px;
+    position: relative; padding: 0 0 72px;
+  }
+  .step::before {
+    content: ""; position: absolute; left: 150px; top: 0; bottom: -40px; width: 2px;
+    margin-left: 19px; background: var(--rail); z-index: 0;
+  }
+  #t0 .mark { position: static; }
+  .step:last-of-type::before { display: none; }
+  .mark {
+    position: sticky; top: 24px; align-self: start;
+    display: flex; align-items: center; gap: 14px; justify-content: flex-end;
+    font-weight: 600; font-size: 22px; color: var(--water); letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+  }
+  .mark .dot {
+    width: 14px; height: 14px; border-radius: 50%; background: var(--ink); flex: none;
+    border: 3px solid var(--water); position: relative; left: 32px; box-shadow: 0 0 0 6px var(--ink);
+    transition: background .35s cubic-bezier(.2,.8,.2,1);
+  }
+  .step.is-live .mark .dot { background: var(--water); }
+  .body { min-width: 0; position: relative; z-index: 1; }
+  .body h2 { font-size: clamp(28px, 3.6vw, 44px); max-width: 22ch; }
+  .body > p { color: var(--muted); max-width: 64ch; margin-top: 16px; font-size: 19px; }
+  .body > p b { color: var(--text); font-weight: 500; }
+  .shot { margin-top: 22px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--line); overflow: hidden; }
+  .shot img { width: 100%; }
+  .shot.wide { margin-left: -190px; width: calc(100% + 190px); }
+  @media (max-width: 900px) {
+    .step { grid-template-columns: 1fr; padding-bottom: 56px; }
+    .step::before { display: none; }
+    .mark { position: static; justify-content: flex-start; margin-bottom: 14px; }
+    .mark .dot { left: 0; order: -1; }
+    .shot.wide { margin-left: 0; width: 100%; }
+  }
+
+  /* Locks list (0:30) */
+  .locks { margin: 26px 0 0; padding: 0; list-style: none; display: grid; gap: 0; max-width: 64ch; border-top: 1px solid var(--line); }
+  .locks li.plain { grid-template-columns: 28px 1fr; }
+  .locks li { display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 18px; }
+  .locks li svg { width: 22px; height: 22px; color: var(--muted); align-self: start; margin-top: 2px; }
+  .locks li span { color: var(--muted); font-size: 16px; }
+  .locks .st { font-weight: 500; font-size: 16px; white-space: nowrap; font-style: normal; }
+  @media (max-width: 640px) { .locks li { grid-template-columns: 28px 1fr; } .locks .st { grid-column: 2; white-space: normal; margin-top: -4px; } }
+  .st.good { color: var(--good); } .st.watch { color: var(--watch); } .st.bad { color: var(--bad); } .st.manual { color: var(--water); }
+
+  /* Counters strip (8:00) */
+  .counters {
+    margin-top: 30px; padding: 30px 32px; border-radius: 14px;
+    background: var(--ink-deep); border: 1px solid var(--line);
+    display: grid; grid-template-columns: 1fr; gap: 22px; align-items: center;
+  }
+  .nums { display: flex; gap: clamp(22px, 5vw, 60px); flex-wrap: wrap; }
+  .num { display: grid; gap: 4px; }
+  .num b { font-size: clamp(46px, 7vw, 80px); font-weight: 600; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+  .num span { color: var(--muted); font-size: 16px; display: flex; align-items: center; gap: 8px; }
+  .num i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+  .num.good b { color: var(--good); }  .num.good i { background: var(--good); }
+  .num.watch b { color: var(--watch); } .num.watch i { background: var(--watch); }
+  .num.bad b { color: var(--bad); }    .num.bad i { background: var(--bad); }
+  .num.none b { color: var(--muted); } .num.none i { border: 2px dashed var(--muted); width: 8px; height: 8px; }
+  .num.manual b { color: var(--water); } .num.manual i { background: var(--water); }
+  .figs { margin-top: 22px; padding: 22px 28px; } .figs .nums { gap: clamp(18px, 3vw, 36px); } .figs .num b { font-size: clamp(32px, 4vw, 44px); } .figs .num span { font-size: 15px; }
+  .counters p { color: var(--muted); max-width: 60ch; font-size: 17px; }
+  @media (max-width: 760px) { .counters { grid-template-columns: 1fr; padding: 24px 20px; } }
+
+  /* Tests list (3:00) */
+  .tests { margin: 26px 0 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 28px; max-width: 760px; }
+  .tests li { display: grid; grid-template-columns: 18px 1fr; gap: 12px; align-items: baseline; font-weight: 500; }
+  .tests li::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 2px dashed var(--muted); align-self: start; margin-top: 7px; }
+  .tests li small { display: block; color: var(--muted); font-weight: 400; font-size: 15px; line-height: 1.4; }
+  @media (max-width: 640px) { .tests { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 400px) { .tests { grid-template-columns: 1fr; } }
+
+  /* Rules (what the report refuses) */
+  .rules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 44px; margin-top: 30px; max-width: 900px; }
+  .rule { display: grid; grid-template-columns: 26px 1fr; gap: 14px; align-items: start; }
+  .rule svg { width: 26px; height: 26px; color: var(--water); margin-top: 2px; }
+  .rule b { font-weight: 600; display: block; margin-bottom: 4px; }
+  .rule p { color: var(--muted); font-size: 16.5px; }
+  @media (max-width: 640px) { .rules { grid-template-columns: 1fr; } }
+
+  /* Day after: Aman Disk */
+  .after { background: var(--ink-deep); border-top: 1px solid var(--line); padding: 72px 0 80px; }
+  .after .step { padding-bottom: 0; }
+  .after .step::before { display: none; }
+  .after .mark { color: var(--muted); }
+  .after .mark .dot { border-color: var(--muted); box-shadow: 0 0 0 6px var(--ink-deep); background: var(--ink-deep); }
+  .after ul { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; max-width: 58ch; color: var(--muted); font-size: 17.5px; }
+  .after li { padding-left: 24px; position: relative; }
+  .after li::before { content: ""; position: absolute; left: 0; top: 11px; width: 10px; height: 10px; border-radius: 50%; background: var(--water); }
+  .after li b { color: var(--text); font-weight: 500; }
+  .shots2 { display: grid; grid-template-columns: 1.45fr 1fr; gap: 16px; margin-top: 34px; align-items: start; }
+  .shots2 .shot { margin-top: 0; }
+  @media (max-width: 760px) { .shots2 { grid-template-columns: 1fr; } }
+
+  /* Close */
+  .close { text-align: center; padding: 80px 0 64px; }
+  .close h2 { font-size: clamp(30px, 4.2vw, 50px); margin-inline: auto; max-width: 20ch; }
+  .close p { color: var(--muted); max-width: 52ch; margin: 16px auto 0; }
+  .close .cta { justify-content: center; }
+  .btn-kofi { background: var(--kofi); color: #fff; }
+  .btn-kofi:hover { background: #FF7572; }
+  footer { padding: 30px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: 15px; }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--muted); }
+  footer a:hover { color: var(--text); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .btn, .mark .dot { transition: none; }
+  }
+</style>
+</head>
+<body>
+<!--
+THESIS: A used-Mac check is a ten-minute meeting, so the page is that meeting on a time rail, minute by minute, and refuses the feature-grid landing.
+OWN-WORLD: Aman ink #0B2230 ground, water #2E9FD6 for the rail and the action, report statuses green/orange/red/dashed-gray, Jost throughout, real app windows as the only imagery.
+STORY: a buyer sees what to do with the Mac in front of them, in order, trusts that the report never rounds up, downloads Aman Check, and keeps Aman Disk for the day after.
+FIRST VIEWPORT: headline "Ten minutes with the Mac. Here's what to do with them.", one-paragraph lead, Download button, Gatekeeper line, then 0:00 on the rail with the full app window.
+FORM: the handover timeline, candidate 6 of the grounded list, seed key 327fe1d7.
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+-->
+
+<header class="wrap top">
+  <a class="brand" href="#"><picture><source type="image/webp" srcset="../site/icon.webp"><img src="../site/icon.png" alt="" width="36" height="36"></picture>Aman Check</a>
+  <nav aria-label="Page">
+    <a href="#t0">Les dix minutes</a>
+    <a href="#t8">Le rapport</a>
+    <a href="#after">Aman Disk</a>
+    <a href="#safe">Est-ce sûr ?</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://github.com/MidZai/aman_check"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>GitHub</a>
+    <a class="lang" href="../" hreflang="en" lang="en">English</a>
+  </nav>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <h1>Dix minutes avec le Mac. Voici quoi en faire.</h1>
+      <p class="lead">Aman Check se lance sur le Mac que vous allez acheter ou vendre et rédige un rapport d'état daté, lisible par tous. Gratuit, open source, et rien ne quitte le Mac.</p>
+      <div class="cta">
+        <a class="btn btn-primary" data-release="MidZai/aman_check" href="https://github.com/MidZai/aman_check/releases/latest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+          Télécharger pour macOS
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/MidZai/aman_check"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>Voir sur GitHub</a>
+      </div>
+      <ul class="trust" aria-label="En bref">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Fonctionne sans compte Apple, même sur un Mac fraîchement restauré</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>macOS 14 ou plus, Apple Silicon et Intel</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Rien ne quitte votre Mac</li>
+      </ul>
+      <p class="fine">L'app n'est pas notarisée par Apple : macOS vous demande de l'autoriser une fois. <a href="#safe">Pourquoi, et comment</a>. <a href="https://github.com/MidZai/aman_check/releases/latest">Notes de version et somme de contrôle</a>.</p>
+    </div>
+  </div>
+
+  <div class="wrap plan">
+
+    <section class="step" id="t0">
+      <div class="mark"><span>0:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Ouvrez l'app sur le Mac du vendeur.</h2>
+        <p>Copiez-la depuis une clé USB ou téléchargez-la : pas de compte, pas de mot de passe, pas d'installation, il suffit de la glisser dans Applications. L'analyse démarre en quelques secondes et <b>ne fait que lire</b> : elle ne modifie rien sur le Mac.</p>
+        <figure class="shot wide">
+          <picture><source type="image/webp" srcset="../site/app-1100.webp 1100w, ../site/app-2200.webp 2200w" sizes="(min-width: 1180px) 1140px, calc(100vw - 40px)"><img src="../site/app.png" alt="Fenêtre d'Aman Check sur un MacBook Pro 16 pouces 2019 : processeur, mémoire, stockage et graphisme, puis batterie à 82 % de sa capacité d'origine, santé du SSD 98 %, et la section Verrouillages." width="2200" height="1288"></picture>
+        </figure>
+      </div>
+    </section>
+
+    <section class="step" id="t30">
+      <div class="mark"><span>0:30</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Lisez d'abord les verrouillages.</h2>
+        <p>Un Mac verrouillé ne vaut rien : les blocages sont toujours en tête, en rouge. Aman Check lit ce que macOS indique et vous dit ce que cela <b>ne prouve pas</b> : un verrouillage d'activation désactivé ne dit rien d'un compte Apple encore connecté, d'où une ligne à part pour ce compte.</p>
+        <ul class="locks">
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A6 6 0 0 1 18 9a4 4 0 0 1 0 9z"/></svg><div>Verrouillage d'activation iCloud<span><br>lu dans macOS ; désactivé, c'est bon signe, mais cela ne dit rien du compte ci-dessous</span></div><em class="st good">Verrou désactivé</em></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><div>Compte Apple connecté<span><br>Localiser est activé : le vendeur doit se déconnecter et effacer le Mac avant la remise</span></div><em class="st watch">Compte connecté</em></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2"/></svg><div>Gestion par une entreprise (MDM)<span><br>un Mac encore enrôlé peut être verrouillé ou effacé à distance</span></div><em class="st good">Aucun signal détecté</em></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg><div>Mot de passe firmware<span><br>sa lecture demande les droits administrateur, l'app explique donc comment le vérifier à la main</span></div><em class="st manual">Vérification manuelle</em></li>
+          <li class="plain"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="12" rx="2"/><path d="M8 21h8"/></svg><div>Machine virtuelle, SIP, FileVault, profils de configuration<span><br>tout ce derrière quoi un vendeur pourrait se cacher, chacun avec sa ligne d'état dans l'app</span></div></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="step" id="t1">
+      <div class="mark"><span>1:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Batterie et SSD, en chiffres que l'annonce ne donne jamais.</h2>
+        <p>Cycles de charge et capacité actuelle à pleine charge, comparée à celle d'origine. Santé S.M.A.R.T. du SSD, heures de fonctionnement, données écrites, usure et réserve, lues avec le moteur d'Aman Disk. Puis la configuration réelle : modèle et année de commercialisation, puce, mémoire, stockage, graphisme, écran, macOS installé et le <b>dernier macOS qu'il pourra recevoir</b>.</p>
+        <div class="counters figs" aria-label="Chiffres du Mac d'exemple">
+          <div class="nums">
+            <div class="num good"><b>82 %</b><span><i></i>batterie, après 511 cycles</span></div>
+            <div class="num good"><b>98 %</b><span><i></i>durée de vie restante du SSD, 2 % d'usure</span></div>
+            <div class="num"><b>3 538 h</b><span>de fonctionnement du SSD</span></div>
+            <div class="num"><b>116 To</b><span>écrits sur le SSD</span></div>
+          </div>
+          <p>Lus sur le MacBook Pro des captures d'écran, pas des valeurs types.</p>
+        </div>
+        <figure class="shot">
+          <picture><source type="image/webp" srcset="../site/overview.webp"><img src="../site/overview.png" alt="Vue d'ensemble : MacBook Pro 16 pouces 2019, Intel Core i9, 32 Go, SSD NVMe de 500 Go, batterie à 82 % après 511 cycles, santé du SSD 98 %, 3 538 heures de fonctionnement, 116 To écrits." width="1600" height="815" loading="lazy"></picture>
+        </figure>
+      </div>
+    </section>
+
+    <section class="step" id="t3">
+      <div class="mark"><span>3:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Testez maintenant ce qu'aucune fiche technique ne dit.</h2>
+        <p>Neuf tests guidés, un par écran. Vous les faites, l'app enregistre ce que vous avez constaté et le précise dans le rapport. Un clavier ou une souris externe est détecté avant, pour que ce soit bien le matériel intégré qui soit testé.</p>
+        <ul class="tests">
+          <li><div>Écran<small>Couleurs unies en plein écran : pixels morts, taches, rétroéclairage inégal</small></div></li>
+          <li><div>Clavier<small>Chaque touche passe au vert quand elle répond</small></div></li>
+          <li><div>Touch Bar<small>Affichage et toucher, d'un bout à l'autre</small></div></li>
+          <li><div>Trackpad<small>Clics, gestes, Force Touch, toute la surface</small></div></li>
+          <li><div>Haut-parleurs<small>Gauche, droite, grésillements</small></div></li>
+          <li><div>Micro<small>Jauge de niveau et court enregistrement réécouté</small></div></li>
+          <li><div>Caméra<small>Image en direct, rien n'est enregistré</small></div></li>
+          <li><div>Touch ID<small>Lecteur d'empreintes</small></div></li>
+          <li><div>Ports<small>Une clé USB valide chaque port ; charge, vidéo, casque, carte SD</small></div></li>
+        </ul>
+        <figure class="shot">
+          <picture><source type="image/webp" srcset="../site/keyboard.webp"><img src="../site/keyboard.png" alt="Test du clavier : un dessin du clavier du MacBook où chaque touche passe au vert quand on l'appuie, 0 touche sur 65 détectée, avec un choix ANSI/ISO." width="1600" height="1108" loading="lazy"></picture>
+        </figure>
+      </div>
+    </section>
+
+    <section class="step" id="t8">
+      <div class="mark"><span>8:00</span><span class="dot" aria-hidden="true"></span></div>
+      <div class="body">
+        <h2>Exportez le rapport. Concluez sur le même document.</h2>
+        <p>Un PDF pour vous deux et un JSON pour archive, datés à la minute près. La synthèse tient en cinq compteurs, rien d'autre : pas de score, pas de note, pas d'étoiles, parce qu'un chiffre flatteur est exactement ce que l'acheteur paie plus tard.</p>
+        <div class="counters" aria-label="Exemple de synthèse du rapport">
+          <div class="nums">
+            <div class="num good"><b>9</b><span><i></i>bons</span></div>
+            <div class="num watch"><b>1</b><span><i></i>à surveiller</span></div>
+            <div class="num bad"><b>0</b><span><i></i>problème</span></div>
+            <div class="num none"><b>9</b><span><i></i>non testés</span></div>
+            <div class="num manual"><b>1</b><span><i></i>à vérifier soi-même</span></div>
+          </div>
+          <p>Chaque ligne indique si elle a été mesurée par l'app ou constatée par la personne.</p>
+        </div>
+        <div class="rules">
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+            <div><b>Une donnée manquante n'est jamais verte.</b><p>Une valeur que l'app ne peut pas lire devient « Non disponible » ou « Vérification manuelle », jamais une réussite discrète.</p></div>
+          </div>
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>
+            <div><b>Ignoré veut dire « Non testé », pas « Échoué ».</b><p>De même pour une autorisation caméra ou micro refusée. Le rapport dit ce qui n'a pas été fait.</p></div>
+          </div>
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h10"/></svg>
+            <div><b>Des mots simples, pas d'argument de vente.</b><p>Vous n'y lirez jamais « certifié », « garantie », « 100 % fonctionnel » ou « Grade A ». C'est un instantané pris à la date indiquée, et chaque page le rappelle.</p></div>
+          </div>
+          <div class="rule">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <div><b>Rien ne quitte le Mac.</b><p>Pas de réseau, pas de télémétrie. Le numéro de série n'apparaît que par ses quatre derniers caractères. Les seuls fichiers créés sont le PDF et le JSON que vous choisissez d'enregistrer.</p></div>
+          </div>
+        </div>
+        <figure class="shot">
+          <picture><source type="image/webp" srcset="../site/report.webp"><img src="../site/report.png" alt="Écran du rapport : l'aperçu du PDF avec les verrouillages, les tuiles de synthèse et les tests guidés, et les boutons d'export PDF et JSON." width="1600" height="897" loading="lazy"></picture>
+        </figure>
+      </div>
+    </section>
+  </div>
+
+  <section class="after" id="after">
+    <div class="wrap">
+      <div class="step">
+        <div class="mark"><span>Le lendemain</span><span class="dot" aria-hidden="true"></span></div>
+        <div class="body">
+          <h2>Allez au fond du disque avec Aman Disk.</h2>
+          <p>Aman Check vous dit que le SSD est en bonne santé. Aman Disk, l'app sœur dont il utilise déjà le moteur, vous montre <b>pourquoi</b>, attribut par attribut, et continue de surveiller le disque une fois le Mac à vous. Le bilan du disque à faire sur le Mac que vous venez d'acheter.</p>
+          <ul>
+            <li><b>Chaque attribut S.M.A.R.T.</b>, nommé et expliqué, avec les valeurs brutes sur demande.</li>
+            <li><b>Historique des températures</b> : une mesure toutes les 30 secondes, 30 jours d'historique, avec un panneau dans la barre des menus.</li>
+            <li><b>Test de performance</b> : lectures et écritures séquentielles et aléatoires, fichier de test toujours supprimé.</li>
+            <li><b>Disques externes aussi</b> : boîtiers NVMe Thunderbolt et USB4, disques SATA en USB avec le pilote open source SAT SMART, alertes et historique.</li>
+            <li><b>Mêmes règles</b> : pas de réseau, aucune donnée envoyée, vos données jamais modifiées, 18 langues.</li>
+          </ul>
+          <div class="cta">
+            <a class="btn btn-primary" data-release="MidZai/aman_disk" href="https://github.com/MidZai/aman_disk/releases/latest">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+              Télécharger Aman Disk
+            </a>
+            <a class="btn btn-ghost" href="https://github.com/MidZai/aman_disk"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>Aman Disk sur GitHub</a>
+          </div>
+          <p class="fine"><a href="https://github.com/MidZai/aman_disk/releases/latest">Notes de version et somme de contrôle</a>. Même étape au premier lancement qu'Aman Check.</p>
+          <div class="shots2">
+            <figure class="shot"><picture><source type="image/webp" srcset="../site/aman-disk-health.webp"><img src="../site/aman-disk-health.png" alt="Aman Disk : SSD interne en bonne santé, 98 % de durée de vie restante, historique des températures de la dernière heure et tableau des attributs S.M.A.R.T." width="1600" height="1018" loading="lazy"></picture></figure>
+            <figure class="shot"><picture><source type="image/webp" srcset="../site/aman-disk-performance.webp"><img src="../site/aman-disk-performance.png" alt="Aman Disk : test de performance avec les débits de lecture et d'écriture séquentiels et aléatoires." width="1600" height="1018" loading="lazy"></picture></figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="safe" id="safe">
+    <div class="wrap">
+      <h2>Est-ce sûr ?</h2>
+      <p class="intro">Vous allez lancer une app venue d'Internet sur un Mac qui n'est pas encore le vôtre. Voici exactement ce qu'elle fait, et pourquoi macOS vous avertit la première fois.</p>
+      <div class="rules">
+        <div class="rule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/></svg>
+          <div><b>Open source, jusqu'à la dernière ligne.</b><p>Le code est <a href="https://github.com/MidZai/aman_check">sur GitHub</a> : tout le monde peut le lire, et vous pouvez <a href="https://github.com/MidZai/aman_check#build-from-source">compiler l'app vous-même</a> avec les outils gratuits d'Apple.</p></div>
+        </div>
+        <div class="rule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l20 20"/><path d="M8.5 16.5a5 5 0 0 1 7 0"/><path d="M5 12.9a10 10 0 0 1 5.2-2.8"/><path d="M19 12.9a10 10 0 0 0-2.3-1.6"/><path d="M12 20h.01"/></svg>
+          <div><b>Elle ne se connecte jamais à Internet.</b><p>Pas de télémétrie, pas de recherche de mise à jour, pas de compte. Les liens GitHub et Ko-fi ne s'ouvrent dans votre navigateur que si vous cliquez dessus.</p></div>
+        </div>
+        <div class="rule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
+          <div><b>Elle ne fait que lire.</b><p>Rien n'est modifié sur le Mac. Les seuls fichiers écrits sont les rapports que vous choisissez d'enregistrer et ses propres réglages.</p></div>
+        </div>
+        <div class="rule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M18 12v3M15 12v2"/></svg>
+          <div><b>Jamais de mot de passe administrateur.</b><p>Les contrôles qui en demanderaient un, comme le mot de passe firmware, deviennent une étape à faire à la main, expliquée simplement.</p></div>
+        </div>
+      </div>
+
+      <h3 class="sub">Pourquoi macOS dit qu'elle « ne peut pas être ouverte »</h3>
+      <p class="intro">Pour supprimer cet avertissement, il faut un identifiant Apple Developer payant (99 $ par an) et la notarisation d'Apple. Aman Check n'en a pas encore : macOS ne peut pas savoir qui l'a créée et la bloque la première fois. Vous l'autorisez une fois, puis elle s'ouvre normalement.</p>
+      <div class="gate">
+        <div>
+          <h3>macOS 15 Sequoia ou plus récent</h3>
+          <ol>
+            <li>Ouvrez Aman Check, puis cliquez sur <b>Terminé</b> dans l'avertissement.</li>
+            <li>Allez dans <b>Réglages Système › Confidentialité et sécurité</b> et faites défiler jusqu'à <b>Sécurité</b>.</li>
+            <li>À côté de « Aman Check a été bloqué pour protéger votre Mac », cliquez sur <b>Ouvrir quand même</b>, puis confirmez avec votre mot de passe ou Touch ID.</li>
+          </ol>
+          <p>Pas de bouton <b>Ouvrir quand même</b> ? Ouvrez Aman Check une fois de plus, puis revenez dans Réglages Système.</p>
+        </div>
+        <div>
+          <h3>macOS 14 Sonoma</h3>
+          <ol>
+            <li>Dans le dossier <b>Applications</b>, faites un clic droit (ou Contrôle-clic) sur <b>Aman Check</b>.</li>
+            <li>Choisissez <b>Ouvrir</b>.</li>
+            <li>Cliquez sur <b>Ouvrir</b> dans l'avertissement.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>Ou dans Terminal, toutes versions</h3>
+          <p class="first">Cette commande retire la marque « téléchargé depuis Internet » que macOS vérifie :</p>
+          <pre><code>xattr -dr com.apple.quarantine "/Applications/Aman Check.app"</code></pre>
+        </div>
+      </div>
+      <div class="kofi-note">
+        <a class="btn btn-kofi" href="https://ko-fi.com/midzai">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.8 5c2 0 3.5 1.1 4.2 2.4C11.7 6.1 13.2 5 15.2 5c3.5 0 5.7 3.4 4.3 6.8C17.5 16.4 12 21 12 21z"/></svg>
+          Soutenir sur Ko-fi
+        </a>
+        <span>Les premiers dons serviront à payer la signature Apple, pour supprimer cet avertissement pour tout le monde.</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq" id="faq">
+    <div class="wrap">
+      <h2>Questions fréquentes</h2>
+      <dl>
+        <details>
+          <summary>Faut-il un compte Apple ?</summary>
+          <p>Non. Aman Check fonctionne sans aucun compte, Apple ou autre. La ligne « Compte Apple connecté » du rapport vérifie si le compte du vendeur est encore lié au Mac : un Mac remis avec le compte du vendeur et Localiser encore actifs peut être bloqué après effacement.</p>
+        </details>
+        <details>
+          <summary>Ça marche sur un Mac fraîchement restauré ?</summary>
+          <p>Oui. Terminez l'assistant de configuration (vous pouvez passer la connexion au compte Apple), copiez l'app depuis une clé USB ou téléchargez-la, et lancez-la. Sur un Mac effacé, l'assistant de configuration est lui-même un test utile : s'il n'a demandé ni le mot de passe d'un ancien propriétaire ni une organisation, c'est bon signe, et Aman Check contrôle le reste.</p>
+        </details>
+        <details>
+          <summary>Ça marche sur les Mac Intel ?</summary>
+          <p>Oui. Le téléchargement est une app universelle, Apple Silicon et Intel. Elle a été développée sur un MacBook Pro Intel avec puce T2 ; quelques lectures propres à Apple Silicon sont encore listées comme non vérifiées, et les retours d'autres Mac sont les bienvenus.</p>
+        </details>
+        <details>
+          <summary>Et les anciens macOS ?</summary>
+          <p>La version actuelle demande macOS 14 Sonoma ou plus récent. La prise en charge de macOS 13 Ventura est prête pour la prochaine version. Les systèmes plus anciens ne sont pas pris en charge ; <a href="https://github.com/MidZai/aman_check/issues/7">la discussion se poursuit ici</a>.</p>
+        </details>
+        <details>
+          <summary>Qu'est-ce qui est envoyé sur Internet ?</summary>
+          <p>Rien. Aman Check ne se connecte jamais à Internet de lui-même : pas de télémétrie, pas de statistiques, pas de recherche de mise à jour. Le rapport reste sur le Mac jusqu'à ce que vous l'enregistriez et l'envoyiez vous-même.</p>
+        </details>
+        <details>
+          <summary>Pourquoi pas de note globale ?</summary>
+          <p>Parce qu'un chiffre unique cache l'essentiel. Un Mac avec une batterie parfaite et un verrouillage d'activation ne vaut rien, et un test non fait n'est pas une réussite. Le rapport affiche plutôt des compteurs (bons, à surveiller, problèmes, non testés) et met les blocages en tête.</p>
+        </details>
+      </dl>
+    </div>
+  </section>
+
+  <section class="close">
+    <div class="wrap">
+      <h2>Les deux apps sont gratuites et open source.</h2>
+      <!-- Review this sentence when verifiable-report publishing ships. -->
+      <p>Licence MIT, écrites en Swift, sans compte, sans version payante. Si elles vous ont aidé à acheter ou vendre l'esprit tranquille, un café les fait vivre.</p>
+      <div class="cta">
+        <a class="btn btn-primary" data-release="MidZai/aman_check" href="https://github.com/MidZai/aman_check/releases/latest">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 19h16"/></svg>
+          Télécharger Aman Check
+        </a>
+        <a class="btn btn-ghost" href="https://github.com/MidZai/aman_check"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>Code source sur GitHub</a>
+        <a class="btn btn-kofi" href="https://ko-fi.com/midzai">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.8 5c2 0 3.5 1.1 4.2 2.4C11.7 6.1 13.2 5 15.2 5c3.5 0 5.7 3.4 4.3 6.8C17.5 16.4 12 21 12 21z"/></svg>
+          Soutenir sur Ko-fi
+        </a>
+      </div>
+      <p>« Aman » signifie l'eau en kabyle, d'où la goutte de l'icône, et la sécurité en arabe. Les deux vont bien à une app qui veille sur un Mac.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 MidZai. Licence MIT.</span>
+    <span><a href="https://github.com/MidZai/aman_check">Aman Check sur GitHub</a> &nbsp;&nbsp; <a href="https://github.com/MidZai/aman_disk">Aman Disk sur GitHub</a> &nbsp;&nbsp; <a href="https://ko-fi.com/midzai">Ko-fi</a></span>
+  </div>
+</footer>
+
+<script>
+  // Download buttons: point straight at the latest DMG when the GitHub API answers; the release page stays as fallback.
+  (function () {
+    document.querySelectorAll('a[data-release]').forEach(function (a) {
+      fetch('https://api.github.com/repos/' + a.dataset.release + '/releases/latest', { headers: { Accept: 'application/vnd.github+json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (rel) {
+          var dmg = rel && rel.assets && rel.assets.find(function (x) { return /\.dmg$/i.test(x.name); });
+          if (dmg) { a.href = dmg.browser_download_url; a.setAttribute('download', dmg.name); }
+        })
+        .catch(function () {});
+    });
+  })();
+
+  // One authored moment: each time mark on the rail fills in as its step reaches the reader.
+  (function () {
+    var steps = document.querySelectorAll('.step');
+    if (!('IntersectionObserver' in window)) { steps.forEach(function (s) { s.classList.add('is-live'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-live'); io.unobserve(e.target); } });
+    }, { rootMargin: '0px 0px -45% 0px' });
+    steps.forEach(function (s) { io.observe(s); });
+  })();
+</script>
+</body>
+</html>
