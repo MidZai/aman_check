@@ -64,8 +64,8 @@ struct SpeakerTestView: View {
     private var instruction: String {
         switch stage {
         case .check, .demo:
-            return L("Raise the volume to about half. You will hear a low tone (to reveal buzzing), a sweep from low to high, then left and right.",
-                     "Montez le volume à la moitié environ. Vous allez entendre un son grave (qui révèle les vibrations), un balayage du grave à l'aigu, puis la gauche et la droite.")
+            return L("Raise the volume to about half. You will hear a low tone and a sweep (4 seconds), then 3 short beeps: say where each one came from.",
+                     "Montez le volume à la moitié environ. Vous allez entendre un son grave et un balayage (4 secondes), puis 3 bips courts : dites d'où vient chacun.")
         case .quiz(let round):
             return L("Round \(round + 1) of \(Self.rounds): where did you hear the sound?", "Manche \(round + 1) sur \(Self.rounds) : de quel côté avez-vous entendu le son ?")
         case .quality:
@@ -77,10 +77,7 @@ struct SpeakerTestView: View {
     private var stageContent: some View {
         switch stage {
         case .check, .demo:
-            if demoDone {
-                Label(L("Demo finished. Now a short quiz: the side is chosen at random.", "Démonstration terminée. Place à un court quiz : le côté est tiré au hasard."),
-                      systemImage: "checkmark").foregroundStyle(.secondary)
-            }
+            EmptyView()
         case .quiz:
             HStack(spacing: 12) {
                 answerButton(L("Left", "Gauche"), .left)
@@ -99,20 +96,12 @@ struct SpeakerTestView: View {
     private var actions: some View {
         switch stage {
         case .check, .demo:
-            if demoDone {
-                Button(L("Replay", "Réécouter")) { runDemo() }
-                Button(L("Start the Quiz", "Commencer le quiz")) { startQuiz() }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
-            } else {
-                Button(L("Play the Sounds", "Jouer les sons")) { runDemo() }
-                    .buttonStyle(.borderedProminent)
-                    .keyboardShortcut(.defaultAction)
-                    .disabled(playing != nil)
-            }
-        case .quiz:
-            Button(L("Play the Sound", "Jouer le son")) { playQuiz() }
+            Button(L("Play the Sounds", "Jouer les sons")) { runDemo() }
                 .buttonStyle(.borderedProminent)
+                .keyboardShortcut(.defaultAction)
+                .disabled(playing != nil)
+        case .quiz:
+            Button(L("Play Again", "Rejouer")) { playQuiz() }
                 .disabled(playing != nil)
         case .quality:
             Button(L("No, It Crackles", "Non, ça grésille")) { complete(clean: false) }
@@ -131,12 +120,17 @@ struct SpeakerTestView: View {
         output = AudioDevices.defaultDevice(input: false)
     }
 
+    /// Son grave puis balayage (4 s), et le quiz enchaîne de lui-même : plus de démonstration gauche/droite
+    /// ni de clic « Jouer » à chaque manche (le test prenait trop de temps).
     private func runDemo() {
         refreshOutput()
         stage = .demo
         demoDone = false
-        let sequence: [(ToneGenerator.Kind, ToneGenerator.Side)] = [(.lowTone, .both), (.sweep, .both), (.beep, .left), (.beep, .right), (.beep, .both)]
-        playSequence(sequence[...]) { demoDone = true }
+        let sequence: [(ToneGenerator.Kind, ToneGenerator.Side)] = [(.lowTone, .both), (.sweep, .both)]
+        playSequence(sequence[...]) {
+            demoDone = true
+            startQuiz()
+        }
     }
 
     private func playSequence(_ items: ArraySlice<(ToneGenerator.Kind, ToneGenerator.Side)>, done: @escaping () -> Void) {
@@ -158,6 +152,7 @@ struct SpeakerTestView: View {
         answers = []
         quizPlayed = false
         stage = .quiz(round: 0)
+        playQuiz()
     }
 
     private func playQuiz() {
@@ -176,6 +171,8 @@ struct SpeakerTestView: View {
         quizPlayed = false
         if round + 1 < Self.rounds {
             stage = .quiz(round: round + 1)
+            // Petit silence pour que le bip suivant ne se confonde pas avec le clic.
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { playQuiz() }
         } else {
             stage = .quality
         }

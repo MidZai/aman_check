@@ -35,9 +35,9 @@ final class CameraSession: NSObject, ObservableObject, AVCaptureVideoDataOutputS
             return
         }
         // Caméra intégrée uniquement : pas une caméra externe ni l'iPhone (Continuité).
-        let devices = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices
-            .filter { !$0.isContinuityCamera && $0.transportType == Int32(kIOAudioDeviceTransportTypeBuiltIn) }
-        DiagnosticLog.shared.log("caméra", "périphériques intégrés : \(devices.map(\.localizedName))")
+        let all = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices
+        let devices = all.filter(Self.isBuiltInCamera)
+        DiagnosticLog.shared.log("caméra", "caméras : \(all.map { "\($0.localizedName) [\($0.modelID), transport \($0.transportType)]" }) · intégrées : \(devices.map(\.localizedName))")
         guard let device = devices.first else { state = .noCamera; return }
         deviceName = device.localizedName
 
@@ -78,6 +78,18 @@ final class CameraSession: NSObject, ObservableObject, AVCaptureVideoDataOutputS
             state = .failed(error.localizedDescription)
             DiagnosticLog.shared.log("caméra", "échec : \(error)")
         }
+    }
+
+    /// Caméra intégrée. Sur les Mac Intel à puce T2, la caméra FaceTime passe par le bus USB interne de la T2 :
+    /// son transport est « usb », pas « built-in » (constaté sur le MacBookPro16,1, modèle « UVC Camera
+    /// VendorID_1452 ProductID_34068 ») ; l'ancien filtre la rejetait et le test concluait « pas de caméra ».
+    /// Une caméra USB d'Apple n'est retenue que si son nom dit FaceTime (l'écran Studio Display, lui aussi
+    /// d'Apple, a une caméra externe nommée autrement).
+    static func isBuiltInCamera(_ device: AVCaptureDevice) -> Bool {
+        if device.isContinuityCamera { return false }
+        if device.transportType == Int32(kIOAudioDeviceTransportTypeBuiltIn) { return true }
+        let isUSB = device.transportType == Int32(kIOAudioDeviceTransportTypeUSB)
+        return isUSB && device.modelID.contains("VendorID_1452") && device.localizedName.localizedCaseInsensitiveContains("FaceTime")
     }
 
     func stop() {

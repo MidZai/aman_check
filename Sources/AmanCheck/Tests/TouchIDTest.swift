@@ -10,6 +10,8 @@ struct TouchIDTestView: View {
 
     private enum State: Equatable { case ready, waiting, success, failed(String), notEnrolled, unavailable(String) }
     @SwiftUI.State private var state: State = .ready
+    /// Sans empreinte enregistrée : vérifie toutes les 2 s si la personne en a ajouté une, pour reprendre seule.
+    @SwiftUI.State private var enrollmentTimer: Timer?
 
     var body: some View {
         TestScaffold(title: "Touch ID",
@@ -30,9 +32,17 @@ struct TouchIDTestView: View {
                     StatusLabel(.watch, text: message, font: .headline)
                 case .notEnrolled:
                     Callout(tint: .blue, symbol: "hand.raised") {
-                        Text(L("No fingerprint is saved on this Mac. Add one in System Settings > Touch ID & Password, or skip.",
-                               "Aucune empreinte n'est enregistrée sur ce Mac. Ajoutez-en une dans Réglages Système > Touch ID et mot de passe, ou passez."))
+                        // Aucune interface ne lit le capteur sans empreinte enregistrée : c'est l'enclave sécurisée
+                        // qui compare. Enregistrer une empreinte fait lire le capteur, et le test reprend seul ensuite.
+                        Text(L("No fingerprint is saved on this Mac, and macOS only lets an app use Touch ID with a saved fingerprint. Adding one also tests the sensor: the Mac reads the finger several times.",
+                               "Aucune empreinte n'est enregistrée sur ce Mac, et macOS ne laisse une app utiliser Touch ID qu'avec une empreinte enregistrée. En ajouter une teste aussi le capteur : le Mac lit le doigt plusieurs fois."))
                             .fixedSize(horizontal: false, vertical: true)
+                        Text(L("Add a fingerprint (the Mac's password is needed), then come back: the test continues by itself. It can be deleted afterwards.",
+                               "Ajoutez une empreinte (le mot de passe du Mac est demandé), puis revenez : le test reprend tout seul. Elle peut être supprimée ensuite."))
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Button(L("Open Touch ID Settings", "Ouvrir les réglages Touch ID")) { SystemSettingsPage.touchID.open() }
                     }
                 case .unavailable(let message):
                     Callout(tint: .gray, symbol: "touchid") { Text(message) }
@@ -52,7 +62,6 @@ struct TouchIDTestView: View {
                 Button(L("Skip", "Passer")) {
                     finish(.notTested(.touchID, reason: L("No fingerprint saved", "Aucune empreinte enregistrée")))
                 }
-                Button(L("Try Again", "Réessayer")) { authenticate() }
             case .unavailable:
                 Button(L("Skip", "Passer")) {
                     finish(.notTested(.touchID, reason: L("Touch ID unavailable in this session", "Touch ID indisponible dans cette session")))
@@ -72,6 +81,10 @@ struct TouchIDTestView: View {
                     .disabled(state == .waiting)
             }
         }
+        .onDisappear {
+            enrollmentTimer?.invalidate()
+            enrollmentTimer = nil
+        }
     }
 
     private var symbolColor: Color {
@@ -79,6 +92,22 @@ struct TouchIDTestView: View {
         case .success: return .green
         case .failed: return .orange
         default: return AmanPalette.water
+        }
+    }
+
+    /// Tant qu'aucune empreinte n'existe : surveille son ajout, puis lance la reconnaissance d'elle-même.
+    private func watchEnrollment() {
+        guard enrollmentTimer == nil else { return }
+        enrollmentTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { timer in
+            MainActor.assumeIsolated {
+                var error: NSError?
+                guard LAContext().canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else { return }
+                timer.invalidate()
+                enrollmentTimer = nil
+                DiagnosticLog.shared.log("touchid", "empreinte ajoutée : reprise du test")
+                NSApp.activate(ignoringOtherApps: true)
+                authenticate()
+            }
         }
     }
 
@@ -90,6 +119,7 @@ struct TouchIDTestView: View {
             DiagnosticLog.shared.log("touchid", "indisponible : \(String(describing: error))")
             if let code = error.map({ LAError.Code(rawValue: $0.code) }), code == .biometryNotEnrolled {
                 state = .notEnrolled
+                watchEnrollment()
             } else {
                 state = .unavailable(error?.localizedDescription ?? L("Touch ID is not available.", "Touch ID n'est pas disponible."))
             }

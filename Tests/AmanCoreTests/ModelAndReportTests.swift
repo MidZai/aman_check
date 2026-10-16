@@ -73,7 +73,8 @@ struct DeviceProfileTests {
         #expect(p.thunderboltPorts == 4)
         #expect(p.model?.lastMacOS == 26)
         #expect(p.chip == .intelT2)
-        #expect(Set(TestID.applicable(to: p)) == Set(TestID.allCases))
+        // Tous les tests, sauf l'angle de l'écran : il dépend d'une détection réelle, absente en simulation.
+        #expect(Set(TestID.applicable(to: p)) == Set(TestID.allCases).subtracting([.lidAngle]))
     }
 
     @Test("Mac mini simulé : ni clavier, ni trackpad, ni caméra, ni micro, ni Touch ID, ni batterie")

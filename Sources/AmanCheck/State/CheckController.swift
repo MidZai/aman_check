@@ -244,12 +244,13 @@ final class CheckController: ObservableObject {
         d.hasBattery = SystemReader.batteryProperties().map { ($0["BatteryInstalled"] as? Bool) ?? true } ?? false
         d.isAppleSilicon = SystemReader.isAppleSilicon
         let cameras = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInWideAngleCamera], mediaType: .video, position: .unspecified).devices
-        d.hasBuiltInCamera = !cameras.isEmpty
+        d.hasBuiltInCamera = cameras.contains(where: CameraSession.isBuiltInCamera)
         let context = LAContext()
         var error: NSError?
         _ = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
         // biometryType est renseigné même si aucune empreinte n'est enregistrée (erreur biometryNotEnrolled).
         d.hasBiometrics = context.biometryType == .touchID
+        d.hasLidAngleSensor = LidAngleSensor()?.degrees() != nil
         return d
     }
 

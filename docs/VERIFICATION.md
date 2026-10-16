@@ -1,6 +1,6 @@
 # Aman Check — à vérifier à la main sur le MacBookPro16,1
 
-Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (124 tests).
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (128 tests).
 Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
 
 | Test | Ce qu'il faut constater | Critère |
@@ -51,7 +51,19 @@ Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (fra
 | QR code | Scanner la page 1 imprimée avec l'appareil photo d'un iPhone et d'un Android : le texte s'affiche sans app dédiée |
 | Réglage | Réglages › décocher « QR code de résumé dans le PDF » : plus de QR ni de légende ; un rapport publié (niveau 2) garde son QR code |
 
+## Tests guidés, second passage (2026-10-16)
+
+| Test | Ce qu'il faut constater |
+|---|---|
+| Caméra | L'image s'affiche (la caméra FaceTime des Mac T2 est en transport « usb », elle était rejetée par erreur) |
+| Haut-parleurs | Un clic : son grave + balayage (4 s), puis 3 bips qui s'enchaînent seuls après chaque réponse |
+| Touch ID sans empreinte | « Ouvrir les réglages Touch ID » ; après ajout d'une empreinte, l'app revient au premier plan et demande le doigt d'elle-même |
+| Touch Bar | 10 zones visibles en entier ; bouton volume de la Control Strip + glissé → « extrémité droite OK » |
+| Angle de l'écran | L'angle suit l'écran en direct ; 30° de variation → réussi sans question |
+| Accueil | Bandeau « Processeur … °C · Ventilateurs … · en direct » mis à jour toutes les 2 s (vérifié dans la fenêtre réelle : 71 °C, 3 362 et 3 129 tr/min ; le mode `--snapshot` ne l'affiche pas, ses rendus bloquent la file principale) |
+
 ## Non validé (pas de machine disponible)
+- Capteur d'angle de l'écran sur Apple Silicon (présent sur certains modèles seulement ; le test n'apparaît que s'il est détecté).
 - Performance sur Apple Silicon : débit de `cblas_dgemm` (coprocesseur matriciel), noyau Metal, ventilateurs à 0 tr/min sous charge courte, aucune référence ; MacBook Air sans ventilateur (pas de ligne « Ventilateurs sous charge »).
 - Capteurs sur Apple Silicon : clés de température `Tp*` (M1, M2 ; M3 et M4 peuvent utiliser d'autres préfixes → « Non disponible »), type des clés de ventilateur, `AppleClamshellState`, luminosité par IODisplay (probablement illisible : la question est alors posée), et surtout le capteur de luminosité par HID (sur Apple Silicon il passe par le SPU et peut ne pas apparaître : l'analyse dit alors « Non disponible »). Mac Intel sans T2 et iMac : capteur HID non vérifié. MacBook Air M1+ : « Pas de ventilateur sur ce modèle ». Mac de bureau : section Capteurs sans test du capot.
 - Apple Silicon : clés batterie (`MaxCapacity` en %, `NominalChargeCapacity`), « Capacité maximale » de SPPowerDataType, `sppci_cores`, classes des ports USB, `UsbCPortNumber`.

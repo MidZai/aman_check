@@ -63,6 +63,11 @@ enum SensorCollector {
 
         deinit { aman_smc_close(connection) }
 
+        /// Vitesse de chaque ventilateur, en tr/min (`nil` : illisible) ; vide sans ventilateur.
+        func fanSpeeds() -> [Double?] {
+            (0..<min(fanCount, 4)).map { SensorCollector.value(connection, "F\($0)Ac").flatMap { SMCValue.isPlausibleFanSpeed($0) ? $0 : nil } }
+        }
+
         /// Ventilateur le plus rapide, en tr/min ; `nil` : illisible ou pas de ventilateur.
         func fastestFan() -> Double? {
             (0..<min(fanCount, 4)).compactMap { SensorCollector.value(connection, "F\($0)Ac") }
@@ -151,24 +156,22 @@ enum SensorCollector {
     }
 }
 
-/// Capteur de luminosité intégré, lu par l'interface HID publique (norme HID « Sensors » : page 0x20,
-/// usage Lumière ambiante 0x41, champ Éclairement 0x4D1, en lux). Lecture seule : aucun rapport n'est
-/// envoyé au capteur, sa configuration ne change pas.
-/// Constaté sur le MacBookPro16,1 (T2) : périphérique USB interne « Ambient Light Sensor ».
-/// TODO: à valider sur machine réelle : Apple Silicon (capteur derrière le SPU, peut-être invisible ici),
-/// Mac Intel sans T2, iMac. Un écran externe Apple a aussi un capteur : seul le capteur intégré est lu.
-final class AmbientLightSensor {
+/// Capteur intégré exposé par l'interface HID publique (norme HID « Sensors », page 0x20). Lecture seule :
+/// aucun rapport n'est envoyé au capteur, sa configuration ne change pas. Seul le périphérique intégré est lu
+/// (« Built-In »), jamais celui d'un écran ou d'un accessoire externe.
+final class BuiltInHIDSensor {
     private let manager: IOHIDManager
     private let device: IOHIDDevice
     private let element: IOHIDElement
 
-    init?() {
+    /// `deviceUsage` : usage principal du périphérique ; `elementUsage` : champ à lire.
+    init?(deviceUsage: Int, elementUsage: Int) {
         let manager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
-        IOHIDManagerSetDeviceMatching(manager, [kIOHIDPrimaryUsagePageKey: 0x20, kIOHIDPrimaryUsageKey: 0x41] as CFDictionary)
+        IOHIDManagerSetDeviceMatching(manager, [kIOHIDPrimaryUsagePageKey: 0x20, kIOHIDPrimaryUsageKey: deviceUsage] as CFDictionary)
         guard IOHIDManagerOpen(manager, IOOptionBits(kIOHIDOptionsTypeNone)) == kIOReturnSuccess,
               let devices = IOHIDManagerCopyDevices(manager) as? Set<IOHIDDevice>,
               let device = devices.first(where: { (IOHIDDeviceGetProperty($0, "Built-In" as CFString) as? NSNumber)?.boolValue == true }),
-              let element = (IOHIDDeviceCopyMatchingElements(device, [kIOHIDElementUsagePageKey: 0x20, kIOHIDElementUsageKey: 0x4D1] as CFDictionary,
+              let element = (IOHIDDeviceCopyMatchingElements(device, [kIOHIDElementUsagePageKey: 0x20, kIOHIDElementUsageKey: elementUsage] as CFDictionary,
                                                              IOOptionBits(kIOHIDOptionsTypeNone)) as? [IOHIDElement])?.first
         else {
             IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
@@ -183,11 +186,11 @@ final class AmbientLightSensor {
         IOHIDManagerClose(manager, IOOptionBits(kIOHIDOptionsTypeNone))
     }
 
-    /// Valeur actuelle, en lux (lue sur le capteur à chaque appel).
-    func lux() -> Double? {
+    /// Valeur actuelle, lue sur le capteur à chaque appel. `scaled` : appliquer l'exposant d'unité du champ.
+    func read(scaled: Bool) -> Double? {
         // `IOHIDDeviceGetValueWithOptions` remplace le pointeur par une valeur qui appartient à l'élément (règle
         // « Get ») : elle ne doit jamais être libérée ici. La libérer faisait planter l'app au bout de quelques
-        // dizaines de lectures (objet libéré puis réutilisé par IOHIDLib). La valeur de départ, elle, est gérée
+        // centaines de lectures (objet libéré puis réutilisé par IOHIDLib). La valeur de départ, elle, est gérée
         // par Swift et reste vivante pendant l'appel.
         let placeholder = IOHIDValueCreateWithIntegerValue(kCFAllocatorDefault, element, 0, 0)
         var value = Unmanaged.passUnretained(placeholder)
@@ -195,9 +198,29 @@ final class AmbientLightSensor {
         let status = IOHIDDeviceGetValueWithOptions(device, element, &value, 1)
         return withExtendedLifetime(placeholder) {
             guard status == kIOReturnSuccess else { return nil }
-            let lux = IOHIDValueGetScaledValue(value.takeUnretainedValue(), IOHIDValueScaleType(kIOHIDValueScaleTypeExponent))
-            return lux.isFinite && lux >= 0 ? lux : nil
+            let current = value.takeUnretainedValue()
+            let number = scaled ? IOHIDValueGetScaledValue(current, IOHIDValueScaleType(kIOHIDValueScaleTypeExponent))
+                                : Double(IOHIDValueGetIntegerValue(current))
+            return number.isFinite ? number : nil
         }
+    }
+}
+
+/// Capteur de luminosité intégré : usage Lumière ambiante 0x41, champ Éclairement 0x4D1, en lux.
+/// Constaté sur le MacBookPro16,1 (T2) : périphérique USB interne « Ambient Light Sensor ».
+/// TODO: à valider sur machine réelle : Apple Silicon (capteur derrière le SPU, peut-être invisible ici),
+/// Mac Intel sans T2, iMac.
+final class AmbientLightSensor {
+    private let sensor: BuiltInHIDSensor
+
+    init?() {
+        guard let sensor = BuiltInHIDSensor(deviceUsage: 0x41, elementUsage: 0x4D1) else { return nil }
+        self.sensor = sensor
+    }
+
+    /// Valeur actuelle, en lux.
+    func lux() -> Double? {
+        sensor.read(scaled: true).flatMap { $0 >= 0 ? $0 : nil }
     }
 
     /// Une lecture, pour l'analyse automatique.
@@ -205,5 +228,21 @@ final class AmbientLightSensor {
         let value = AmbientLightSensor()?.lux()
         DiagnosticLog.shared.log("capteurs", "capteur de luminosité : \(value.map { String(format: "%.3f lux", $0) } ?? "illisible")")
         return value
+    }
+}
+
+/// Capteur d'angle de l'écran, dans la charnière : usage 0x8A, champ 0x47F de 0 à 360, en degrés.
+/// Constaté sur le MacBookPro16,1 : périphérique Apple 0x8104, 123° écran ouvert.
+/// TODO: à valider sur machine réelle : MacBook Air et MacBook Pro Apple Silicon (présent sur certains modèles seulement).
+final class LidAngleSensor {
+    private let sensor: BuiltInHIDSensor
+
+    init?() {
+        guard let sensor = BuiltInHIDSensor(deviceUsage: 0x8A, elementUsage: 0x47F) else { return nil }
+        self.sensor = sensor
+    }
+
+    func degrees() -> Double? {
+        sensor.read(scaled: false).flatMap { SensorTests.isPlausibleLidAngle($0) ? $0 : nil }
     }
 }

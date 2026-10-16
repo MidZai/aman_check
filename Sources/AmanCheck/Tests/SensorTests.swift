@@ -165,7 +165,7 @@ struct LidTestView: View {
 
 /// Ouvre une page de Réglages Système (lecture seule pour l'app : la personne fait le réglage elle-même).
 enum SystemSettingsPage {
-    case displays, keyboard
+    case displays, keyboard, touchID
 
     /// Adresses de macOS 13 et plus, puis celles des anciennes Préférences Système en repli.
     private var urls: [String] {
@@ -174,6 +174,8 @@ enum SystemSettingsPage {
                                 "x-apple.systempreferences:com.apple.preference.displays"]
         case .keyboard: return ["x-apple.systempreferences:com.apple.Keyboard-Settings.extension",
                                 "x-apple.systempreferences:com.apple.preference.keyboard"]
+        case .touchID: return ["x-apple.systempreferences:com.apple.Touch-ID-Settings.extension",
+                               "x-apple.systempreferences:com.apple.preferences.password"]
         }
     }
 
@@ -534,5 +536,138 @@ struct KeyboardBacklightTestView: View {
         }
         return [.init(text: L("Click Control Centre at the top right of the screen (the icon with two small switches), then Keyboard Brightness, and drag the slider all the way up.",
                               "Cliquez sur le Centre de contrôle en haut à droite de l'écran (l'icône à deux petits interrupteurs), puis sur Luminosité du clavier, et poussez le curseur à fond."))]
+    }
+}
+
+// MARK: - Capteur d'angle de l'écran
+
+/// Le Mac vu de profil : la base et l'écran à l'angle mesuré, mis à jour en direct.
+private struct LidAngleDiagram: View {
+    let degrees: Double?
+
+    var body: some View {
+        Canvas { context, size in
+            let hinge = CGPoint(x: size.width * 0.32, y: size.height * 0.82)
+            let base = size.width * 0.55
+            var basePath = Path()
+            basePath.move(to: hinge)
+            basePath.addLine(to: CGPoint(x: hinge.x + base, y: hinge.y))
+            context.stroke(basePath, with: .color(Color(white: 0.6)), style: StrokeStyle(lineWidth: 8, lineCap: .round))
+            let angle = (degrees ?? 110) * .pi / 180
+            let lid = size.height * 0.72
+            // Angle mesuré entre la base (vers la droite) et l'écran.
+            let tip = CGPoint(x: hinge.x + cos(angle) * lid, y: hinge.y - sin(angle) * lid)
+            var lidPath = Path()
+            lidPath.move(to: hinge)
+            lidPath.addLine(to: tip)
+            context.stroke(lidPath, with: .color(degrees == nil ? Color(white: 0.4) : AmanPalette.water),
+                           style: StrokeStyle(lineWidth: 8, lineCap: .round))
+            var arc = Path()
+            arc.addArc(center: hinge, radius: 36, startAngle: .degrees(0), endAngle: .degrees(-(degrees ?? 110)), clockwise: true)
+            context.stroke(arc, with: .color(AmanPalette.water.opacity(0.6)), style: StrokeStyle(lineWidth: 2, dash: [4, 3]))
+        }
+        .frame(width: 320, height: 200)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(degrees.map { L("Screen open at \(Int($0.rounded()))°", "Écran ouvert à \(Int($0.rounded()))°") } ?? "")
+    }
+}
+
+struct LidAngleTestView: View {
+    let finish: (TestResult) -> Void
+
+    private enum Phase: Equatable { case ready, running(Int), noReaction, done }
+
+    @State private var sensor = LidAngleSensor()
+    @State private var phase: Phase = .ready
+    @State private var current: Double?
+    @State private var samples: [Double] = []
+    @State private var result: TestResult?
+    @State private var timer: Timer?
+
+    private let seconds = 30
+
+    var body: some View {
+        TestScaffold(title: TestID.lidAngle.title,
+                     instruction: L("A sensor in the hinge measures how far the screen is open. Tilt the screen slowly forward, then back: no need to close it.",
+                                    "Un capteur dans la charnière mesure l'ouverture de l'écran. Inclinez lentement l'écran vers l'avant, puis vers l'arrière : inutile de le fermer.")) {
+            VStack(spacing: 18) {
+                LidAngleDiagram(degrees: current)
+                Text(current.map { "\(Int($0.rounded()))°" } ?? "—")
+                    .font(.system(size: 44, weight: .semibold, design: .rounded))
+                    .monospacedDigit()
+                switch phase {
+                case .ready:
+                    HintRow(text: L("Click Start, then move the screen by about a quarter turn (30° or more). The app follows the angle by itself.",
+                                    "Cliquez sur Commencer, puis bougez l'écran d'un quart de tour environ (30° ou plus). L'app suit l'angle d'elle-même."))
+                case .running(let left):
+                    Text(L("Tilt the screen now… \(left)", "Inclinez l'écran maintenant… \(left)"))
+                        .font(.title3.weight(.medium))
+                        .monospacedDigit()
+                case .noReaction:
+                    StatusLabel(.watch, text: L("The angle did not change.", "L'angle n'a pas changé."), font: .headline)
+                case .done:
+                    StatusLabel(.good, text: result?.summary ?? "", font: .headline)
+                }
+            }
+            .frame(maxWidth: 560)
+        } actions: {
+            switch phase {
+            case .ready:
+                Button(L("Start", "Commencer")) { start() }
+                    .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
+            case .running:
+                Button(L("Cancel", "Annuler")) { stop(); phase = .ready }
+            case .noReaction:
+                Button(L("I Moved It, Nothing Changed", "Je l'ai bougé, rien n'a changé")) {
+                    finish(SensorTests.lidAngleNoReaction(samples: samples))
+                }
+                Button(L("Try Again", "Réessayer")) { start() }
+                    .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
+            case .done:
+                Button(L("Continue", "Continuer")) { if let result { finish(result) } }
+                    .buttonStyle(.borderedProminent)
+                    .keyboardShortcut(.defaultAction)
+            }
+        }
+        .onAppear { current = sensor?.degrees() }
+        .onDisappear(perform: stop)
+    }
+
+    private func stop() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    private func start() {
+        stop()
+        samples = []
+        var ticks = 0
+        phase = .running(seconds)
+        timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { t in
+            MainActor.assumeIsolated {
+                ticks += 1
+                if let value = sensor?.degrees() {
+                    current = value
+                    samples.append(value)
+                }
+                if let detected = SensorTests.lidAngleResult(samples: samples) {
+                    t.invalidate()
+                    DiagnosticLog.shared.log("lidAngle", detected.summary)
+                    result = detected
+                    phase = .done
+                    return
+                }
+                let left = seconds - ticks / 10
+                if left <= 0 {
+                    t.invalidate()
+                    DiagnosticLog.shared.log("lidAngle", "aucune variation nette : \(samples.suffix(20))")
+                    phase = .noReaction
+                } else if ticks % 10 == 0 {
+                    phase = .running(left)
+                }
+            }
+        }
     }
 }

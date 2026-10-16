@@ -191,6 +191,34 @@ struct SensorGuidedTests {
         #expect(SensorAnalysis.ambientLightMeasurement(lux: 5, expected: false) == nil)
     }
 
+    @Test("Angle de l'écran : 30° de variation suffisent, sinon le test continue ; immobile → à surveiller")
+    func lidAngle() {
+        // Mesuré sur le MacBookPro16,1 : 123° écran ouvert.
+        let moved = SensorTests.lidAngleResult(samples: [123, 118, 104, 92, 110, 124])
+        #expect(moved?.status == .good)
+        #expect(moved?.provenance == .measuredAuto)
+        #expect(SensorTests.lidAngleResult(samples: [123, 120, 110, 100]) == nil)
+        #expect(SensorTests.lidAngleResult(samples: []) == nil)
+        // Valeurs impossibles écartées.
+        #expect(SensorTests.lidAngleResult(samples: [123, -50, 500]) == nil)
+        let still = SensorTests.lidAngleNoReaction(samples: [123, 123, 124])
+        #expect(still.status == .watch)
+        #expect(still.test == .lidAngle)
+    }
+
+    @Test("Angle de l'écran : test proposé seulement si le capteur est détecté sur un portable")
+    func lidAngleApplicability() {
+        let detected = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true, hasBuiltInCamera: true, hasBiometrics: true, hasLidAngleSensor: true))
+        #expect(TestID.applicable(to: detected).contains(.lidAngle))
+        let absent = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true, hasBuiltInCamera: true, hasBiometrics: true, hasLidAngleSensor: false))
+        #expect(!TestID.applicable(to: absent).contains(.lidAngle))
+        // Simulation : aucune détection, pas de test.
+        #expect(!TestID.applicable(to: DeviceProfile.make(modelIdentifier: "MacBookPro18,3", simulated: true)).contains(.lidAngle))
+        // Mac de bureau : jamais, même si quelque chose était détecté.
+        let mini = DeviceProfile.make(modelIdentifier: "Macmini9,1", detected: .init(hasLidAngleSensor: true))
+        #expect(!TestID.applicable(to: mini).contains(.lidAngle))
+    }
+
     @Test("Rétroéclairage : constaté par la personne")
     func backlight() {
         #expect(SensorTests.keyboardBacklightResult(works: true).status == .good)

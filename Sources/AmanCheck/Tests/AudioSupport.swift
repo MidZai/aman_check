@@ -42,6 +42,19 @@ enum AudioDevices {
         return device
     }
 
+    /// Volume et sourdine de la sortie par défaut, sans écrire dans le journal (relevé plusieurs fois par seconde).
+    static func outputLevel() -> (volume: Float?, muted: Bool?) {
+        var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultOutputDevice,
+                                                 mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMain)
+        var deviceID = AudioDeviceID(0)
+        var size = UInt32(MemoryLayout<AudioDeviceID>.size)
+        guard AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &deviceID) == noErr,
+              deviceID != 0 else { return (nil, nil) }
+        let volume: Float32? = read(deviceID, kAudioHardwareServiceDeviceProperty_VirtualMainVolume, kAudioDevicePropertyScopeOutput)
+        let mute: UInt32? = read(deviceID, kAudioDevicePropertyMute, kAudioDevicePropertyScopeOutput)
+        return (volume, mute.map { $0 != 0 })
+    }
+
     private static func read<T>(_ id: AudioObjectID, _ selector: AudioObjectPropertySelector, _ scope: AudioObjectPropertyScope) -> T? {
         var address = AudioObjectPropertyAddress(mSelector: selector, mScope: scope, mElement: kAudioObjectPropertyElementMain)
         guard AudioObjectHasProperty(id, &address) else { return nil }
@@ -115,9 +128,10 @@ final class ToneGenerator {
     private func makeBuffer(_ kind: Kind, side: Side) -> AVAudioPCMBuffer {
         let duration: Double
         switch kind {
-        case .lowTone: duration = 2.5
-        case .sweep: duration = 4
-        case .beep: duration = 0.8
+        // Courts exprès : le test entier tient en une quinzaine de secondes.
+        case .lowTone: duration = 1.5
+        case .sweep: duration = 2.5
+        case .beep: duration = 0.7
         }
         let frames = AVAudioFrameCount(duration * sampleRate)
         let buffer = AVAudioPCMBuffer(pcmFormat: format, frameCapacity: frames)!

@@ -232,6 +232,35 @@ public enum SensorTests {
                                       "Un capteur de capot défectueux laisse le Mac éveillé capot fermé, ou endormi une fois ouvert.")])
     }
 
+    // Capteur d'angle de l'écran (HID : page Capteurs 0x20, usage 0x8A, champ 0x47F de 0 à 360, en degrés).
+    // Constaté sur le MacBookPro16,1 : périphérique Apple 0x8104, 123° écran ouvert.
+
+    /// Variation d'angle qui prouve que le capteur suit l'écran.
+    public static let lidAngleMinimumSpan = 30.0
+
+    /// Angle plausible (0–360°).
+    public static func isPlausibleLidAngle(_ degrees: Double) -> Bool { (0...360).contains(degrees) }
+
+    /// L'écran a été incliné d'au moins 30° : bon, mesuré automatiquement ; sinon `nil` (le test continue).
+    public static func lidAngleResult(samples: [Double]) -> TestResult? {
+        let valid = samples.filter(isPlausibleLidAngle)
+        guard let low = valid.min(), let high = valid.max(), high - low >= lidAngleMinimumSpan else { return nil }
+        return TestResult(test: .lidAngle, outcome: .passed, provenance: .measuredAuto,
+                          summary: L("Screen angle followed from \(Int(low.rounded()))° to \(Int(high.rounded()))°",
+                                     "Angle de l'écran suivi de \(Int(low.rounded()))° à \(Int(high.rounded()))°"))
+    }
+
+    /// Le capteur se lit mais l'angle n'a pas bougé alors que la personne dit avoir incliné l'écran.
+    public static func lidAngleNoReaction(samples: [Double]) -> TestResult {
+        let valid = samples.filter(isPlausibleLidAngle)
+        let around = valid.isEmpty ? nil : valid.reduce(0, +) / Double(valid.count)
+        return TestResult(test: .lidAngle, outcome: .failed, status: .watch, provenance: .measuredAuto,
+                          summary: around.map { L("The screen angle stayed at about \(Int($0.rounded()))°", "L'angle de l'écran est resté vers \(Int($0.rounded()))°") }
+                              ?? L("The screen angle could not be read", "L'angle de l'écran n'a pas pu être lu"),
+                          details: [L("The sensor did not follow the screen. It may be faulty or disconnected (it sits in the hinge).",
+                                      "Le capteur n'a pas suivi l'écran. Il peut être défectueux ou débranché (il se trouve dans la charnière).")])
+    }
+
     /// Réponse au test de luminosité ambiante, quand l'app ne peut rien mesurer elle-même.
     public enum AmbientAnswer: Sendable {
         case changed, noChange, automaticBrightnessOff

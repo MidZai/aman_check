@@ -4,6 +4,12 @@ All notable changes to Aman Check are documented here.
 
 ## Unreleased
 
+### Guided tests
+- Camera: the built-in camera of Intel Macs with a T2 chip (connected through the chip's internal USB) is no longer mistaken for an external one.
+- Speakers: about a third of the time; the beeps follow one another without extra clicks.
+- Touch ID without a saved fingerprint: a button opens Touch ID settings, and the test resumes on its own once a fingerprint is added.
+- Touch Bar: the zones fit beside the Control Strip, and the right end is tested with the volume button (the app sees the volume change).
+
 ### Report
 - "Share…" button on the report screen: AirDrop, Messages, Mail and the other macOS share services, with the PDF.
 - Offline QR code on the first page of the PDF: a short plain-text summary (model, last 4 characters of the serial number, battery, SSD hours, locks, counters), no link, no server. Its caption says it does not prove the report is authentic. Can be turned off in Settings.
@@ -16,6 +22,8 @@ All notable changes to Aman Check are documented here.
 - Comparison with a reference measured on the same chip when one exists (below 80%: to watch, never a problem). The table holds only real measurements; contributions welcome.
 
 ### Sensors
+- New guided test, screen angle sensor: tilt the screen (no need to close it) and the app follows the hinge angle live; only on Macs where the sensor is detected.
+- Processor temperature and fan speeds shown live on the first screen and in the Sensors section.
 - New "Sensors" section: number of fans, current fan speed and processor temperature, read from the SMC (read only, no password). Fanless Macs show "No fan on this model". A fan the model should have but the Mac does not report is "to watch"; a high temperature at rest is never more than "to watch".
 - New guided tests: lid sensor (sleep and wake detected automatically, or the person answers; adapted when an external display is connected), ambient light sensor (screen brightness measured on Intel Macs, otherwise the person answers; "automatic brightness off" is "not tested", not a failure), keyboard backlight.
 - Ambient light sensor: the app now reads the sensor itself (in lux, through the public HID interface) when the Mac allows it. Shine a phone flashlight on the top of the screen, or cover it, and the test passes on its own, whatever the automatic brightness setting. Covering alone barely changes anything in a dim room, which is why the flashlight comes first. The Sensors section shows the light measured.

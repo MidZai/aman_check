@@ -6,12 +6,51 @@ import DiskHealthCore
 
 /// Touch Bar : l'app affiche des zones numérotées sur toute la largeur ; chaque zone touchée passe au vert.
 /// Vérifie à la fois l'affichage (les zones apparaissent) et le toucher (chaque zone réagit), sans autorisation.
-/// TODO: à valider sur machine réelle : largeur exacte de la zone d'app (bande de contrôle repliée à droite).
+/// La partie droite de la barre appartient à la Control Strip (luminosité, volume, Siri) : aucune interface
+/// publique ne la masque, et 12 zones forcées sur 640 points débordaient dessous (constaté sur le MacBookPro16,1).
+/// Les zones tiennent donc dans la partie de l'app, et l'extrémité droite se teste par le bouton volume de la
+/// Control Strip : l'app voit le volume changer.
 @MainActor
 final class TouchBarModel: ObservableObject {
-    static let zoneCount = 12
+    static let zoneCount = 10
     @Published private(set) var touched: Set<Int> = []
     @Published private(set) var barShown = false
+    /// Extrémité droite : le volume (ou la sourdine) a changé depuis l'ouverture du test.
+    @Published private(set) var rightEndResponded = false
+    /// `false` si le volume de la sortie ne se lit pas : l'étape n'est pas proposée.
+    @Published private(set) var volumeReadable = true
+    private var startLevel: (volume: Float?, muted: Bool?) = (nil, nil)
+    private var timer: Timer?
+
+    func startWatchingVolume() {
+        startLevel = AudioDevices.outputLevel()
+        volumeReadable = startLevel.volume != nil || startLevel.muted != nil
+        guard volumeReadable, timer == nil else { return }
+        timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.checkVolume() }
+        }
+    }
+
+    func stopWatchingVolume() {
+        timer?.invalidate()
+        timer = nil
+    }
+
+    private func checkVolume() {
+        let now = AudioDevices.outputLevel()
+        let volumeMoved = zip2(now.volume, startLevel.volume).map { abs($0 - $1) >= 0.02 } ?? false
+        let muteToggled = zip2(now.muted, startLevel.muted).map { $0 != $1 } ?? false
+        if volumeMoved || muteToggled {
+            rightEndResponded = true
+            stopWatchingVolume()
+            DiagnosticLog.shared.log("touchbar", "extrémité droite : volume \(String(describing: startLevel.volume)) → \(String(describing: now.volume)), sourdine \(String(describing: now.muted))")
+        }
+    }
+
+    private func zip2<A, B>(_ a: A?, _ b: B?) -> (A, B)? {
+        guard let a, let b else { return nil }
+        return (a, b)
+    }
 
     func tap(_ index: Int) {
         touched.insert(index)
@@ -24,7 +63,12 @@ final class TouchBarModel: ObservableObject {
         DiagnosticLog.shared.log("touchbar", "barre de l'app fournie au système")
     }
 
-    func reset() { touched = [] }
+    func reset() {
+        touched = []
+        rightEndResponded = false
+        stopWatchingVolume()
+        startWatchingVolume()
+    }
 }
 
 extension NSTouchBarItem.Identifier {
@@ -71,8 +115,11 @@ final class TouchBarHostView: NSView, NSTouchBarDelegate {
         let stack = NSStackView(views: buttons)
         stack.distribution = .fillEqually
         stack.spacing = 6
-        // Toute la largeur disponible pour l'app (la bande de contrôle repliée reste à droite).
-        stack.widthAnchor.constraint(greaterThanOrEqualToConstant: 640).isActive = true
+        // Largeur souple : au moins 520 points, jusqu'à 720 si la place existe, sans passer sous la Control Strip.
+        stack.widthAnchor.constraint(greaterThanOrEqualToConstant: 520).isActive = true
+        let preferred = stack.widthAnchor.constraint(equalToConstant: 720)
+        preferred.priority = .defaultLow
+        preferred.isActive = true
         item.view = stack
         return item
     }
@@ -99,8 +146,8 @@ struct TouchBarTestView: View {
 
     var body: some View {
         TestScaffold(title: "Touch Bar",
-                     instruction: L("12 numbered zones appear on the Touch Bar. Touch each one with a finger: it turns green, here and on the bar.",
-                                    "12 zones numérotées s'affichent sur la Touch Bar. Touchez-les une à une avec un doigt : elles passent au vert, ici et sur la barre.")) {
+                     instruction: L("10 numbered zones appear on the Touch Bar. Touch each one with a finger: it turns green, here and on the bar. Then test the right end with the volume button.",
+                                    "10 zones numérotées s'affichent sur la Touch Bar. Touchez-les une à une avec un doigt : elles passent au vert, ici et sur la barre. Testez ensuite l'extrémité droite avec le bouton du volume.")) {
             VStack(spacing: 22) {
                 ZStack {
                     TouchBarHost(model: model).frame(width: 1, height: 1).opacity(0)
@@ -113,12 +160,29 @@ struct TouchBarTestView: View {
                                 .frame(height: 34)
                                 .animation(.easeOut(duration: 0.15), value: on)
                         }
+                        if model.volumeReadable {
+                            // Extrémité droite : la Control Strip (volume), testée par le changement de volume.
+                            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                .fill(model.rightEndResponded ? Color.green : Color(white: 0.3))
+                                .overlay(Image(systemName: "speaker.wave.2.fill").foregroundStyle(.white))
+                                .frame(width: 70, height: 34)
+                                .padding(.leading, 10)
+                                .animation(.easeOut(duration: 0.15), value: model.rightEndResponded)
+                        }
                     }
                     .padding(10)
                     .background(Color.black, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
                     .frame(maxWidth: 820)
                 }
-                Text(L("\(model.touched.count) of \(TouchBarModel.zoneCount) zones touched", "\(model.touched.count) zones sur \(TouchBarModel.zoneCount) touchées"))
+                if model.volumeReadable {
+                    NumberedSteps(steps: [
+                        .init(text: L("Right end of the bar (sound, brightness, Siri): touch the volume button, then slide your finger left or right. The app sees the volume change.",
+                                      "Extrémité droite de la barre (son, luminosité, Siri) : touchez le bouton du volume, puis faites glisser le doigt vers la gauche ou la droite. L'app voit le volume changer."))
+                    ])
+                    .frame(maxWidth: 640)
+                }
+                Text(L("\(model.touched.count) of \(TouchBarModel.zoneCount) zones touched", "\(model.touched.count) zones sur \(TouchBarModel.zoneCount) touchées")
+                     + (model.volumeReadable ? (model.rightEndResponded ? L(" · right end responds", " · extrémité droite OK") : L(" · right end not tested yet", " · extrémité droite pas encore testée")) : ""))
                     .font(.title3.weight(.semibold))
                     .monospacedDigit()
                 HintRow(text: L("Nothing on the Touch Bar? In System Settings > Keyboard > Touch Bar Settings, choose “Touch Bar shows: App Controls”, then come back here.",
@@ -138,6 +202,8 @@ struct TouchBarTestView: View {
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
         }
+        .onAppear { model.startWatchingVolume() }
+        .onDisappear { model.stopWatchingVolume() }
     }
 
     private func complete() {
@@ -146,12 +212,25 @@ struct TouchBarTestView: View {
         let summary = L("\(count) of \(total) zones respond", "\(count) zones sur \(total) réagissent")
         if count == 0 {
             finish(.notTested(.touchBar, reason: L("No zone touched", "Aucune zone touchée"), aborted: true))
-        } else if count == total {
-            finish(TestResult(test: .touchBar, outcome: .passed, provenance: .measuredAuto, summary: summary))
-        } else {
+            return
+        }
+        // Extrémité droite (Control Strip) : comptée seulement si le volume se lit sur ce Mac.
+        let rightEndMissing = model.volumeReadable && !model.rightEndResponded
+        var details: [String] = []
+        if count < total {
             let missing = (0..<total).filter { !model.touched.contains($0) }.map { "\($0 + 1)" }.joined(separator: ", ")
-            finish(TestResult(test: .touchBar, outcome: .failed, status: .watch, provenance: .measuredAuto, summary: summary,
-                              details: [L("Zones not touched: \(missing)", "Zones non touchées : \(missing)")]))
+            details.append(L("Zones not touched: \(missing)", "Zones non touchées : \(missing)"))
+        }
+        if rightEndMissing {
+            details.append(L("Right end (volume button) not tested", "Extrémité droite (bouton du volume) non testée"))
+        } else if model.rightEndResponded {
+            details.append(L("Right end responds (volume changed from the Touch Bar)", "L'extrémité droite répond (volume changé depuis la Touch Bar)"))
+        }
+        let fullSummary = summary + (model.rightEndResponded ? L(" · right end responds", " · extrémité droite OK") : "")
+        if count == total && !rightEndMissing {
+            finish(TestResult(test: .touchBar, outcome: .passed, provenance: .measuredAuto, summary: fullSummary, details: details))
+        } else {
+            finish(TestResult(test: .touchBar, outcome: .failed, status: .watch, provenance: .measuredAuto, summary: fullSummary, details: details))
         }
     }
 }

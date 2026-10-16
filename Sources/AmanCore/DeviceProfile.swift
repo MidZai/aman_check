@@ -32,6 +32,9 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
     /// ils restent dans le profil, mais leur test guidé n'est pas proposé et le rapport les signale.
     /// Optionnel pour lire les rapports enregistrés avant son ajout.
     public var missingComponents: [MissingComponent]? = nil
+    /// Capteur d'angle de l'écran détecté sur ce Mac (MacBook Pro 16 pouces 2019 et suivants, selon les
+    /// modèles). Détecté, jamais déduit du catalogue : `nil` en simulation et dans les anciens rapports.
+    public var hasLidAngleSensor: Bool? = nil
 
     public var isRecognized: Bool { model != nil }
     /// Portables et iMac ; Mac mini, Mac Studio et Mac Pro n'ont pas d'écran intégré.
@@ -93,9 +96,11 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
         public var hasBiometrics: Bool?
         public var hasT2: Bool?
         public var isAppleSilicon: Bool?
+        public var hasLidAngleSensor: Bool?
 
         public init(hasBattery: Bool? = nil, hasBuiltInCamera: Bool? = nil, hasBiometrics: Bool? = nil,
-                    hasT2: Bool? = nil, isAppleSilicon: Bool? = nil) {
+                    hasT2: Bool? = nil, isAppleSilicon: Bool? = nil, hasLidAngleSensor: Bool? = nil) {
+            self.hasLidAngleSensor = hasLidAngleSensor
             self.hasBattery = hasBattery
             self.hasBuiltInCamera = hasBuiltInCamera
             self.hasBiometrics = hasBiometrics
@@ -153,7 +158,8 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
             hasSDSlot: model?.hasSDSlot ?? false,
             hasHDMI: model?.hasHDMI ?? false,
             hasMagSafe: model?.hasMagSafe ?? false,
-            missingComponents: missing.isEmpty ? nil : missing
+            missingComponents: missing.isEmpty ? nil : missing,
+            hasLidAngleSensor: isLaptop ? d.hasLidAngleSensor : nil
         )
     }
 

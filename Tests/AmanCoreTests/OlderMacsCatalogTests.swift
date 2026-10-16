@@ -26,7 +26,8 @@ struct OlderMacsCatalogTests {
         // MacBook Pro 2017 à Touch Bar : tous les tests guidés, clavier sans touche Échap.
         let p = DeviceProfile.make(modelIdentifier: "MacBookPro14,3", simulated: true)
         #expect(p.isRecognized && p.kind == .laptop && !p.hasPhysicalEscape)
-        #expect(Set(TestID.applicable(to: p)) == Set(TestID.allCases))
+        // Tous les tests, sauf l'angle de l'écran : il dépend d'une détection réelle, absente en simulation.
+        #expect(Set(TestID.applicable(to: p)) == Set(TestID.allCases).subtracting([.lidAngle]))
         #expect(MacOSRelease.name(13) == "macOS 13 Ventura")
     }
 

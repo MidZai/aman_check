@@ -151,6 +151,8 @@ private struct MachineHero: View {
             Text(controller.preview.joined(separator: " · "))
                 .font(.callout)
                 .foregroundStyle(.secondary)
+            LiveSensorsStrip(hasFan: controller.profile.hasFan)
+                .padding(.top, 4)
         }
     }
 }
@@ -248,6 +250,7 @@ private struct ResultsView: View {
                                empty: L("Nothing left to check.", "Plus rien à vérifier."))
                 }
 
+                LiveSensorsStrip(hasFan: controller.profile.hasFan)
                 MetricSectionView(section: .sensors)
                 MetricSectionView(section: .performance)
                 MetricSectionView(section: .connectivity)
