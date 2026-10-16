@@ -230,19 +230,3 @@ final class AmbientLightSensor {
         return value
     }
 }
-
-/// Capteur d'angle de l'écran, dans la charnière : usage 0x8A, champ 0x47F de 0 à 360, en degrés.
-/// Constaté sur le MacBookPro16,1 : périphérique Apple 0x8104, 123° écran ouvert.
-/// TODO: à valider sur machine réelle : MacBook Air et MacBook Pro Apple Silicon (présent sur certains modèles seulement).
-final class LidAngleSensor {
-    private let sensor: BuiltInHIDSensor
-
-    init?() {
-        guard let sensor = BuiltInHIDSensor(deviceUsage: 0x8A, elementUsage: 0x47F) else { return nil }
-        self.sensor = sensor
-    }
-
-    func degrees() -> Double? {
-        sensor.read(scaled: false).flatMap { SensorTests.isPlausibleLidAngle($0) ? $0 : nil }
-    }
-}

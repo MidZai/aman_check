@@ -250,7 +250,6 @@ private struct ResultsView: View {
                                empty: L("Nothing left to check.", "Plus rien à vérifier."))
                 }
 
-                LiveSensorsStrip(hasFan: controller.profile.hasFan)
                 MetricSectionView(section: .sensors)
                 MetricSectionView(section: .performance)
                 MetricSectionView(section: .connectivity)

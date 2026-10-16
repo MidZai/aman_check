@@ -3,7 +3,7 @@ import DiskHealthCore
 
 /// Tests guidés (spec §7). L'ordre est celui de l'assistant.
 public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
-    case screen, keyboard, touchBar, trackpad, speakers, microphone, camera, touchID, lidAngle, lid, ambientLight, keyboardBacklight, ports
+    case screen, keyboard, touchBar, trackpad, speakers, microphone, camera, touchID, lid, ambientLight, keyboardBacklight, ports
 
     public var id: String { rawValue }
 
@@ -17,7 +17,6 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
         case .microphone: return L("Microphone", "Micro")
         case .camera: return L("Camera", "Caméra")
         case .touchID: return "Touch ID"
-        case .lidAngle: return L("Screen angle sensor", "Capteur d'angle de l'écran")
         case .lid: return L("Lid sensor", "Capteur du capot")
         case .ambientLight: return L("Ambient light sensor", "Capteur de luminosité")
         case .keyboardBacklight: return L("Keyboard backlight", "Rétroéclairage du clavier")
@@ -35,7 +34,6 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
         case .microphone: return L("Level and recording", "Niveau et enregistrement")
         case .camera: return L("Live picture", "Image en direct")
         case .touchID: return L("Fingerprint reader", "Lecteur d'empreintes")
-        case .lidAngle: return L("Tilt the screen, no need to close it", "Inclinez l'écran, inutile de le fermer")
         case .lid: return L("Sleep when closed, wake when opened", "Veille à la fermeture, réveil à l'ouverture")
         case .ambientLight: return L("Automatic brightness, next to the camera", "Luminosité automatique, près de la caméra")
         case .keyboardBacklight: return L("Keys light up", "Les touches s'éclairent")
@@ -53,7 +51,6 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
         case .microphone: return "mic"
         case .camera: return "camera"
         case .touchID: return "touchid"
-        case .lidAngle: return "angle"
         case .lid: return "laptopcomputer"
         case .ambientLight: return "sun.max"
         case .keyboardBacklight: return "light.max"
@@ -73,7 +70,6 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
             case .microphone: return profile.hasBuiltInMic
             case .camera: return profile.hasBuiltInCamera && !profile.isMissing(.camera)
             case .touchID: return profile.hasTouchID && !profile.isMissing(.touchID)
-            case .lidAngle: return profile.hasLid && profile.hasLidAngleSensor == true
             case .lid: return profile.hasLid
             case .ambientLight: return profile.hasAmbientLightSensor
             case .keyboardBacklight: return profile.hasKeyboardBacklight

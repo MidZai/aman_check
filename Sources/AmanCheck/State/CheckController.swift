@@ -250,7 +250,6 @@ final class CheckController: ObservableObject {
         _ = context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
         // biometryType est renseigné même si aucune empreinte n'est enregistrée (erreur biometryNotEnrolled).
         d.hasBiometrics = context.biometryType == .touchID
-        d.hasLidAngleSensor = LidAngleSensor()?.degrees() != nil
         return d
     }
 

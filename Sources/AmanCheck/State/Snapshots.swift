@@ -34,7 +34,7 @@ enum Snapshots {
                 render(PerformanceView(runner: controller.performanceRunner).environmentObject(controller), size: CGSize(width: 1040, height: 1000),
                        to: dir.appendingPathComponent("3-performance-resultats.png"))
             }
-            for test in [TestID.screen, .keyboard, .touchBar, .trackpad, .speakers, .microphone, .lidAngle, .lid, .ambientLight, .keyboardBacklight, .ports] {
+            for test in [TestID.screen, .keyboard, .touchBar, .trackpad, .speakers, .microphone, .lid, .ambientLight, .keyboardBacklight, .ports] {
                 render(TestHost(test: test, profile: controller.profile) { _ in }.environmentObject(controller),
                        size: CGSize(width: 1040, height: 720), to: dir.appendingPathComponent("4-test-\(test.rawValue).png"))
             }
