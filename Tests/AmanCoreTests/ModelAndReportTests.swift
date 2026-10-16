@@ -26,7 +26,8 @@ struct MeasurementTests {
                    MetricID.storageDataWritten, MetricID.storagePercentageUsed, MetricID.storageAvailableSpare,
                    MetricID.storageMediaErrors, MetricID.storageTemperature, MetricID.storageModel,
                    MetricID.storageInterface, MetricID.wifi, MetricID.bluetooth,
-                   MetricID.batteryPresence, MetricID.cameraPresence, MetricID.touchIDPresence]
+                   MetricID.batteryPresence, MetricID.cameraPresence, MetricID.touchIDPresence,
+                   MetricID.fanCount, MetricID.fanSpeed, MetricID.cpuTemperature]
         #expect(Set(ids).count == MetricCatalog.allIDs.count)
         for id in ids {
             #expect(MetricCatalog.contains(id), "\(id) sans libellé")
@@ -207,9 +208,9 @@ struct ReportTests {
         #expect(s.watch == 1)
         #expect(s.problem == 1)
         #expect(s.toCheck == 1)     // mot de passe firmware
-        #expect(s.notTested == 8)   // 9 tests prévus (Touch Bar comprise), 1 réussi
+        #expect(s.notTested == 11)  // 12 tests prévus (Touch Bar et 3 capteurs compris), 1 réussi
         #expect(s.testsDone == 1)
-        #expect(s.testsPlanned == 9)
+        #expect(s.testsPlanned == 12)
         #expect(s.blockers.map(\.id) == [MetricID.activationLock])
     }
 
@@ -320,7 +321,7 @@ struct MissingComponentTests {
                                      tests: [], plannedTests: TestID.applicable(to: profile))
         let summary = ReportSummary(report: report)
         #expect(summary.problem == 1)
-        #expect(summary.notTested == 8)
+        #expect(summary.notTested == 11)
     }
 }
 

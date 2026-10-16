@@ -3,7 +3,7 @@ import DiskHealthCore
 
 /// Tests guidés (spec §7). L'ordre est celui de l'assistant.
 public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
-    case screen, keyboard, touchBar, trackpad, speakers, microphone, camera, touchID, ports
+    case screen, keyboard, touchBar, trackpad, speakers, microphone, camera, touchID, lid, ambientLight, keyboardBacklight, ports
 
     public var id: String { rawValue }
 
@@ -17,6 +17,9 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
         case .microphone: return L("Microphone", "Micro")
         case .camera: return L("Camera", "Caméra")
         case .touchID: return "Touch ID"
+        case .lid: return L("Lid sensor", "Capteur du capot")
+        case .ambientLight: return L("Ambient light sensor", "Capteur de luminosité")
+        case .keyboardBacklight: return L("Keyboard backlight", "Rétroéclairage du clavier")
         case .ports: return L("Ports", "Ports et connecteurs")
         }
     }
@@ -31,6 +34,9 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
         case .microphone: return L("Level and recording", "Niveau et enregistrement")
         case .camera: return L("Live picture", "Image en direct")
         case .touchID: return L("Fingerprint reader", "Lecteur d'empreintes")
+        case .lid: return L("Sleep when closed, wake when opened", "Veille à la fermeture, réveil à l'ouverture")
+        case .ambientLight: return L("Automatic brightness, next to the camera", "Luminosité automatique, près de la caméra")
+        case .keyboardBacklight: return L("Keys light up", "Les touches s'éclairent")
         case .ports: return L("USB-C, charging, video, headphones", "USB-C, charge, vidéo, casque")
         }
     }
@@ -45,6 +51,9 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
         case .microphone: return "mic"
         case .camera: return "camera"
         case .touchID: return "touchid"
+        case .lid: return "laptopcomputer"
+        case .ambientLight: return "sun.max"
+        case .keyboardBacklight: return "light.max"
         case .ports: return "cable.connector"
         }
     }
@@ -61,6 +70,9 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
             case .microphone: return profile.hasBuiltInMic
             case .camera: return profile.hasBuiltInCamera && !profile.isMissing(.camera)
             case .touchID: return profile.hasTouchID && !profile.isMissing(.touchID)
+            case .lid: return profile.hasLid
+            case .ambientLight: return profile.hasAmbientLightSensor
+            case .keyboardBacklight: return profile.hasKeyboardBacklight
             case .ports: return true
             }
         }

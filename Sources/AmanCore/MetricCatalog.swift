@@ -53,6 +53,11 @@ public enum MetricID {
     public static let storageModel = "storage.model"
     public static let storageInterface = "storage.interface"
 
+    // Capteurs
+    public static let fanCount = "sensors.fan_count"
+    public static let fanSpeed = "sensors.fan_speed"
+    public static let cpuTemperature = "sensors.cpu_temperature"
+
     // Connectivité
     public static let wifi = "connectivity.wifi"
     public static let bluetooth = "connectivity.bluetooth"
@@ -64,7 +69,7 @@ public enum MetricLevel: String, Codable, Sendable {
 }
 
 public enum MetricSection: String, Codable, Sendable, CaseIterable {
-    case locks, identity, battery, storage, connectivity, security
+    case locks, identity, battery, storage, sensors, connectivity, security
 
     public var title: String {
         switch self {
@@ -72,6 +77,7 @@ public enum MetricSection: String, Codable, Sendable, CaseIterable {
         case .identity: return L("Configuration", "Configuration")
         case .battery: return L("Battery", "Batterie")
         case .storage: return L("Storage", "Stockage")
+        case .sensors: return L("Sensors", "Capteurs")
         case .connectivity: return L("Wireless", "Sans fil")
         case .security: return L("System protection", "Protection du système")
         }
@@ -201,6 +207,16 @@ public enum MetricCatalog {
             m(MetricID.storageTemperature, "SSD temperature", "Température du SSD", .storage, .advanced, judged: false),
             m(MetricID.storageModel, "SSD model", "Modèle du SSD", .storage, .advanced, judged: false),
             m(MetricID.storageInterface, "Interface", "Interface", .storage, .advanced, judged: false),
+
+            m(MetricID.fanCount, "Fans", "Ventilateurs", .sensors, .essential, judged: true,
+              help: ("Number of fans the Mac reports. MacBook Air models with Apple silicon have none.",
+                     "Nombre de ventilateurs signalés par le Mac. Les MacBook Air à puce Apple n'en ont pas.")),
+            m(MetricID.fanSpeed, "Fan speed", "Vitesse des ventilateurs", .sensors, .essential, judged: false,
+              help: ("Current speed, read from the system management controller (SMC).",
+                     "Vitesse actuelle, lue dans le contrôleur de gestion du système (SMC).")),
+            m(MetricID.cpuTemperature, "Processor temperature", "Température du processeur", .sensors, .essential, judged: true,
+              help: ("Read from the processor's sensors at the time of the check. A single reading is only indicative: it is never a problem on its own.",
+                     "Lue sur les sondes du processeur au moment du contrôle. Une seule mesure n'est qu'indicative : elle n'est jamais un problème à elle seule.")),
 
             m(MetricID.wifi, "Wi-Fi", "Wi-Fi", .connectivity, .essential, judged: true),
             m(MetricID.bluetooth, "Bluetooth", "Bluetooth", .connectivity, .essential, judged: true)

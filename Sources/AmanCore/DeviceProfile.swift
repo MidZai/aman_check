@@ -65,6 +65,22 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
     }
     public var isLaptop: Bool { kind == .laptop }
 
+    // Capteurs (spec §6.6). Calculés plutôt qu'enregistrés : les rapports déjà enregistrés se relisent tels quels.
+    /// Capteur de fermeture du capot : portables.
+    public var hasLid: Bool { isLaptop }
+    /// Capteur de luminosité ambiante : portables et iMac (près de la caméra).
+    public var hasAmbientLightSensor: Bool { isLaptop || kind == .iMac }
+    /// Clavier rétroéclairé : tous les portables du catalogue (2016 et suivants).
+    public var hasKeyboardBacklight: Bool { isLaptop }
+    /// Ventilateur : tous les Mac du catalogue sauf les MacBook Air Apple Silicon et le MacBook 12 pouces.
+    /// `nil` : modèle non reconnu.
+    public var hasFan: Bool? {
+        guard let model else { return nil }
+        if model.family == "MacBook" { return false }
+        if model.family == "MacBook Air" && model.chip == .appleSilicon { return false }
+        return true
+    }
+
     /// Nom commercial, ou l'identifiant brut si le modèle n'est pas reconnu.
     public var displayName: String {
         model?.displayName ?? modelIdentifier
