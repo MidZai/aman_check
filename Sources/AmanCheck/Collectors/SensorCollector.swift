@@ -47,16 +47,40 @@ enum SensorCollector {
         return reading
     }
 
-    /// Vitesses actuelles des ventilateurs (pendant le test de performance).
-    static func fanSpeeds() -> [Double?] {
-        let connection = aman_smc_open()
-        guard connection != 0 else { return [] }
-        defer { aman_smc_close(connection) }
-        let count = value(connection, "FNum").map { Int($0) } ?? 0
-        return (0..<min(count, 4)).map { value(connection, "F\($0)Ac") }
+    /// Relevés répétés pendant le test de performance : une connexion, et les clés de température
+    /// trouvées une fois (sur Apple Silicon, parcourir toutes les clés à chaque relevé serait trop lent).
+    final class Session {
+        private let connection: UInt32
+        private var temperatureKeys: [String]?
+        private let fanCount: Int
+
+        init?() {
+            connection = aman_smc_open()
+            guard connection != 0 else { return nil }
+            fanCount = SensorCollector.value(connection, "FNum").map { Int($0) } ?? 0
+        }
+
+        deinit { aman_smc_close(connection) }
+
+        /// Ventilateur le plus rapide, en tr/min ; `nil` : illisible ou pas de ventilateur.
+        func fastestFan() -> Double? {
+            (0..<min(fanCount, 4)).compactMap { SensorCollector.value(connection, "F\($0)Ac") }
+                .filter(SMCValue.isPlausibleFanSpeed).max()
+        }
+
+        func cpuTemperature() -> Double? {
+            if temperatureKeys == nil {
+                if let key = SMCValue.intelCPUTemperatureKeys.first(where: { SensorCollector.value(connection, $0).map(SMCValue.isPlausibleTemperature) == true }) {
+                    temperatureKeys = [key]
+                } else {
+                    temperatureKeys = SensorCollector.cpuCoreTemperatures(connection).map(\.0)
+                }
+            }
+            return SensorAnalysis.averageTemperature((temperatureKeys ?? []).compactMap { SensorCollector.value(connection, $0) })
+        }
     }
 
-    private static func value(_ connection: UInt32, _ key: String) -> Double? {
+    fileprivate static func value(_ connection: UInt32, _ key: String) -> Double? {
         var type: (CChar, CChar, CChar, CChar, CChar) = (0, 0, 0, 0, 0)
         var bytes = [UInt8](repeating: 0, count: 32)
         var size: UInt32 = 0
@@ -72,7 +96,7 @@ enum SensorCollector {
         return SMCValue.decode(type: typeString, bytes: Array(bytes.prefix(Int(size))))
     }
 
-    private static func cpuCoreTemperatures(_ connection: UInt32) -> [(String, Double)] {
+    fileprivate static func cpuCoreTemperatures(_ connection: UInt32) -> [(String, Double)] {
         guard let total = value(connection, "#KEY"), total > 0, total < 10_000 else { return [] }
         var result: [(String, Double)] = []
         var key: (CChar, CChar, CChar, CChar, CChar) = (0, 0, 0, 0, 0)

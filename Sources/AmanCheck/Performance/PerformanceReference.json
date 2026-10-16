@@ -1,0 +1,7 @@
+{
+  "Intel(R) Core(TM) i9-9980HK CPU @ 2.40GHz": {
+    "cpu_gflops": 171,
+    "gpu_gflops": null,
+    "source": "MacBookPro16,1, Aman Check 1.0.1, 2026-10-16, on power adapter, after cooling (CPU only: the same processor ships with several GPUs)"
+  }
+}

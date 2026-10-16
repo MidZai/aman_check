@@ -71,6 +71,9 @@ let package = Package(
         .executableTarget(
             name: "AmanCheck",
             dependencies: ["AmanCore", "AmanDesign", "AmanStorageKit", "DiskHealthCore", "CSMC"],
+            // Table de référence du test de performance : copiée par build_app.sh dans Contents/Resources
+            // (pas de ressource SwiftPM : Bundle.module chercherait le dossier .build de la machine de compilation).
+            exclude: ["Performance/PerformanceReference.json"],
             linkerSettings: [
                 .linkedFramework("IOKit"),
                 .linkedFramework("CoreWLAN"),
@@ -78,7 +81,9 @@ let package = Package(
                 .linkedFramework("LocalAuthentication"),
                 .linkedFramework("AVFoundation"),
                 .linkedFramework("CoreAudio"),
-                .linkedFramework("Carbon")
+                .linkedFramework("Carbon"),
+                .linkedFramework("Accelerate"),
+                .linkedFramework("Metal")
             ]
         ),
         // Export du catalogue de libellés pour la page publique du niveau 2 (server/src/catalog.json).

@@ -58,6 +58,15 @@ public enum MetricID {
     public static let fanSpeed = "sensors.fan_speed"
     public static let cpuTemperature = "sensors.cpu_temperature"
 
+    // Performance (lancée par la personne)
+    public static let performanceStability = "performance.stability"
+    public static let performanceCPU = "performance.cpu"
+    public static let performanceGPU = "performance.gpu"
+    public static let performanceMemory = "performance.memory"
+    public static let performanceFans = "performance.fans"
+    public static let performancePeakTemperature = "performance.peak_temperature"
+    public static let performanceConditions = "performance.conditions"
+
     // Connectivité
     public static let wifi = "connectivity.wifi"
     public static let bluetooth = "connectivity.bluetooth"
@@ -69,7 +78,7 @@ public enum MetricLevel: String, Codable, Sendable {
 }
 
 public enum MetricSection: String, Codable, Sendable, CaseIterable {
-    case locks, identity, battery, storage, sensors, connectivity, security
+    case locks, identity, battery, storage, sensors, performance, connectivity, security
 
     public var title: String {
         switch self {
@@ -78,6 +87,7 @@ public enum MetricSection: String, Codable, Sendable, CaseIterable {
         case .battery: return L("Battery", "Batterie")
         case .storage: return L("Storage", "Stockage")
         case .sensors: return L("Sensors", "Capteurs")
+        case .performance: return L("Performance", "Performance")
         case .connectivity: return L("Wireless", "Sans fil")
         case .security: return L("System protection", "Protection du système")
         }
@@ -217,6 +227,22 @@ public enum MetricCatalog {
             m(MetricID.cpuTemperature, "Processor temperature", "Température du processeur", .sensors, .essential, judged: true,
               help: ("Read from the processor's sensors at the time of the check. A single reading is only indicative: it is never a problem on its own.",
                      "Lue sur les sondes du processeur au moment du contrôle. Une seule mesure n'est qu'indicative : elle n'est jamais un problème à elle seule.")),
+
+            m(MetricID.performanceStability, "Stability under load", "Stabilité sous charge", .performance, .essential, judged: true,
+              help: ("Compares the first seconds of the test with the last ones. A Mac that cools badly slows down as it heats up.",
+                     "Compare les premières secondes du test aux dernières. Un Mac qui refroidit mal ralentit à mesure qu'il chauffe.")),
+            m(MetricID.performanceCPU, "Processor", "Processeur", .performance, .essential, judged: true,
+              help: ("Calculation speed of all the cores together. Not a score: it is compared only with the same chip, when a reference exists.",
+                     "Vitesse de calcul de tous les cœurs ensemble. Ce n'est pas une note : elle n'est comparée qu'à la même puce, quand une référence existe.")),
+            m(MetricID.performanceGPU, "Graphics (GPU)", "Graphisme (GPU)", .performance, .essential, judged: true,
+              help: ("Calculation speed of the graphics processor, measured with Metal.",
+                     "Vitesse de calcul du processeur graphique, mesurée avec Metal.")),
+            m(MetricID.performanceFans, "Fans under load", "Ventilateurs sous charge", .performance, .essential, judged: true,
+              help: ("Speed of the fans at the start of the test and at its peak.",
+                     "Vitesse des ventilateurs au début du test et au plus fort.")),
+            m(MetricID.performanceMemory, "Memory copy", "Copie mémoire", .performance, .advanced, judged: false),
+            m(MetricID.performancePeakTemperature, "Peak processor temperature", "Température maximale du processeur", .performance, .advanced, judged: false),
+            m(MetricID.performanceConditions, "Test conditions", "Conditions du test", .performance, .advanced, judged: false),
 
             m(MetricID.wifi, "Wi-Fi", "Wi-Fi", .connectivity, .essential, judged: true),
             m(MetricID.bluetooth, "Bluetooth", "Bluetooth", .connectivity, .essential, judged: true)

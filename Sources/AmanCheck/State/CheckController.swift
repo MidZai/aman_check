@@ -39,13 +39,14 @@ enum AnalysisStep: String, CaseIterable, Identifiable {
 enum StepState { case pending, running, done }
 
 enum SidebarItem: String, Hashable, CaseIterable, Identifiable {
-    case overview, tests, report
+    case overview, tests, performance, report
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .overview: return L("Check", "Contrôle")
         case .tests: return L("Guided tests", "Tests guidés")
+        case .performance: return L("Performance", "Performance")
         case .report: return L("Report", "Rapport")
         }
     }
@@ -54,6 +55,7 @@ enum SidebarItem: String, Hashable, CaseIterable, Identifiable {
         switch self {
         case .overview: return "checklist"
         case .tests: return "hand.tap"
+        case .performance: return "speedometer"
         case .report: return "doc.text"
         }
     }
@@ -69,6 +71,9 @@ final class CheckController: ObservableObject {
     @Published private(set) var profile: DeviceProfile
     @Published private(set) var measurements: [Measurement] = []
     @Published private(set) var results: [TestID: TestResult] = [:]
+    /// Test de performance (§7.8) : « Non testé » tant que la personne ne l'a pas lancé.
+    @Published private(set) var performance: [Measurement] = PerformanceAnalysis.notRun()
+    let performanceRunner = PerformanceRunner()
     @Published private(set) var analyzedAt: Date?
     /// Aperçu affiché sur l'accueil, avant le contrôle (lectures instantanées).
     @Published private(set) var preview: [String] = []
@@ -95,10 +100,13 @@ final class CheckController: ObservableObject {
 
     var plannedTests: [TestID] { TestID.applicable(to: profile) }
 
-    func measurement(_ id: String) -> Measurement? { measurements.first { $0.id == id } }
+    func measurement(_ id: String) -> Measurement? { allMeasurements.first { $0.id == id } }
+
+    /// Analyse automatique et test de performance : ce que montre et exporte le rapport.
+    var allMeasurements: [Measurement] { measurements + performance }
 
     func measurements(in section: MetricSection, level: MetricLevel? = nil) -> [Measurement] {
-        measurements.filter {
+        allMeasurements.filter {
             let info = MetricCatalog.info(for: $0.id)
             return info.section == section && (level == nil || info.level == level)
         }
@@ -106,7 +114,7 @@ final class CheckController: ObservableObject {
 
     var report: ConditionReport {
         ConditionReport(reportID: reportID, generatedAt: analyzedAt ?? Date(), appVersion: AppInfo.version, profile: profile,
-                        measurements: measurements,
+                        measurements: allMeasurements,
                         tests: TestResult.belonging(toAnalysisStartedAt: analysisStartedAt, plannedTests.compactMap { results[$0] }),
                         plannedTests: plannedTests,
                         sellerName: sellerName.trimmingCharacters(in: .whitespaces).isEmpty ? nil : sellerName)
@@ -190,6 +198,40 @@ final class CheckController: ObservableObject {
 
     func resetTests() {
         results = [:]
+    }
+
+    // MARK: Performance
+
+    /// Table de référence (Contents/Resources/PerformanceReference.json) ; vide si absente.
+    static let performanceReference: PerformanceReference = {
+        let url = Bundle.main.url(forResource: "PerformanceReference", withExtension: "json")
+        return PerformanceReference(json: url.flatMap { try? Data(contentsOf: $0) })
+    }()
+
+    func runPerformance() {
+        performanceRunner.start { [weak self] run in
+            guard let self else { return }
+            if let run {
+                self.performance = PerformanceAnalysis.measurements(run, reference: Self.performanceReference, expectsFan: self.profile.hasFan)
+                for m in self.performance {
+                    DiagnosticLog.shared.log("performance", "\(m.id) = \(m.displayText) [\(m.status.rawValue)]")
+                }
+            } else {
+                self.performance = PerformanceAnalysis.notRun(cancelled: true)
+            }
+        }
+    }
+
+    /// Mode --snapshot --performance : attend la fin du test.
+    func runPerformanceAndWait() async {
+        await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+            performanceRunner.start { [weak self] run in
+                if let self, let run {
+                    self.performance = PerformanceAnalysis.measurements(run, reference: Self.performanceReference, expectsFan: self.profile.hasFan)
+                }
+                continuation.resume()
+            }
+        }
     }
 
     // MARK: Détection matérielle

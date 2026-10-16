@@ -49,6 +49,7 @@ struct ContentView: View {
         switch controller.selection ?? .overview {
         case .overview: OverviewView()
         case .tests: TestsView()
+        case .performance: PerformanceView(runner: controller.performanceRunner)
         case .report: ReportScreen()
         }
     }
@@ -150,7 +151,7 @@ private struct SidebarRow: View {
             Text("\(done)/\(controller.plannedTests.count)")
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(.secondary)
-        case .report:
+        case .performance, .report:
             EmptyView()
         }
     }
