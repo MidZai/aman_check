@@ -1,6 +1,6 @@
 # Aman Check — à vérifier à la main sur le MacBookPro16,1
 
-Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (85 tests).
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (110 tests).
 Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
 
 | Test | Ce qu'il faut constater | Critère |
@@ -19,7 +19,20 @@ Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (
 Profils simulés (sans ces Mac) : `Aman Check.app/Contents/MacOS/AmanCheck --simulate-model Macmini9,1`
 (aussi iMac21,1, Mac13,1, MacBookAir10,1, MacBookPro15,1, MacBookPro18,3).
 
+## Capteurs (§6.6)
+
+| Test | Ce qu'il faut constater | Critère |
+|---|---|---|
+| Ventilateurs | Section « Capteurs » : 2 ventilateurs, vitesses plausibles, température du processeur ; Avancé : clés lues (`FNum, F0Ac, F1Ac, TCXC`) | §6.6 |
+| Capot | Commencer, fermer le capot 5 s, rouvrir : « Fermeture et ouverture du capot détectées par le capteur » sans question | §6.6 |
+| Capot + écran externe | Écran externe branché : consigne « le Mac ne se mettra pas en veille… », capot fermé/rouvert détecté quand même | §6.6 |
+| Luminosité | Luminosité automatique activée, capteur couvert : « Luminosité de l'écran passée de X à Y » (lecture IODisplay sur Intel) ; désactivée : question, « La luminosité automatique est désactivée » → Non testé | §6.6 |
+| Rétroéclairage | Consigne adaptée à la Touch Bar ; Oui / Non | §6.6 |
+
+Vérifié automatiquement sur le MacBookPro16,1 : lecture du SMC sans droits (2 ventilateurs en `flt`, sondes en `sp78`), `AppleClamshellState` lisible (« No » capot ouvert), luminosité de l'écran lisible par IODisplay. Pas vérifié à la main : la fermeture réelle du capot pendant le test, la luminosité capteur couvert.
+
 ## Non validé (pas de machine disponible)
+- Capteurs sur Apple Silicon : clés de température `Tp*` (M1, M2 ; M3 et M4 peuvent utiliser d'autres préfixes → « Non disponible »), type des clés de ventilateur, `AppleClamshellState`, et luminosité par IODisplay (probablement illisible : la question est alors posée). MacBook Air M1+ : « Pas de ventilateur sur ce modèle ». Mac de bureau : section Capteurs sans test du capot.
 - Apple Silicon : clés batterie (`MaxCapacity` en %, `NominalChargeCapacity`), « Capacité maximale » de SPPowerDataType, `sppci_cores`, classes des ports USB, `UsbCPortNumber`.
 - Mac de bureau réels, Mac Intel sans T2 (Activation Lock non lisible).
 - Touches F1–F12 physiques (keyCodes média, Mission Control 160, Launchpad 131), lecteur SD, HDMI.

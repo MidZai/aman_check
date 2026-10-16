@@ -210,6 +210,32 @@ Optionnel : lien vers la vérification de couverture Apple (checkcoverage.apple.
 - **Bluetooth :** contrôleur présent et allumable (CoreBluetooth / IOBluetooth). Déclarer `NSBluetoothAlwaysUsageDescription`.
 - **Ports :** test guidé « branchez un périphérique USB dans chaque port » avec détection d'arrivée via notifications IOKit USB. Résultat par port (mesuré). Port de charge : détecté via l'état d'alimentation de la batterie quand on branche le chargeur.
 
+### 6.6 Capteurs
+
+Section « Capteurs » de l'analyse automatique (ventilateurs, température), et trois tests guidés (capot, luminosité ambiante, rétroéclairage du clavier). Origine : un acheteur a reçu un Mac dont le capteur de réveil était défectueux, ce qu'aucun contrôle ne voyait. Les verdicts sont décidés dans `AmanCore/SensorAnalysis.swift` (testés) ; la lecture est faite par l'app (`SensorCollector`, cible C `CSMC`).
+
+| Capteur | Libellé FR / EN | Source | Provenance | Machines |
+|---|---|---|---|---|
+| Ventilateurs | « Ventilateurs » / « Fans » | SMC, clé `FNum` | Mesuré automatiquement | Tous (« Pas de ventilateur sur ce modèle » pour MacBook Air Apple Silicon et MacBook 12 pouces, d'après le catalogue) |
+| Vitesse | « Vitesse des ventilateurs » / « Fan speed » | SMC, `F0Ac`, `F1Ac`… | Mesuré automatiquement | Mac avec ventilateur |
+| Température du processeur | « Température du processeur » / « Processor temperature » | SMC : Intel `TCXC`, `TC0E`, `TC0F`, `TC0D`, `TC0P` (la première lisible) ; Apple Silicon moyenne des clés `Tp*` | Mesuré automatiquement | Tous |
+| Capot | « Capteur du capot » / « Lid sensor » | `AppleClamshellState` (IOPMrootDomain), notifications de veille et de réveil (`NSWorkspace`) ; sinon réponse de la personne | Mesuré automatiquement, ou Constaté par l'utilisateur | Portables |
+| Luminosité ambiante | « Capteur de luminosité » / « Ambient light sensor » | Luminosité de l'écran intégré par `IODisplayGetFloatParameter` (interface publique, Intel) ; sinon réponse de la personne. Pas d'API privée (`AppleLMUController` n'est pas utilisé) | Mesuré automatiquement, ou Constaté par l'utilisateur | Portables et iMac |
+| Rétroéclairage du clavier | « Rétroéclairage du clavier » / « Keyboard backlight » | Question à la personne | Constaté par l'utilisateur | Portables |
+
+**Lecture du SMC :** client utilisateur `AppleSMC`, lecture seule, sans droits administrateur. Le décodage suit le type annoncé par le SMC (`ui8`, `ui16`, `ui32`, `sp78`, `fpe2`, `flt`), pas la puce : sur le MacBookPro16,1, les vitesses sont en `flt` et les températures en `sp78`. Valeurs hors plage (température hors 5–130 °C, vitesse hors 0–12 000 tr/min) écartées, jamais affichées comme zéro.
+
+**États :**
+- Ventilateurs : *Information* (nombre lu, ou « Pas de ventilateur sur ce modèle ») ; *À surveiller* si le modèle a un ventilateur et que le Mac n'en signale aucun ; *Non disponible* si le SMC est illisible.
+- Vitesse : *Information* seulement (au repos, un ventilateur peut être arrêté) ; leur réaction sous charge est jugée par le test de performance (§7.8).
+- Température : *Information* ; *À surveiller* à partir de 95 °C au repos (seuil indicatif). **Jamais « problème » sur une seule température.**
+- Capot : *Bon* si la fermeture et la réouverture sont vues par le capteur, ou la veille et le réveil par les notifications ; sinon question « L'écran s'est-il éteint à la fermeture du capot, et rallumé à l'ouverture ? » : oui → *Bon* (constaté) ; oui alors que l'état du capot était lisible et n'a pas bougé → *À surveiller* ; non → *Problème*. **Écran externe branché :** le Mac ne se met pas en veille capot fermé ; si l'état du capot est lisible, le test continue en le surveillant directement, sinon il demande de débrancher l'écran ou de passer (→ *Non testé*).
+- Luminosité : baisse d'au moins 5 points de la luminosité de l'écran capteur couvert → *Bon* (mesuré). Sinon question : changement vu → *Bon* (constaté) ; aucun changement → *À surveiller* (capteur défectueux, ou pièce trop sombre) ; « La luminosité automatique est désactivée » → *Non testé* (à vérifier à la main), sans conclure.
+- Rétroéclairage : oui → *Bon*, non → *Problème* (constaté).
+- Tout test sauté ou interrompu → *Non testé*.
+
+**Hors périmètre :** Touch ID (déjà testé), accéléromètre / capteur de mouvement (absent des Mac récents), capteur de charnière (trop incertain).
+
 ---
 
 ## 7. Tests interactifs
@@ -245,7 +271,7 @@ Chaque test se termine par un état : **Réussi · Échoué · Ignoré · Interr
 - Détecter la présence via `LocalAuthentication` (`canEvaluatePolicy`). Test = demande d'authentification biométrique ; succès/échec mesurés. Si absent : `notApplicable`.
 
 ### 7.7 Hors périmètre du MVP
-- Stress test CPU/GPU prolongé, benchmarks, test de ventilateurs et capteurs thermiques (SMC non documenté), test de charge de batterie. À étudier plus tard ; le rendez-vous d'achat doit durer **quelques minutes**, pas une heure.
+- Stress test CPU/GPU prolongé, benchmarks comparatifs, test de charge de batterie. Le rendez-vous d'achat doit durer **quelques minutes**, pas une heure. (Ventilateurs et capteurs : §6.6.)
 
 ---
 
