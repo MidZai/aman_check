@@ -437,7 +437,8 @@ struct AnalysisStartTests {
 @Suite("Point fort macOS")
 struct LatestMacOSTests {
     private func report() -> ConditionReport {
-        let profile = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true))
+        // Mac Apple silicon : encore pris en charge par la dernière version (un Mac Intel s'arrête à macOS 26).
+        let profile = DeviceProfile.make(modelIdentifier: "Mac14,2", detected: .init(hasBattery: true))
         return ConditionReport(appVersion: "test", profile: profile, measurements: [], tests: [], plannedTests: [])
     }
 

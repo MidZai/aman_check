@@ -68,14 +68,17 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
     // Capteurs (spec §6.6). Calculés plutôt qu'enregistrés : les rapports déjà enregistrés se relisent tels quels.
     /// Capteur de fermeture du capot : portables.
     public var hasLid: Bool { isLaptop }
-    /// Capteur de luminosité ambiante : portables et iMac (près de la caméra).
-    public var hasAmbientLightSensor: Bool { isLaptop || kind == .iMac }
-    /// Clavier rétroéclairé : tous les portables du catalogue (2016 et suivants).
-    public var hasKeyboardBacklight: Bool { isLaptop }
+    /// Capteur de luminosité ambiante : portables et iMac (près de la caméra), sauf le MacBook Neo (absent de sa fiche technique).
+    public var hasAmbientLightSensor: Bool { (isLaptop || kind == .iMac) && !isMacBookNeo }
+    /// Clavier rétroéclairé : tous les portables du catalogue (2016 et suivants), sauf le MacBook Neo.
+    public var hasKeyboardBacklight: Bool { isLaptop && !isMacBookNeo }
+    /// MacBook Neo (2026) : portable d'entrée de gamme, sans plusieurs équipements des autres portables.
+    var isMacBookNeo: Bool { model?.family == "MacBook Neo" }
     /// Ventilateur : tous les Mac du catalogue sauf les MacBook Air Apple Silicon et le MacBook 12 pouces.
-    /// `nil` : modèle non reconnu.
+    /// `nil` : modèle non reconnu, ou MacBook Neo (Apple ne le précise pas).
     public var hasFan: Bool? {
         guard let model else { return nil }
+        if isMacBookNeo { return nil }
         if model.family == "MacBook" { return false }
         if model.family == "MacBook Air" && model.chip == .appleSilicon { return false }
         return true
@@ -137,8 +140,8 @@ public struct DeviceProfile: Codable, Sendable, Equatable {
             hasBattery: missing.contains(.battery) ? expectedBattery : (d.hasBattery ?? isLaptop),
             hasBuiltInKeyboard: isLaptop,
             hasBuiltInTrackpad: isLaptop,
-            // Tous les portables pris en charge (2018 et plus) ont un trackpad Force Touch.
-            trackpadForceTouch: isLaptop,
+            // Tous les portables pris en charge (2018 et plus) ont un trackpad Force Touch, sauf le MacBook Neo.
+            trackpadForceTouch: isLaptop && model?.family != "MacBook Neo",
             hasTouchBar: model?.hasTouchBar ?? false,
             hasPhysicalFunctionRow: model?.hasFunctionRow ?? isLaptop,
             hasPhysicalEscape: model?.hasPhysicalEscape ?? isLaptop,

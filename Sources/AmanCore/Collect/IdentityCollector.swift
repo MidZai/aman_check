@@ -137,20 +137,22 @@ public enum IdentityCollector {
         return Output(measurements: result, hasT2: hasT2)
     }
 
-    public static func macOSMax(_ model: MacModel?, now: Date) -> Measurement {
+    /// `latest` : dernière version de macOS, ou celle en cours d'exécution si elle est plus récente que celle connue de l'app.
+    public static func macOSMax(_ model: MacModel?, now: Date,
+                                latest: Int = MacOSRelease.reference(runningMajor: ProcessInfo.processInfo.operatingSystemVersion.majorVersion)) -> Measurement {
         guard let model else {
             return .unavailable(MetricID.macOSMax, note: L("Model not recognized.", "Modèle non reconnu."))
         }
         let method = L("model table · Apple compatibility lists", "table des modèles · listes de compatibilité Apple")
         if let last = model.lastMacOS {
-            let isLatest = last >= MacOSRelease.latestKnown
+            let isLatest = last >= latest
             let detail: String
             if isLatest && model.chip != .appleSilicon {
                 detail = L("Latest version, and the last one for Intel Macs", "Version actuelle, et dernière pour les Mac Intel")
             } else if isLatest {
                 detail = L("Latest version", "Version actuelle")
             } else {
-                detail = L("Will not receive \(MacOSRelease.name(MacOSRelease.latestKnown))", "Ne recevra pas \(MacOSRelease.name(MacOSRelease.latestKnown))")
+                detail = L("Will not receive \(MacOSRelease.name(latest))", "Ne recevra pas \(MacOSRelease.name(latest))")
             }
             // macOS 10.x (Mac anciens, Aman Legacy) : la version mineure distingue High Sierra, Mojave et Catalina.
             let minor = model.lastMacOSMinor ?? 0
@@ -158,8 +160,8 @@ public enum IdentityCollector {
                                provenance: .derived, method: method, collectedAt: now,
                                display: MacOSRelease.name(last, minor: minor), detail: detail, note: model.lastMacOSNote)
         }
-        return Measurement(id: MetricID.macOSMax, value: .int(Int64(MacOSRelease.latestKnown)), status: .info, provenance: .derived, method: method,
-                           collectedAt: now, display: MacOSRelease.name(MacOSRelease.latestKnown),
+        return Measurement(id: MetricID.macOSMax, value: .int(Int64(latest)), status: .info, provenance: .derived, method: method,
+                           collectedAt: now, display: MacOSRelease.name(latest),
                            detail: L("Still supported by Apple", "Toujours pris en charge par Apple"))
     }
 

@@ -29,7 +29,8 @@ public enum ChipFamily: String, Codable, Sendable {
 /// et modèles plus anciens, jusqu'à macOS 10.13 (`olderLaptops`, `olderDesktops` ; ceux de macOS 13 servent aussi à Aman Check).
 ///
 /// Sources : pages d'assistance Apple « Identifier votre MacBook Pro / MacBook Air / iMac /
-/// Mac mini / Mac Studio / Mac Pro » et listes de compatibilité de macOS 14, 15 et 26.
+/// Mac mini / Mac Studio / Mac Pro » et listes de compatibilité de macOS 14, 15, 26 et 27 (tous les Mac Apple silicon,
+/// aucun Mac Intel). Vérifié le 18 octobre 2026.
 /// TODO: à revérifier à chaque nouvelle version de macOS (macOS maximal) et à chaque nouveau Mac.
 public struct MacModel: Codable, Sendable, Hashable {
     public let identifiers: [String]
@@ -82,8 +83,8 @@ public struct MacModel: Codable, Sendable, Hashable {
 /// Noms commerciaux des versions de macOS.
 public enum MacOSRelease {
     /// Dernière version majeure connue de cette version de l'app.
-    public static let latestKnown = 26
-    /// Dernière version majeure annoncée par Apple pour les Mac Intel (WWDC 2025).
+    public static let latestKnown = 27
+    /// Dernière version majeure pour les Mac Intel (annoncé à la WWDC 2025 ; macOS 27 ne les prend pas en charge).
     public static let lastForIntel = 26
 
     /// Référence « dernier macOS » : la version en cours d'exécution si elle dépasse celle connue de l'app.
@@ -103,6 +104,7 @@ public enum MacOSRelease {
         case (14, _): return "Sonoma"
         case (15, _): return "Sequoia"
         case (26, _): return "Tahoe"
+        case (27, _): return "Golden Gate"
         default: return nil
         }
     }
@@ -171,6 +173,11 @@ public enum MacModelCatalog {
         laptop(["Mac15,13"], "MacBook Air", inches: 15, year: 2024, variant: "M3", chip: .appleSilicon, ports: 2, magSafe: true),
         laptop(["Mac16,12"], "MacBook Air", inches: 13, year: 2025, variant: "M4", chip: .appleSilicon, ports: 2, magSafe: true),
         laptop(["Mac16,13"], "MacBook Air", inches: 15, year: 2025, variant: "M4", chip: .appleSilicon, ports: 2, magSafe: true),
+        laptop(["Mac17,3"], "MacBook Air", inches: 13, year: 2026, variant: "M5", chip: .appleSilicon, ports: 2, magSafe: true),
+        laptop(["Mac17,4"], "MacBook Air", inches: 15, year: 2026, variant: "M5", chip: .appleSilicon, ports: 2, magSafe: true),
+        // MacBook Neo (puce A18 Pro) : deux ports USB-C sans Thunderbolt, Touch ID seulement sur la version 512 Go
+        // (détecté à l'exécution), clavier non rétroéclairé, trackpad sans Force Touch (DeviceProfile).
+        laptop(["Mac17,5"], "MacBook Neo", inches: 13, year: 2026, chip: .appleSilicon, ports: 2, touchID: false),
 
         // MacBook Pro Intel (Touch Bar)
         laptop(["MacBookPro15,1"], "MacBook Pro", inches: 15, year: 2018, alsoYear: 2019, chip: .intelT2, touchBar: true, physicalEscape: false, ports: 4, lastMacOS: 15),
@@ -192,7 +199,10 @@ public enum MacModelCatalog {
         laptop(["Mac15,7", "Mac15,9", "Mac15,11"], "MacBook Pro", inches: 16, year: 2023, chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true),
         laptop(["Mac16,1"], "MacBook Pro", inches: 14, year: 2024, variant: "M4", chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true),
         laptop(["Mac16,6", "Mac16,8"], "MacBook Pro", inches: 14, year: 2024, variant: L("M4 Pro or M4 Max", "M4 Pro ou M4 Max"), chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true),
-        laptop(["Mac16,5", "Mac16,7"], "MacBook Pro", inches: 16, year: 2024, chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true)
+        laptop(["Mac16,5", "Mac16,7"], "MacBook Pro", inches: 16, year: 2024, chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true),
+        laptop(["Mac17,2"], "MacBook Pro", inches: 14, year: 2025, variant: "M5", chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true),
+        laptop(["Mac17,7", "Mac17,9"], "MacBook Pro", inches: 14, year: 2026, variant: L("M5 Pro or M5 Max", "M5 Pro ou M5 Max"), chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true),
+        laptop(["Mac17,6", "Mac17,8"], "MacBook Pro", inches: 16, year: 2026, chip: .appleSilicon, ports: 3, hdmi: true, sd: true, magSafe: true)
     ]
 
     // MARK: - Mac de bureau
@@ -223,10 +233,15 @@ public enum MacModelCatalog {
         desktop(["Macmini9,1"], "Mac mini", kind: .mini, year: 2020, variant: "M1", chip: .appleSilicon, camera: false, hdmi: true),
         desktop(["Mac14,3", "Mac14,12"], "Mac mini", kind: .mini, year: 2023, chip: .appleSilicon, camera: false, hdmi: true),
         desktop(["Mac16,10", "Mac16,11"], "Mac mini", kind: .mini, year: 2024, chip: .appleSilicon, camera: false, hdmi: true),
+        // Mac sortis en 2026 : HDMI et carte SD repris de la génération précédente (non détaillés sur la page Apple).
+        desktop(["Mac17,16"], "Mac mini", kind: .mini, year: 2026, variant: "M5 Pro", chip: .appleSilicon, camera: false, hdmi: true),
+        desktop(["Mac18,5"], "Mac mini", kind: .mini, year: 2026, variant: "M6", chip: .appleSilicon, camera: false, hdmi: true),
 
         desktop(["Mac13,1", "Mac13,2"], "Mac Studio", kind: .studio, year: 2022, chip: .appleSilicon, camera: false, hdmi: true, sd: true),
         desktop(["Mac14,13", "Mac14,14"], "Mac Studio", kind: .studio, year: 2023, chip: .appleSilicon, camera: false, hdmi: true, sd: true),
         desktop(["Mac15,14", "Mac16,9"], "Mac Studio", kind: .studio, year: 2025, chip: .appleSilicon, camera: false, hdmi: true, sd: true),
+        desktop(["Mac17,14"], "Mac Studio", kind: .studio, year: 2026, variant: "M5 Max", chip: .appleSilicon, camera: false, hdmi: true, sd: true),
+        desktop(["Mac17,15"], "Mac Studio", kind: .studio, year: 2026, variant: "M5 Ultra", chip: .appleSilicon, camera: false, hdmi: true, sd: true),
 
         desktop(["MacPro7,1"], "Mac Pro", kind: .pro, year: 2019, chip: .intelT2, camera: false, lastMacOS: 26),
         desktop(["Mac14,8"], "Mac Pro", kind: .pro, year: 2023, chip: .appleSilicon, camera: false, hdmi: true)
