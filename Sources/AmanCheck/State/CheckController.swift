@@ -10,7 +10,7 @@ typealias Measurement = AmanCore.Measurement
 
 enum AppInfo {
     static let name = "Aman Check"
-    static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.1.0"
+    static let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.1.1"
     /// Code source d'Aman Check.
     static let repositoryURL = URL(string: "https://github.com/MidZai/aman_check")!
     /// Page Ko-fi du projet (la même qu'Aman Disk).

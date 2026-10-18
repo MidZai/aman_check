@@ -134,7 +134,7 @@ open -n "Aman Check.app" --args --language ja                  # force a languag
 ## Compatibility
 
 - **macOS 13 Ventura** or later.
-- **Apple Silicon** and **Intel** Macs. The model catalog covers Macs released up to early 2025 that can run macOS 13, MacBook Pro, MacBook and iMac 2017 included.
+- **Apple Silicon** and **Intel** Macs. The model catalog covers Macs released up to 2026 that can run macOS 13 (MacBook Pro, MacBook and iMac 2017 included, MacBook Neo and the M5 and M6 Macs too), and knows that macOS 27 Golden Gate runs on every Apple Silicon Mac and on no Intel Mac.
 - Tests adapt to the machine: Touch Bar, Touch ID, headphone jack, SD card reader, HDMI, MagSafe and battery only appear when the model has them.
 - Developed and verified on an Intel MacBook Pro with a T2 chip. Some readings specific to Apple Silicon and to desktop Macs (sensor keys) are listed as not yet verified in [docs/VERIFICATION.md](docs/VERIFICATION.md). Reports from other machines are welcome.
 

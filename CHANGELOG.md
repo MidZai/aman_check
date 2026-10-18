@@ -2,6 +2,20 @@
 
 All notable changes to Aman Check are documented here.
 
+## 1.1.1 — 2026-10-18
+
+### Battery
+- macOS 27: the battery percentage was missing (reported on Reddit for MacBook Air M2 and MacBook Pro M1 Pro). macOS 27 moved the battery capacities to another place in the system registry; the app reads them there now. Nothing changes on macOS 26 and earlier.
+- If no capacity in mAh can be read at all, the "Maximum Capacity" shown by macOS is used, and the report says it comes from macOS.
+
+### Compatibility
+- macOS 27 Golden Gate: every Apple Silicon Mac now shows "runs up to macOS 27 Golden Gate" (it said macOS 26 Tahoe). Intel Macs stop at macOS 26 and say they will not receive macOS 27. When the Mac runs a macOS newer than the app knows, that version is shown.
+- New Macs: MacBook Pro M5, M5 Pro and M5 Max, MacBook Air M5, MacBook Neo, Mac mini M5 Pro and M6, Mac Studio M5 Max and M5 Ultra. On the MacBook Neo the keyboard backlight, ambient light and Force Touch tests are left out (it has none of them), and Touch ID is tested only when the Mac has it.
+
+### Guided tests
+- Speakers: left, right and both were hard to tell apart (Reddit feedback). Each beep lasts 0.35 s instead of 0.12 s, with 0.3 s between beeps and 1.2 s of silence before each round, and the sound is richer in high frequencies, which the ear places more easily.
+- Speakers: the screen no longer seems frozen between two sounds. The end of a sound is also taken from the playback position (the end signal from macOS was missed once in a real run), the screen says "Listen" with the buttons disabled during the pause, and no beep can play after the test is closed.
+
 ## 1.1.0 — 2026-10-18
 
 ### Guided tests

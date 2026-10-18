@@ -10,7 +10,7 @@
 set -e
 cd "$(dirname "$0")"
 
-VERSION="${VERSION:-1.1.0}"
+VERSION="${VERSION:-1.1.1}"
 # Numéro de build : nombre de commits, ou 1 hors dépôt git. Date de compilation : lue par l'app
 # (point fort « dernier macOS » uniquement si cette version a moins de 18 mois).
 BUILD_NUMBER="$(git rev-list --count HEAD 2>/dev/null || echo 1)"

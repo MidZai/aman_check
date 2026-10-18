@@ -55,6 +55,7 @@ Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (fra
 ## Non validé (pas de machine disponible)
 - Capteurs sur Apple Silicon : clés de température `Tp*` (M1, M2 ; M3 et M4 peuvent utiliser d'autres préfixes → « Non disponible »), type des clés de ventilateur, `AppleClamshellState`, luminosité par IODisplay (probablement illisible : la question est alors posée), et surtout le capteur de luminosité par HID (sur Apple Silicon il passe par le SPU et peut ne pas apparaître : l'analyse dit alors « Non disponible »). Mac Intel sans T2 et iMac : capteur HID non vérifié. MacBook Air M1+ : « Pas de ventilateur sur ce modèle ». Mac de bureau : section Capteurs sans test du capot.
 - Apple Silicon : clés batterie (`MaxCapacity` en %, `NominalChargeCapacity`), « Capacité maximale » de SPPowerDataType, `sppci_cores`, classes des ports USB, `UsbCPortNumber`.
+- macOS 27 : capacités de la batterie lues dans le nœud enfant `AppleSmartBatteryPack` (1.1.1, d'après un relevé publié de MacBook Air M2, pas encore vu sur une machine réelle) ; écran principal sur un iMac M3 sous macOS 27.2 (un utilisateur ne voyait que la liste des disques, non reproduit).
 - Mac de bureau réels, Mac Intel sans T2 (Activation Lock non lisible).
 - Touches F1–F12 physiques (keyCodes média, Mission Control 160, Launchpad 131), lecteur SD, HDMI.
 
