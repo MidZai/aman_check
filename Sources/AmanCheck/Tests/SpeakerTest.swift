@@ -16,6 +16,10 @@ struct SpeakerTestView: View {
     @State private var generator = ToneGenerator()
     /// Un son est en cours (boutons de réponse désactivés).
     @State private var playing = false
+    /// Silence avant la manche suivante : affiché comme « Écoutez… », boutons désactivés (sinon l'écran
+    /// semblait figé, question posée avant le son). Annulé si le test se ferme : aucun bip après coup.
+    @State private var pendingRound: DispatchWorkItem?
+    private var busy: Bool { playing || pendingRound != nil }
     @State private var sweepProgress = 0.0
     @State private var progressTimer: Timer?
     @State private var quizSides: [ToneGenerator.Side] = []
@@ -43,6 +47,8 @@ struct SpeakerTestView: View {
         }
         .onDisappear {
             progressTimer?.invalidate()
+            pendingRound?.cancel()
+            pendingRound = nil
             generator.stop()
         }
     }
@@ -104,7 +110,7 @@ struct SpeakerTestView: View {
             }
         case .quiz:
             VStack(spacing: 16) {
-                Text(playing ? L("Listen…", "Écoutez…") : L("Where did the beeps come from?", "D'où venaient les bips ?"))
+                Text(busy ? L("Listen…", "Écoutez…") : L("Where did the beeps come from?", "D'où venaient les bips ?"))
                     .font(.title3.weight(.medium))
                 HStack(spacing: 12) {
                     answerButton(L("Left", "Gauche"), .left)
@@ -114,7 +120,7 @@ struct SpeakerTestView: View {
                 .controlSize(.large)
                 Button(L("I heard nothing", "Je n'ai rien entendu")) { answer(nil) }
                     .buttonStyle(.link)
-                    .disabled(playing)
+                    .disabled(busy)
             }
         case .quality:
             EmptyView()
@@ -132,7 +138,7 @@ struct SpeakerTestView: View {
             EmptyView()
         case .quiz:
             Button(L("Play Again", "Rejouer")) { playQuiz() }
-                .disabled(playing)
+                .disabled(busy)
         case .quality:
             Button(L("Listen Again", "Réécouter")) { playSweep(thenQuiz: false) }
                 .disabled(playing)
@@ -146,7 +152,7 @@ struct SpeakerTestView: View {
     private func answerButton(_ title: String, _ side: ToneGenerator.Side) -> some View {
         Button(title) { answer(side) }
             .frame(minWidth: 120)
-            .disabled(playing)
+            .disabled(busy)
     }
 
     private func refreshOutput() {
@@ -178,12 +184,22 @@ struct SpeakerTestView: View {
         quizSides = (0..<Self.rounds).map { _ in sides.randomElement()! }
         answers = []
         stage = .quiz(round: 0)
-        // Un silence entre le balayage et le premier bip.
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.pauseBeforeBeeps) { playQuiz() }
+        playAfterPause()
+    }
+
+    /// Un silence avant chaque manche, puis les bips.
+    private func playAfterPause() {
+        pendingRound?.cancel()
+        let item = DispatchWorkItem {
+            pendingRound = nil
+            playQuiz()
+        }
+        pendingRound = item
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.pauseBeforeBeeps, execute: item)
     }
 
     private func playQuiz() {
-        guard case .quiz(let round) = stage, !playing else { return }
+        guard case .quiz(let round) = stage, !busy else { return }
         playing = true
         generator.play(.pips, side: quizSides[round]) {
             playing = false
@@ -191,17 +207,19 @@ struct SpeakerTestView: View {
     }
 
     private func answer(_ side: ToneGenerator.Side?) {
-        guard case .quiz(let round) = stage, !playing else { return }
+        guard case .quiz(let round) = stage, !busy else { return }
         answers.append(side == quizSides[round])
         if round + 1 < Self.rounds {
             stage = .quiz(round: round + 1)
-            DispatchQueue.main.asyncAfter(deadline: .now() + Self.pauseBeforeBeeps) { playQuiz() }
+            playAfterPause()
         } else {
             stage = .quality
         }
     }
 
     private func complete(clean: Bool) {
+        pendingRound?.cancel()
+        pendingRound = nil
         generator.stop()
         // Une sortie externe ne dit rien des haut-parleurs du Mac : non testé, à refaire sans le périphérique.
         if let output, !output.isBuiltIn {

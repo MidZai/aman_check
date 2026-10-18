@@ -86,8 +86,9 @@ enum AudioDevices {
 /// (un lecteur désalloué juste après `play()` est une cause classique de « pas de son »).
 ///
 /// Sons choisis pour les haut-parleurs d'un portable : rien sous 250 Hz (un son grave à 110 Hz ne sortait
-/// presque pas, la personne entendait « un son, puis rien »). Fin d'un son = son réellement joué
-/// (`.dataPlayedBack`), et non mémoire consommée ; un garde-fou rend la main si la fin n'arrive jamais.
+/// presque pas, la personne entendait « un son, puis rien »). Fin d'un son = son réellement joué : signal
+/// `.dataPlayedBack` de macOS, ou position de lecture du lecteur arrivée au bout (le signal a manqué au moins
+/// une fois en essai réel, l'écran restait figé plusieurs secondes). Un garde-fou rend la main en dernier recours.
 @MainActor
 final class ToneGenerator {
     enum Side { case left, right, both }
@@ -113,6 +114,8 @@ final class ToneGenerator {
     private let sampleRate: Double = 48_000
     /// Numéro du son en cours : une fin (ou un garde-fou) d'un son précédent est ignorée.
     private var generation = 0
+    /// Suivi de la position de lecture du son en cours.
+    private var progressTimer: Timer?
 
     init() {
         format = AVAudioFormat(standardFormatWithSampleRate: sampleRate, channels: 2)!
@@ -135,6 +138,8 @@ final class ToneGenerator {
 
     func stop() {
         generation += 1
+        progressTimer?.invalidate()
+        progressTimer = nil
         player.stop()
         engine.stop()
     }
@@ -148,23 +153,51 @@ final class ToneGenerator {
         }
         generation += 1
         let current = generation
+        let requested = Date()
         var done = false
-        let finish: () -> Void = { [weak self] in
+        let finish: (String) -> Void = { [weak self] how in
             guard let self, !done, current == self.generation else { return }
             done = true
+            self.progressTimer?.invalidate()
+            self.progressTimer = nil
+            DiagnosticLog.shared.log("audio", String(format: "fin de \(kind) (%@) après %.2f s pour %.2f s de son",
+                                                     how, Date().timeIntervalSince(requested), kind.duration))
             completion?()
         }
         let buffer = makeBuffer(kind, side: side)
-        // Interrompt un son précédent éventuel : un seul son à la fois.
+        // Interrompt un son précédent éventuel : un seul son à la fois. Le lecteur repart de zéro.
+        progressTimer?.invalidate()
         player.stop()
         player.play()
         player.scheduleBuffer(buffer, at: nil, options: [], completionCallbackType: .dataPlayedBack) { _ in
-            DispatchQueue.main.async { MainActor.assumeIsolated { finish() } }
+            DispatchQueue.main.async { MainActor.assumeIsolated { finish("signal de macOS") } }
         }
-        // Garde-fou : jamais d'écran bloqué « son en cours » si la fin n'est pas signalée.
-        DispatchQueue.main.asyncAfter(deadline: .now() + kind.duration + 1.5) {
-            MainActor.assumeIsolated { finish() }
+        // Position de lecture : fin dès que tout le son est passé dans la sortie (plus sa latence).
+        // Garde-fou : 0,4 s après la fin prévue une fois la lecture commencée, 1,5 s si elle ne commence jamais.
+        let frames = Double(buffer.frameLength)
+        let latency = engine.outputNode.presentationLatency
+        var startedAt: Date?
+        let timer = Timer(timeInterval: 0.05, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                if let nodeTime = self.player.lastRenderTime, let playerTime = self.player.playerTime(forNodeTime: nodeTime),
+                   playerTime.sampleTime > 0 {
+                    if startedAt == nil { startedAt = Date() }
+                    if Double(playerTime.sampleTime) / playerTime.sampleRate >= frames / self.sampleRate + latency {
+                        finish("position de lecture")
+                        return
+                    }
+                }
+                let now = Date()
+                if let startedAt, now.timeIntervalSince(startedAt) > kind.duration + latency + 0.4 {
+                    finish("garde-fou")
+                } else if now.timeIntervalSince(requested) > kind.duration + 1.5 {
+                    finish(startedAt == nil ? "garde-fou, lecture jamais commencée" : "garde-fou")
+                }
+            }
         }
+        RunLoop.main.add(timer, forMode: .common)
+        progressTimer = timer
         DiagnosticLog.shared.log("audio", "lecture \(kind) côté \(side)")
     }
 
