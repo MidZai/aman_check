@@ -2,7 +2,7 @@
 
 All notable changes to Aman Check are documented here.
 
-## Unreleased
+## 1.1.0 — 2026-10-18
 
 ### Guided tests
 - Desktop Macs (iMac, Mac mini, Mac Studio, Mac Pro): optional keyboard and trackpad tests for the accessories that come with the Mac. Not in the step-by-step tests and never counted as "not tested"; a test done goes into the report with the accessory's name.
@@ -27,7 +27,7 @@ All notable changes to Aman Check are documented here.
 
 ### Documentation
 - `docs/LEGACY-MACOS-AUDIT.md`: what supporting macOS 12 Monterey would take (decision pending).
-- README: sensors, sharing, offline QR code, release process.
+- README and website: macOS 13, sensors, sharing, offline QR code, release process, and a Ko-fi call to fund the Apple Developer Program.
 
 ### Trust and first launch
 - First launch: a short notice says what Aman Check does and doesn't do (reads only, no connection, no password, no Apple Account needed). "Got It" hides it for good.
@@ -39,7 +39,6 @@ All notable changes to Aman Check are documented here.
 - Runs on macOS 13 Ventura (was macOS 14). New Macs covered: MacBook Pro 2017, MacBook 2017 and iMac 2017, whose last macOS is Ventura.
 - On macOS 14 and later nothing changes. On macOS 13 the Touch ID and speaker symbols do not animate.
 - Not yet verified on a real Mac running macOS 13.
-- The README and the website still say macOS 14 until this version is released.
 
 ## 1.0.1 — 2026-10-12
 

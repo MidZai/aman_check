@@ -17,8 +17,10 @@ Locks, battery, SSD, sensors, configuration, then guided tests of the screen, ke
   </a>
 </p>
 
+<p align="center"><b>Help get Aman Check signed by Apple.</b> The Apple Developer Program costs $99 a year. With it, the app can be signed and notarized, and macOS stops blocking it the first time. Donations on <a href="https://ko-fi.com/midzai">Ko-fi</a> go toward it first.</p>
+
 <p align="center">
-  <sub>Free and open source · macOS 14 or later · Apple Silicon and Intel · <a href="https://github.com/MidZai/aman_check/releases/latest">Latest version</a> · <a href="https://midzai.github.io/aman_check/">Website</a> · Sister project: <a href="https://github.com/MidZai/aman_disk">Aman Disk</a></sub>
+  <sub>Free and open source · macOS 13 or later · Apple Silicon and Intel · <a href="https://github.com/MidZai/aman_check/releases/latest">Latest version</a> · <a href="https://midzai.github.io/aman_check/">Website</a> · Sister project: <a href="https://github.com/MidZai/aman_disk">Aman Disk</a></sub>
 </p>
 
 <p align="center">
@@ -53,9 +55,11 @@ It is written for non-technical people: plain words, one status per line, and a 
 - **Keyboard**: every key turns green when pressed, including modifiers and arrows; ANSI, ISO or JIS layout detected automatically.
 - **Touch Bar**, **trackpad** (click, secondary click, scroll, pinch, rotate, force click, 8×5 grid), **speakers** (left and right), **microphone** (level meter and a 3‑second playback), **camera** (live preview, nothing recorded), **Touch ID**.
 - **Ports**: a USB stick validates each port without a click; charging, video output, headphone jack and SD card reader are checked too.
-- **Lid sensor** (close the lid, wait, open it: sleep and wake are detected), **ambient light sensor** (cover it and watch the brightness) and **keyboard backlight**. A faulty lid sensor was the case that started this, reported on Reddit.
+- **Lid sensor** (close the lid, wait, open it: sleep and wake are detected), **ambient light sensor** (shine a phone flashlight on it, or cover it: the app reads the sensor itself when the Mac allows it) and **keyboard backlight**. A faulty lid sensor was the case that started this, reported on Reddit.
 
 An external keyboard or mouse is detected before the keyboard and trackpad tests, so the built‑in hardware is what gets tested.
+
+On a desktop Mac (iMac, Mac mini, Mac Studio, Mac Pro), the keyboard and trackpad are accessories. Their tests are **optional**: do them if the accessories come with the Mac. A test done goes into the report with the accessory's name; a test not done is not counted.
 
 **Report**
 
@@ -99,7 +103,7 @@ Aman Check is free and open source, but it isn't signed with a paid Apple Develo
 
 If the **Open Anyway** button isn't there, open Aman Check once more, then go back to System Settings.
 
-**macOS 14 Sonoma**: in the **Applications** folder, Control-click **Aman Check**, choose **Open**, then click **Open**.
+**macOS 13 Ventura and macOS 14 Sonoma**: in the **Applications** folder, Control-click **Aman Check**, choose **Open**, then click **Open**.
 
 **Or, in Terminal** (any version), remove the download flag that macOS checks:
 
@@ -129,8 +133,8 @@ open -n "Aman Check.app" --args --language ja                  # force a languag
 
 ## Compatibility
 
-- **macOS 14 Sonoma** or later.
-- **Apple Silicon** and **Intel** Macs. The model catalog covers Macs released up to early 2025 that can run macOS 14.
+- **macOS 13 Ventura** or later.
+- **Apple Silicon** and **Intel** Macs. The model catalog covers Macs released up to early 2025 that can run macOS 13, MacBook Pro, MacBook and iMac 2017 included.
 - Tests adapt to the machine: Touch Bar, Touch ID, headphone jack, SD card reader, HDMI, MagSafe and battery only appear when the model has them.
 - Developed and verified on an Intel MacBook Pro with a T2 chip. Some readings specific to Apple Silicon and to desktop Macs (sensor keys) are listed as not yet verified in [docs/VERIFICATION.md](docs/VERIFICATION.md). Reports from other machines are welcome.
 
@@ -174,6 +178,8 @@ The name has three meanings, and all of them fit:
 ## Support the project
 
 Aman Check is free and open source. If it helped you buy or sell a Mac with a clear head, you can support its development on Ko-fi.
+
+The first goal is the **Apple Developer Program** ($99 a year): with it, Aman Check can be signed and notarized by Apple, and macOS stops blocking it the first time it opens.
 
 <a href="https://ko-fi.com/midzai"><img src="https://ko-fi.com/img/githubbutton_sm.svg" alt="Support on Ko-fi"></a>
 

@@ -136,6 +136,12 @@
   .gate p { color: var(--muted); font-size: 16px; margin-top: 10px; }
   .gate pre { margin: 12px 0 0; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.28); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.5; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
   @media (max-width: 900px) { .gate { grid-template-columns: 1fr; } }
+  .kofi-hero {
+    margin-top: 18px; display: flex; gap: 14px 20px; align-items: center; flex-wrap: wrap; max-width: 72ch;
+    padding: 16px 20px; border-radius: 14px; border: 1px solid rgba(255, 94, 91, 0.5); background: rgba(255, 94, 91, 0.09);
+  }
+  .kofi-hero p { margin: 0; flex: 1 1 32ch; font-size: 16.5px; line-height: 1.45; color: var(--muted); }
+  .kofi-hero p b { color: var(--text); }
   .kofi-note { margin-top: 26px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 17px; max-width: 72ch; }
   .faq { padding: 56px 0 24px; }
   .faq dl { margin: 26px 0 0; max-width: 72ch; border-top: 1px solid var(--line); }
@@ -300,9 +306,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </a>
         <a class="btn btn-ghost" href="https://github.com/MidZai/aman_check"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>Voir sur GitHub</a>
       </div>
+      <div class="kofi-hero">
+        <a class="btn btn-kofi" href="https://ko-fi.com/midzai">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.8 5c2 0 3.5 1.1 4.2 2.4C11.7 6.1 13.2 5 15.2 5c3.5 0 5.7 3.4 4.3 6.8C17.5 16.4 12 21 12 21z"/></svg>
+          Soutenir sur Ko-fi
+        </a>
+        <p><b>Aidez Aman Check à être signée par Apple.</b> Le programme Apple Developer coûte 99 $ par an. Avec lui, l'app est signée et notarisée, et macOS ne la bloque plus au premier lancement. Les dons servent d'abord à ça.</p>
+      </div>
       <ul class="trust" aria-label="En bref">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Fonctionne sans compte Apple, même sur un Mac fraîchement restauré</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>macOS 14 ou plus, Apple Silicon et Intel</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>macOS 13 ou plus, Apple Silicon et Intel</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Rien ne quitte votre Mac</li>
       </ul>
       <p class="fine">L'app n'est pas notarisée par Apple : macOS vous demande de l'autoriser une fois. <a href="#safe">Pourquoi, et comment</a>. <a href="https://github.com/MidZai/aman_check/releases/latest">Notes de version et somme de contrôle</a>.</p>
@@ -361,7 +374,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="mark"><span>3:00</span><span class="dot" aria-hidden="true"></span></div>
       <div class="body">
         <h2>Testez maintenant ce qu'aucune fiche technique ne dit.</h2>
-        <p>Neuf tests guidés, un par écran. Vous les faites, l'app enregistre ce que vous avez constaté et le précise dans le rapport. Un clavier ou une souris externe est détecté avant, pour que ce soit bien le matériel intégré qui soit testé.</p>
+        <p>Jusqu'à douze tests guidés, un par écran, seulement ceux qui ont un sens sur ce Mac. Vous les faites, l'app enregistre ce que vous avez constaté et le précise dans le rapport. Un clavier ou une souris externe est détecté avant, pour que ce soit bien le matériel intégré qui soit testé. Sur un iMac ou un Mac mini, clavier et trackpad sont des accessoires : testez-les s'ils sont vendus avec le Mac, c'est facultatif.</p>
         <ul class="tests">
           <li><div>Écran<small>Couleurs unies en plein écran : pixels morts, taches, rétroéclairage inégal</small></div></li>
           <li><div>Clavier<small>Chaque touche passe au vert quand elle répond</small></div></li>
@@ -372,6 +385,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <li><div>Caméra<small>Image en direct, rien n'est enregistré</small></div></li>
           <li><div>Touch ID<small>Lecteur d'empreintes</small></div></li>
           <li><div>Ports<small>Une clé USB valide chaque port ; charge, vidéo, casque, carte SD</small></div></li>
+          <li><div>Capteur du capot<small>Fermez le capot, rouvrez-le : veille et réveil sont détectés</small></div></li>
+          <li><div>Capteur de luminosité<small>La torche du téléphone sur le haut de l'écran, mesurée en lux</small></div></li>
+          <li><div>Rétroéclairage du clavier<small>Les touches s'éclairent</small></div></li>
         </ul>
         <figure class="shot">
           <picture><source type="image/webp" srcset="../site/keyboard.webp"><img src="../site/keyboard.png" alt="Test du clavier : un dessin du clavier du MacBook où chaque touche passe au vert quand on l'appuie, 0 touche sur 65 détectée, avec un choix ANSI/ISO." width="1600" height="1108" loading="lazy"></picture>
@@ -383,7 +399,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="mark"><span>8:00</span><span class="dot" aria-hidden="true"></span></div>
       <div class="body">
         <h2>Exportez le rapport. Concluez sur le même document.</h2>
-        <p>Un PDF pour vous deux et un JSON pour archive, datés à la minute près. La synthèse tient en cinq compteurs, rien d'autre : pas de score, pas de note, pas d'étoiles, parce qu'un chiffre flatteur est exactement ce que l'acheteur paie plus tard.</p>
+        <p>Un PDF pour vous deux et un JSON pour archive, datés à la minute près, à partager par AirDrop, Messages ou Mail. Un QR code en première page porte un résumé en texte simple, sans lien. La synthèse tient en cinq compteurs, rien d'autre : pas de score, pas de note, pas d'étoiles, parce qu'un chiffre flatteur est exactement ce que l'acheteur paie plus tard.</p>
         <div class="counters" aria-label="Exemple de synthèse du rapport">
           <div class="nums">
             <div class="num good"><b>9</b><span><i></i>bons</span></div>
@@ -486,7 +502,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <p>Pas de bouton <b>Ouvrir quand même</b> ? Ouvrez Aman Check une fois de plus, puis revenez dans Réglages Système.</p>
         </div>
         <div>
-          <h3>macOS 14 Sonoma</h3>
+          <h3>macOS 13 Ventura et 14 Sonoma</h3>
           <ol>
             <li>Dans le dossier <b>Applications</b>, faites un clic droit (ou Contrôle-clic) sur <b>Aman Check</b>.</li>
             <li>Choisissez <b>Ouvrir</b>.</li>
@@ -527,7 +543,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </details>
         <details>
           <summary>Et les anciens macOS ?</summary>
-          <p>La version actuelle demande macOS 14 Sonoma ou plus récent. La prise en charge de macOS 13 Ventura est prête pour la prochaine version. Les systèmes plus anciens ne sont pas pris en charge ; <a href="https://github.com/MidZai/aman_check/issues/7">la discussion se poursuit ici</a>.</p>
+          <p>Aman Check demande macOS 13 Ventura ou plus récent, ce qui couvre les Mac à partir de 2017. Les systèmes plus anciens ne sont pas pris en charge ; <a href="https://github.com/MidZai/aman_check/issues/7">la discussion se poursuit ici</a>.</p>
         </details>
         <details>
           <summary>Qu'est-ce qui est envoyé sur Internet ?</summary>

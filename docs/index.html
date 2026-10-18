@@ -135,6 +135,12 @@
   .gate p { color: var(--muted); font-size: 16px; margin-top: 10px; }
   .gate pre { margin: 12px 0 0; padding: 12px 14px; border-radius: 10px; background: rgba(0,0,0,0.28); border: 1px solid var(--line); font-size: 13.5px; line-height: 1.5; color: var(--text); white-space: pre-wrap; overflow-wrap: anywhere; }
   @media (max-width: 900px) { .gate { grid-template-columns: 1fr; } }
+  .kofi-hero {
+    margin-top: 18px; display: flex; gap: 14px 20px; align-items: center; flex-wrap: wrap; max-width: 72ch;
+    padding: 16px 20px; border-radius: 14px; border: 1px solid rgba(255, 94, 91, 0.5); background: rgba(255, 94, 91, 0.09);
+  }
+  .kofi-hero p { margin: 0; flex: 1 1 32ch; font-size: 16.5px; line-height: 1.45; color: var(--muted); }
+  .kofi-hero p b { color: var(--text); }
   .kofi-note { margin-top: 26px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; color: var(--muted); font-size: 17px; max-width: 72ch; }
   .faq { padding: 56px 0 24px; }
   .faq dl { margin: 26px 0 0; max-width: 72ch; border-top: 1px solid var(--line); }
@@ -299,9 +305,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </a>
         <a class="btn btn-ghost" href="https://github.com/MidZai/aman_check"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>View on GitHub</a>
       </div>
+      <div class="kofi-hero">
+        <a class="btn btn-kofi" href="https://ko-fi.com/midzai">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.5-9.2C1.1 8.4 3.3 5 6.8 5c2 0 3.5 1.1 4.2 2.4C11.7 6.1 13.2 5 15.2 5c3.5 0 5.7 3.4 4.3 6.8C17.5 16.4 12 21 12 21z"/></svg>
+          Support on Ko-fi
+        </a>
+        <p><b>Help get Aman Check signed by Apple.</b> The Apple Developer Program costs $99 a year. With it, the app is signed and notarized, and macOS stops blocking it the first time. Donations go toward it first.</p>
+      </div>
       <ul class="trust" aria-label="At a glance">
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Works without an Apple Account, even on a freshly restored Mac</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>macOS 14 or later, Apple Silicon and Intel</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>macOS 13 or later, Apple Silicon and Intel</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Nothing leaves your Mac</li>
       </ul>
       <p class="fine">The app isn't notarized by Apple, so macOS asks you to allow it once: <a href="#safe">here's why, and how</a>. <a href="https://github.com/MidZai/aman_check/releases/latest">Release notes and checksum</a>.</p>
@@ -360,7 +373,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="mark"><span>3:00</span><span class="dot" aria-hidden="true"></span></div>
       <div class="body">
         <h2>Now test what no spec sheet can tell you.</h2>
-        <p>Nine guided tests, one per screen. You do them, the app records what you observed and says so in the report. An external keyboard or mouse is detected first, so it's the built-in hardware that gets tested.</p>
+        <p>Up to twelve guided tests, one per screen, only those that make sense on this Mac. You do them, the app records what you observed and says so in the report. An external keyboard or mouse is detected first, so it's the built-in hardware that gets tested. On an iMac or a Mac mini, the keyboard and trackpad are accessories: test them if they come with the Mac, it's optional.</p>
         <ul class="tests">
           <li><div>Display<small>Solid colours full screen: dead pixels, stains, uneven backlight</small></div></li>
           <li><div>Keyboard<small>Every key turns green when it answers</small></div></li>
@@ -371,6 +384,9 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <li><div>Camera<small>Live picture, nothing saved</small></div></li>
           <li><div>Touch ID<small>Fingerprint reader</small></div></li>
           <li><div>Ports<small>A USB stick validates each port; charging, video, headphones, SD card</small></div></li>
+          <li><div>Lid sensor<small>Close the lid, open it: sleep and wake are detected</small></div></li>
+          <li><div>Ambient light sensor<small>A phone flashlight on the top of the screen, read in lux</small></div></li>
+          <li><div>Keyboard backlight<small>The keys light up</small></div></li>
         </ul>
         <figure class="shot">
           <picture><source type="image/webp" srcset="site/keyboard.webp"><img src="site/keyboard.png" alt="Keyboard test: a drawing of the MacBook keyboard where each key turns green when pressed, 0 of 65 keys detected, with an ANSI/ISO switch." width="1600" height="1108" loading="lazy"></picture>
@@ -382,7 +398,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
       <div class="mark"><span>8:00</span><span class="dot" aria-hidden="true"></span></div>
       <div class="body">
         <h2>Export the report. Shake hands on the same document.</h2>
-        <p>A PDF for both of you and a JSON for the record, dated to the minute. The summary is five counts, nothing else: no score, no grade, no stars, because a flattering number is exactly what a buyer pays for later.</p>
+        <p>A PDF for both of you and a JSON for the record, dated to the minute, shared with AirDrop, Messages or Mail. A QR code on the first page carries a plain-text summary, no link. The summary is five counts, nothing else: no score, no grade, no stars, because a flattering number is exactly what a buyer pays for later.</p>
         <div class="counters" aria-label="Example of the report summary">
           <div class="nums">
             <div class="num good"><b>9</b><span><i></i>good</span></div>
@@ -485,7 +501,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
           <p>No <b>Open Anyway</b> button? Open Aman Check once more, then go back to System Settings.</p>
         </div>
         <div>
-          <h3>macOS 14 Sonoma</h3>
+          <h3>macOS 13 Ventura and 14 Sonoma</h3>
           <ol>
             <li>In the <b>Applications</b> folder, Control-click <b>Aman Check</b>.</li>
             <li>Choose <b>Open</b>.</li>
@@ -526,7 +542,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
         </details>
         <details>
           <summary>What about older versions of macOS?</summary>
-          <p>The current version needs macOS 14 Sonoma or later. Support for macOS 13 Ventura is ready for the next version. Older systems are not supported; <a href="https://github.com/MidZai/aman_check/issues/7">follow the discussion here</a>.</p>
+          <p>Aman Check needs macOS 13 Ventura or later, which covers Macs from 2017 on. Older systems are not supported; <a href="https://github.com/MidZai/aman_check/issues/7">follow the discussion here</a>.</p>
         </details>
         <details>
           <summary>What is sent over the Internet?</summary>
