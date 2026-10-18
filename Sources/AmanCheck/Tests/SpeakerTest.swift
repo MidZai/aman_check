@@ -4,7 +4,7 @@ import AmanDesign
 import DiskHealthCore
 
 /// Haut-parleurs (correctifs §6.5), refait après essai réel : un son qui monte du grave à l'aigu (3 s), puis
-/// 3 manches de petits bips d'un côté tiré au hasard (impossible de réussir sans écouter), puis la netteté.
+/// 3 manches de 3 bips (1,65 s) d'un côté tiré au hasard (impossible de réussir sans écouter), puis la netteté.
 /// L'image ne s'allume que pendant le son de l'étape 1 ; pendant le quiz elle reste neutre.
 struct SpeakerTestView: View {
     let finish: (TestResult) -> Void
@@ -22,6 +22,8 @@ struct SpeakerTestView: View {
     @State private var answers: [Bool] = []
 
     private static let rounds = 3
+    /// Silence avant chaque manche (retour Reddit : les sons s'enchaînaient trop vite pour situer le côté).
+    private static let pauseBeforeBeeps = 1.2
 
     var body: some View {
         TestScaffold(title: L("Speakers", "Haut-parleurs"), instruction: instruction) {
@@ -176,8 +178,8 @@ struct SpeakerTestView: View {
         quizSides = (0..<Self.rounds).map { _ in sides.randomElement()! }
         answers = []
         stage = .quiz(round: 0)
-        // Un court silence entre le balayage et le premier bip.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { playQuiz() }
+        // Un silence entre le balayage et le premier bip.
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.pauseBeforeBeeps) { playQuiz() }
     }
 
     private func playQuiz() {
@@ -193,7 +195,7 @@ struct SpeakerTestView: View {
         answers.append(side == quizSides[round])
         if round + 1 < Self.rounds {
             stage = .quiz(round: round + 1)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { playQuiz() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + Self.pauseBeforeBeeps) { playQuiz() }
         } else {
             stage = .quality
         }

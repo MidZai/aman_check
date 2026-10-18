@@ -94,13 +94,15 @@ final class ToneGenerator {
     enum Kind {
         /// Balayage 250 Hz → 8 kHz, 3 s : vérifie toute la plage et révèle grésillements et vibrations.
         case sweep
-        /// Trois petits bips nets à 1 kHz (0,6 s) : faciles à situer à gauche ou à droite.
+        /// Trois bips de 0,35 s séparés de 0,3 s (1,65 s). Retour Reddit : des bips de 0,12 s à 1 kHz pur se
+        /// situaient très mal à gauche ou à droite. Un son riche en aigus (harmoniques jusqu'à 6 kHz) se situe
+        /// bien mieux : l'oreille compare surtout le niveau des aigus entre les deux côtés.
         case pips
 
         var duration: Double {
             switch self {
             case .sweep: return 3
-            case .pips: return 0.6
+            case .pips: return 1.65
             }
         }
     }
@@ -185,13 +187,20 @@ final class ToneGenerator {
                 frequency = 250 * pow(32, t / duration)   // 250 Hz → 8 kHz, logarithmique
                 envelope = min(1, t / 0.08, (duration - t) / 0.08)
             case .pips:
-                frequency = 1000
-                // Trois bips de 0,12 s séparés de 0,08 s.
-                let slot = t.truncatingRemainder(dividingBy: 0.2)
-                envelope = slot < 0.12 ? min(1, slot / 0.01, (0.12 - slot) / 0.01) : 0
+                frequency = 500
+                // Trois bips de 0,35 s séparés de 0,3 s, montée et descente de 15 ms.
+                let slot = t.truncatingRemainder(dividingBy: 0.65)
+                envelope = slot < 0.35 ? min(1, slot / 0.015, (0.35 - slot) / 0.015) : 0
             }
             phase += 2 * .pi * frequency / sampleRate
-            let sample = Float(sin(phase) * max(0, envelope)) * amplitude
+            let wave: Double
+            switch kind {
+            case .sweep: wave = sin(phase)
+            case .pips:
+                // Harmoniques 1 à 12 de 500 Hz en 1/n, ramenées à l'amplitude d'un son pur.
+                wave = (1...12).reduce(0.0) { $0 + sin(Double($1) * phase) / Double($1) } / 1.6
+            }
+            let sample = Float(wave * max(0, envelope)) * amplitude
             left[i] = side == .right ? 0 : sample
             right[i] = side == .left ? 0 : sample
         }
