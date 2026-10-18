@@ -134,6 +134,24 @@ public enum SystemReader {
         var props: Unmanaged<CFMutableDictionary>?
         guard IORegistryEntryCreateCFProperties(service, &props, kCFAllocatorDefault, 0) == kIOReturnSuccess,
               let dict = props?.takeRetainedValue() as? [String: Any] else { return nil }
-        return dict
+        // macOS 27 : capacités dans le nœud enfant AppleSmartBatteryPack.
+        return BatteryRegistry.mergingChildNodes(top: dict, pack: descendantProperties(of: service, className: "AppleSmartBatteryPack"))
+    }
+
+    /// Propriétés du premier descendant de `entry` (plan IOService) de la classe donnée.
+    private static func descendantProperties(of entry: io_registry_entry_t, className: String) -> [String: Any]? {
+        var iterator: io_iterator_t = 0
+        guard IORegistryEntryCreateIterator(entry, kIOServicePlane, IOOptionBits(kIORegistryIterateRecursively), &iterator) == kIOReturnSuccess else {
+            return nil
+        }
+        defer { IOObjectRelease(iterator) }
+        while case let child = IOIteratorNext(iterator), child != 0 {
+            defer { IOObjectRelease(child) }
+            guard IOObjectConformsTo(child, className) != 0 else { continue }
+            var props: Unmanaged<CFMutableDictionary>?
+            guard IORegistryEntryCreateCFProperties(child, &props, kCFAllocatorDefault, 0) == kIOReturnSuccess else { return nil }
+            return props?.takeRetainedValue() as? [String: Any]
+        }
+        return nil
     }
 }

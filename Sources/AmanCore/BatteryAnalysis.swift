@@ -42,6 +42,23 @@ public struct BatteryRegistry: Sendable, Equatable {
         permanentFailureStatus = int("PermanentFailureStatus")
         batteryInstalled = bool("BatteryInstalled")
     }
+
+    /// Clés lues par Aman Check que macOS 27 ne publie plus sur `AppleSmartBattery` lui-même.
+    static let keysMovedByMacOS27 = ["DesignCapacity", "AppleRawMaxCapacity", "NominalChargeCapacity", "Temperature",
+                                     "PermanentFailureStatus", "DesignCycleCount9C", "CycleCount"]
+
+    /// macOS 27 a déplacé les capacités de la batterie dans le `BatteryData` du nœud enfant `AppleSmartBatteryPack`
+    /// (et dans le `BatteryData` d'`AppleSmartBattery`) : sans elles, plus de pourcentage (MacBook Air M2, retours Reddit).
+    /// On les remonte au premier niveau. Disposition classique (macOS 26 et avant, `DesignCapacity` présent) : inchangée.
+    public static func mergingChildNodes(top: [String: Any], pack: [String: Any]?) -> [String: Any] {
+        guard top["DesignCapacity"] == nil else { return top }
+        var merged = top
+        let sources = [pack?["BatteryData"] as? [String: Any], top["BatteryData"] as? [String: Any]].compactMap { $0 }
+        for key in keysMovedByMacOS27 where merged[key] == nil {
+            if let value = sources.lazy.compactMap({ $0[key] }).first { merged[key] = value }
+        }
+        return merged
+    }
 }
 
 /// Ce que macOS déclare dans `system_profiler SPPowerDataType -json`.
@@ -143,10 +160,12 @@ public enum BatteryAnalysis {
                                   thresholds: Thresholds, now: Date) -> Measurement {
         let id = MetricID.batteryHealth
         guard let design = r.designCapacity, design > 0 else {
-            return .unavailable(id, note: L("The battery does not report its original capacity.", "La batterie n'indique pas sa capacité d'origine."))
+            return macOSFigure(power, condition: condition, thresholds: thresholds, now: now)
+                ?? .unavailable(id, note: L("The battery does not report its original capacity.", "La batterie n'indique pas sa capacité d'origine."))
         }
         guard let (current, source) = currentCapacity(r) else {
-            return .unavailable(id, note: L("The battery does not report its current capacity in mAh.", "La batterie n'indique pas sa capacité actuelle en mAh."))
+            return macOSFigure(power, condition: condition, thresholds: thresholds, now: now)
+                ?? .unavailable(id, note: L("The battery does not report its current capacity in mAh.", "La batterie n'indique pas sa capacité actuelle en mAh."))
         }
         let ratio = Double(current) / Double(design)
         let method = "\(source) / DesignCapacity = \(current) / \(design) mAh"
@@ -181,6 +200,20 @@ public enum BatteryAnalysis {
                            display: "\(percent)\(Formatters.unitSpace)%",
                            detail: L("of its original capacity", "de sa capacité d'origine"),
                            note: notes.isEmpty ? nil : notes.joined(separator: " "))
+    }
+
+    /// Capacités en mAh illisibles : la « Capacité maximale » affichée par macOS, présentée comme telle
+    /// (mêmes seuils). Rien d'inventé : sans ce chiffre, la mesure reste « Non disponible ».
+    static func macOSFigure(_ power: PowerProfile?, condition: CheckStatus?, thresholds: Thresholds, now: Date) -> Measurement? {
+        guard let percent = power?.maximumCapacityPercent, (1...100).contains(percent) else { return nil }
+        var status: CheckStatus = percent >= thresholds.good ? .good : (percent >= thresholds.watch ? .watch : .problem)
+        if condition == .problem { status = .problem }
+        return Measurement(id: MetricID.batteryHealth, value: .int(Int64(percent)), unit: "%", status: status,
+                           method: "SPPowerDataType · sppower_battery_health_maximum_capacity", collectedAt: now,
+                           display: "\(percent)\(Formatters.unitSpace)%",
+                           detail: L("of its original capacity", "de sa capacité d'origine"),
+                           note: L("Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.",
+                                   "Chiffre affiché par macOS (Réglages Système > Batterie) : la batterie n'indique pas ses capacités en mAh."))
     }
 
     static func cyclesMeasurement(_ r: BatteryRegistry, power: PowerProfile?, ratedCyclesFromModel: Int?, now: Date) -> Measurement {
