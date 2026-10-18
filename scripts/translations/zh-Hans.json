@@ -64,7 +64,6 @@
 "{0} of {1} done": "已完成 {0}/{1}",
 "Reset": "重置",
 "Continue": "继续",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "在这台 Mac 上，键盘、鼠标和触控板属于配件：不进行测试，也不计入报告。",
 "Test": "测试",
 "Redo": "重做",
 "Skipped by the user": "用户已跳过",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "哔声来自哪边？",
 "Both Sides": "两边",
 "Listen": "聆听",
-"Listen Again": "再听一次"
+"Listen Again": "再听一次",
+"Optional: accessories": "可选：配件",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "在这台 Mac 上，键盘、鼠标和触控板属于配件。如果随机出售，请测试它们：完成的测试会加入报告，未做的测试不计入。",
+"Optional": "可选",
+"Accessory: ": "配件：",
+"Test the keyboard that comes with this Mac. ": "测试随这台 Mac 出售的键盘。",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "测试随这台 Mac 出售的触控板（鼠标无法完成这些手势）。"
 }

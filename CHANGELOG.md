@@ -5,6 +5,7 @@ All notable changes to Aman Check are documented here.
 ## Unreleased
 
 ### Guided tests
+- Desktop Macs (iMac, Mac mini, Mac Studio, Mac Pro): optional keyboard and trackpad tests for the accessories that come with the Mac. Not in the step-by-step tests and never counted as "not tested"; a test done goes into the report with the accessory's name.
 - Camera: the built-in camera of Intel Macs with a T2 chip (connected through the chip's internal USB) is no longer mistaken for an external one.
 - Speakers, redone after a real try: one audible rising sound (250 Hz to 8 kHz, 3 s, with a progress bar) instead of a low tone that laptop speakers barely play, then three rounds of short beeps that start on their own; the picture stays neutral during the quiz, and the end of a sound is the sound actually played (never stuck on "playing").
 - Touch ID without a saved fingerprint: a button opens Touch ID settings, and the test resumes on its own once a fingerprint is added.

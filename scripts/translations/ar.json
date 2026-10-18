@@ -64,7 +64,6 @@
 "{0} of {1} done": "تم {0} من {1}",
 "Reset": "إعادة ضبط",
 "Continue": "متابعة",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "لوحة المفاتيح والفأرة ولوحة التعقب ملحقات في هذا الـ Mac: لا تُختبر ولا تُحتسب في التقرير.",
 "Test": "اختبار",
 "Redo": "إعادة",
 "Skipped by the user": "تخطّاه المستخدم",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "من أين جاءت الصفارات؟",
 "Both Sides": "من الجانبين",
 "Listen": "استماع",
-"Listen Again": "الاستماع مرة أخرى"
+"Listen Again": "الاستماع مرة أخرى",
+"Optional: accessories": "اختياري: الملحقات",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "لوحة المفاتيح والفأرة ولوحة التعقب ملحقات في هذا الـ Mac. اختبرها إن كانت تُباع معه: الاختبار المُنجز يُضاف إلى التقرير، والاختبار غير المُنجز لا يُحتسب.",
+"Optional": "اختياري",
+"Accessory: ": "الملحق: ",
+"Test the keyboard that comes with this Mac. ": "اختبر لوحة المفاتيح التي تُباع مع هذا الـ Mac. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "اختبر لوحة التعقب التي تُباع مع هذا الـ Mac (لا تستطيع الفأرة أداء الإيماءات). "
 }

@@ -64,7 +64,6 @@
 "{0} of {1} done": "Wykonano {0} z {1}",
 "Reset": "Wyzeruj",
 "Continue": "Dalej",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "Klawiatura, mysz i gładzik to akcesoria w tym Macu: nie są testowane ani liczone w raporcie.",
 "Test": "Testuj",
 "Redo": "Powtórz",
 "Skipped by the user": "Pominięty przez użytkownika",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "Skąd dochodziły sygnały?",
 "Both Sides": "Z obu stron",
 "Listen": "Słuchaj",
-"Listen Again": "Posłuchaj ponownie"
+"Listen Again": "Posłuchaj ponownie",
+"Optional: accessories": "Opcjonalnie: akcesoria",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "Klawiatura, mysz i gładzik to akcesoria w tym Macu. Przetestuj je, jeśli są sprzedawane razem z nim: wykonany test trafia do raportu, niewykonany nie jest liczony.",
+"Optional": "Opcjonalnie",
+"Accessory: ": "Akcesorium: ",
+"Test the keyboard that comes with this Mac. ": "Przetestuj klawiaturę sprzedawaną z tym Macem. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Przetestuj gładzik sprzedawany z tym Macem (mysz nie wykona gestów). "
 }

@@ -263,6 +263,11 @@ Chaque test se termine par un état : **Réussi · Échoué · Ignoré · Interr
 ### 7.3 Trackpad / souris
 - Clic gauche/droit, glissement, geste à deux doigts (scroll), pincement, **Force Touch** (événements de pression `NSEvent.pressure` / `stage`) si le modèle le supporte. Résultat mesuré quand l'événement est reçu.
 
+### 7.3 bis Clavier et trackpad d'un Mac de bureau (facultatifs)
+- Sur un iMac, un Mac mini, un Mac Studio ou un Mac Pro, clavier et trackpad sont des accessoires : ni prévus, ni dans l'assistant, ni comptés « non testés ». Section « Facultatif : accessoires » de la page Tests guidés, une carte par test, marquée « Facultatif ».
+- Mêmes tests que sur un portable (§7.2, §7.3), avec le clavier externe (rangée F1–F12 et esc) et le trackpad externe (Force Touch non exigé : le Magic Trackpad de première génération ne l'a pas). Le blocage des périphériques externes est désactivé : ce sont eux qui sont testés. Consigne : « Testez le clavier (le trackpad) vendu avec ce Mac » ; une souris ne peut pas faire les gestes.
+- Un test réussi ou échoué entre dans le rapport comme un test prévu (compté dans « X tests réalisés sur Y »), avec le nom de l'accessoire dans les détails (« Accessoire : Magic Keyboard »). Ignoré ou interrompu : absent du rapport.
+
 ### 7.4 Audio
 - Haut-parleurs : balayage de fréquence (sweep) puis tonalité test, canal **gauche** puis **droit** (via `AVAudioEngine` et panoramique). Question utilisateur : « Le son est-il net, sans grésillement ni vibration ? » (déclaratif).
 - Prévenir de monter le volume. Attention au volume : commencer bas et monter progressivement pour ne pas agresser l'utilisateur.
@@ -374,7 +379,7 @@ Le risque principal est la **diversité matérielle**. Chaque collecteur doit ê
 | Intel avec T2 (2018–2020) | MacBook Pro 2019 | Activation Lock lisible, batterie en mAh |
 | Apple Silicon M1 | MacBook Air M1 | Clés batterie, `MaxCapacity` en %, mémoire unifiée |
 | Apple Silicon M2/M3/M4 | MacBook Pro/Air récents | Changements de clés selon macOS |
-| Mac de bureau | iMac, Mac mini | Modules batterie/clavier/trackpad à masquer |
+| Mac de bureau | iMac, Mac mini | Module batterie à masquer ; clavier et trackpad facultatifs (§7.3 bis) |
 
 - Versions de macOS : plusieurs (la plus ancienne supportée par mon app jusqu'à la plus récente).
 - Constituer un **jeu de fixtures** (sorties brutes anonymisées) par machine pour les tests automatisés.

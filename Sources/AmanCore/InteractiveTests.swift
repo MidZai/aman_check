@@ -77,6 +77,27 @@ public enum TestID: String, Codable, Sendable, CaseIterable, Identifiable {
             }
         }
     }
+
+    /// Clavier et trackpad d'un Mac de bureau : des accessoires, proposés à part. Jamais dans l'assistant,
+    /// jamais comptés « non testés » ; un résultat obtenu entre dans le rapport.
+    public static func accessories(for profile: DeviceProfile) -> [TestID] {
+        allCases.filter { test in
+            switch test {
+            case .keyboard: return !profile.hasBuiltInKeyboard
+            case .trackpad: return !profile.hasBuiltInTrackpad
+            default: return false
+            }
+        }
+    }
+
+    /// Tests portés par le rapport : les tests prévus, plus les accessoires réellement testés
+    /// (réussis ou échoués ; un accessoire ignoré ou interrompu n'apparaît pas).
+    public static func reported(for profile: DeviceProfile, results: [TestResult]) -> [TestID] {
+        let planned = applicable(to: profile)
+        let accessories = accessories(for: profile)
+        let done = Set(results.filter { $0.outcome == .passed || $0.outcome == .failed }.map(\.test))
+        return allCases.filter { planned.contains($0) || (accessories.contains($0) && done.contains($0)) }
+    }
 }
 
 /// Fin d'un test : Réussi · Échoué · Ignoré · Interrompu.

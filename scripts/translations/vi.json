@@ -64,7 +64,6 @@
 "{0} of {1} done": "Đã xong {0}/{1}",
 "Reset": "Đặt lại",
 "Continue": "Tiếp tục",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "Trên máy Mac này, bàn phím, chuột và bàn di chuột là phụ kiện: không được kiểm tra và không tính vào báo cáo.",
 "Test": "Kiểm tra",
 "Redo": "Làm lại",
 "Skipped by the user": "Người dùng đã bỏ qua",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "Tiếng bíp phát ra từ đâu?",
 "Both Sides": "Cả hai bên",
 "Listen": "Nghe",
-"Listen Again": "Nghe lại"
+"Listen Again": "Nghe lại",
+"Optional: accessories": "Tùy chọn: phụ kiện",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "Trên máy Mac này, bàn phím, chuột và bàn di chuột là phụ kiện. Hãy kiểm tra nếu chúng được bán kèm: bài kiểm tra đã làm sẽ được thêm vào báo cáo, bài chưa làm không được tính.",
+"Optional": "Tùy chọn",
+"Accessory: ": "Phụ kiện: ",
+"Test the keyboard that comes with this Mac. ": "Kiểm tra bàn phím được bán kèm máy Mac này. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Kiểm tra bàn di chuột được bán kèm máy Mac này (chuột không thể thực hiện các cử chỉ). "
 }

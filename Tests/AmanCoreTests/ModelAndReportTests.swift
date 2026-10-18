@@ -459,3 +459,44 @@ struct LatestMacOSTests {
         #expect(ReportInsights.strengths(report(), builtAt: nil, now: built).first { $0.key == "macos" }?.status == .info)
     }
 }
+
+@Suite("Accessoires des Mac de bureau")
+struct AccessoryTestsTests {
+    @Test("Clavier et trackpad facultatifs sur un iMac, absents d'un portable")
+    func accessoriesOnlyOnDesktops() {
+        let imac = DeviceProfile.make(modelIdentifier: "iMac21,1", simulated: true)
+        let laptop = DeviceProfile.make(modelIdentifier: "MacBookPro16,1", detected: .init(hasBattery: true))
+        #expect(TestID.accessories(for: imac) == [.keyboard, .trackpad])
+        #expect(TestID.accessories(for: laptop).isEmpty)
+        // Jamais prévus : ni dans l'assistant, ni comptés « non testés ».
+        #expect(!TestID.applicable(to: imac).contains(.keyboard))
+        #expect(!TestID.applicable(to: imac).contains(.trackpad))
+    }
+
+    @Test("Un accessoire testé entre dans le rapport ; ignoré, il n'y apparaît pas")
+    func reportedOnlyWhenDone() {
+        let imac = DeviceProfile.make(modelIdentifier: "iMac21,1", simulated: true)
+        let planned = TestID.applicable(to: imac)
+        #expect(TestID.reported(for: imac, results: []) == planned)
+
+        let keyboard = TestResult(test: .keyboard, outcome: .passed, provenance: .measuredAuto, summary: "65 / 65")
+        let trackpad = TestResult.notTested(.trackpad, reason: "ignoré")
+        let reported = TestID.reported(for: imac, results: [keyboard, trackpad])
+        #expect(reported.contains(.keyboard))
+        #expect(!reported.contains(.trackpad))
+        #expect(reported.filter { $0 != .keyboard } == planned)
+
+        let report = ConditionReport(reportID: "T", generatedAt: Date(), appVersion: "1", profile: imac, measurements: [],
+                                     tests: [keyboard], plannedTests: reported)
+        let summary = ReportSummary(report: report)
+        #expect(summary.testsPlanned == planned.count + 1)
+        #expect(summary.testsDone == 1)
+    }
+
+    @Test("Un trackpad défaillant reste dans le rapport")
+    func failedAccessoryIsReported() {
+        let mini = DeviceProfile.make(modelIdentifier: "Macmini9,1", simulated: true)
+        let failed = TestResult(test: .trackpad, outcome: .failed, status: .watch, provenance: .measuredAuto, summary: "3 / 5")
+        #expect(TestID.reported(for: mini, results: [failed]).contains(.trackpad))
+    }
+}

@@ -27,21 +27,24 @@ enum HIDInventory {
 }
 
 /// Surveille les périphériques externes pendant un test du clavier ou du trackpad (vérification chaque seconde).
+/// Inactif sur un Mac de bureau : le clavier et le trackpad testés y sont justement externes.
 @MainActor
 final class ExternalInputMonitor: ObservableObject {
     let test: TestID
+    let active: Bool
     @Published private(set) var blockers: [String] = []
     private var timer: Timer?
 
-    init(test: TestID) {
+    init(test: TestID, active: Bool = true) {
         self.test = test
+        self.active = active
         refresh()
     }
 
     var isBlocked: Bool { !blockers.isEmpty }
 
     func start() {
-        guard timer == nil else { return }
+        guard active, timer == nil else { return }
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.refresh() }
         }
@@ -53,12 +56,19 @@ final class ExternalInputMonitor: ObservableObject {
     }
 
     func refresh() {
+        guard active else { return }
         let found = ExternalInputGuard.blockers(for: test, devices: HIDInventory.devices())
         if found != blockers {
             DiagnosticLog.shared.log(test.rawValue, "périphériques externes : \(found.isEmpty ? "aucun" : found.joined(separator: ", "))")
             blockers = found
         }
     }
+}
+
+/// Accessoire testé sur un Mac de bureau (« Accessoire : Magic Keyboard »), pour les détails du résultat.
+func accessoryDetail(for test: TestID) -> [String] {
+    let names = ExternalInputGuard.externalDevices(for: test, devices: HIDInventory.devices())
+    return names.isEmpty ? [] : [L("Accessory: ", "Accessoire : ") + names.joined(separator: ", ")]
 }
 
 /// Écran affiché à la place du test tant qu'un périphérique externe est branché.

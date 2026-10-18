@@ -64,7 +64,6 @@
 "{0} of {1} done": "Виконано {0} з {1}",
 "Reset": "Скинути",
 "Continue": "Продовжити",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "Клавіатура, миша і трекпад для цього Mac — аксесуари: вони не тестуються й не враховуються у звіті.",
 "Test": "Тест",
 "Redo": "Повторити",
 "Skipped by the user": "Пропущено користувачем",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "Звідки лунали сигнали?",
 "Both Sides": "З обох боків",
 "Listen": "Слухати",
-"Listen Again": "Послухати знову"
+"Listen Again": "Послухати знову",
+"Optional: accessories": "Необов'язково: аксесуари",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "Клавіатура, миша і трекпад для цього Mac — аксесуари. Перевірте їх, якщо вони продаються разом із ним: виконаний тест додається до звіту, невиконаний не враховується.",
+"Optional": "Необов'язково",
+"Accessory: ": "Аксесуар: ",
+"Test the keyboard that comes with this Mac. ": "Перевірте клавіатуру, що продається з цим Mac. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Перевірте трекпад, що продається з цим Mac (миша не може виконати жести). "
 }

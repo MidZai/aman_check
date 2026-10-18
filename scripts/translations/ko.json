@@ -64,7 +64,6 @@
 "{0} of {1} done": "{1}개 중 {0}개 완료",
 "Reset": "재설정",
 "Continue": "계속",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "이 Mac에서 키보드, 마우스, 트랙패드는 액세서리입니다. 테스트하지 않으며 보고서에 포함되지 않습니다.",
 "Test": "테스트",
 "Redo": "다시 하기",
 "Skipped by the user": "사용자가 건너뜀",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "삐 소리가 어디서 났나요?",
 "Both Sides": "양쪽",
 "Listen": "듣기",
-"Listen Again": "다시 듣기"
+"Listen Again": "다시 듣기",
+"Optional: accessories": "선택 사항: 액세서리",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "이 Mac에서 키보드, 마우스, 트랙패드는 액세서리입니다. 함께 판매된다면 테스트하세요. 완료한 테스트는 보고서에 추가되고, 하지 않은 테스트는 집계되지 않습니다.",
+"Optional": "선택 사항",
+"Accessory: ": "액세서리: ",
+"Test the keyboard that comes with this Mac. ": "이 Mac과 함께 판매되는 키보드를 테스트합니다. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "이 Mac과 함께 판매되는 트랙패드를 테스트합니다(마우스로는 제스처를 할 수 없습니다). "
 }

@@ -64,7 +64,6 @@
 "{0} of {1} done": "{0} van {1} gedaan",
 "Reset": "Herstel",
 "Continue": "Ga door",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "Toetsenbord, muis en trackpad zijn accessoires op deze Mac: ze worden niet getest en niet meegeteld in het rapport.",
 "Test": "Test",
 "Redo": "Opnieuw",
 "Skipped by the user": "Overgeslagen door de gebruiker",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "Waar kwamen de piepjes vandaan?",
 "Both Sides": "Beide kanten",
 "Listen": "Luister",
-"Listen Again": "Opnieuw luisteren"
+"Listen Again": "Opnieuw luisteren",
+"Optional: accessories": "Optioneel: accessoires",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "Toetsenbord, muis en trackpad zijn accessoires op deze Mac. Test ze als ze erbij worden verkocht: een uitgevoerde test komt in het rapport, een niet uitgevoerde test telt niet mee.",
+"Optional": "Optioneel",
+"Accessory: ": "Accessoire: ",
+"Test the keyboard that comes with this Mac. ": "Test het toetsenbord dat bij deze Mac wordt verkocht. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Test het trackpad dat bij deze Mac wordt verkocht (een muis kan de gebaren niet maken). "
 }

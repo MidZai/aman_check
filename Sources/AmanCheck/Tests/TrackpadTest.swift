@@ -191,12 +191,13 @@ struct TrackpadTestView: View {
     let profile: DeviceProfile
     let finish: (TestResult) -> Void
     @StateObject private var model: TrackpadModel
-    @StateObject private var gate = ExternalInputMonitor(test: .trackpad)
+    @StateObject private var gate: ExternalInputMonitor
 
     init(profile: DeviceProfile, finish: @escaping (TestResult) -> Void) {
         self.profile = profile
         self.finish = finish
         _model = StateObject(wrappedValue: TrackpadModel(forceTouch: profile.trackpadForceTouch))
+        _gate = StateObject(wrappedValue: ExternalInputMonitor(test: .trackpad, active: profile.hasBuiltInTrackpad))
     }
 
     var body: some View {
@@ -217,8 +218,10 @@ struct TrackpadTestView: View {
 
     private var testBody: some View {
         TestScaffold(title: L("Trackpad", "Trackpad"),
-                     instruction: L("Put the pointer in the gray area, then slide a finger over the whole trackpad until every square lights up. Then do each gesture in the list.",
-                                    "Placez le pointeur dans la zone grise, puis passez un doigt sur tout le trackpad jusqu'à allumer toutes les cases. Faites ensuite chaque geste de la liste.")) {
+                     instruction: (profile.hasBuiltInTrackpad ? "" : L("Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ",
+                                                                        "Testez le trackpad vendu avec ce Mac (une souris ne peut pas faire les gestes). "))
+                        + L("Put the pointer in the gray area, then slide a finger over the whole trackpad until every square lights up. Then do each gesture in the list.",
+                            "Placez le pointeur dans la zone grise, puis passez un doigt sur tout le trackpad jusqu'à allumer toutes les cases. Faites ensuite chaque geste de la liste.")) {
             HStack(alignment: .top, spacing: 24) {
                 ZStack {
                     TrackpadCaptureRepresentable(model: model)
@@ -305,18 +308,19 @@ struct TrackpadTestView: View {
 
     private func complete() {
         let total = TrackpadModel.columns * TrackpadModel.rows
+        let accessory = profile.hasBuiltInTrackpad ? [] : accessoryDetail(for: .trackpad)
         let missing = model.gestures.filter { !model.done.contains($0) }
         let summary = L("\(model.gestures.count - missing.count) of \(model.gestures.count) gestures · \(Int((model.coverage * 100).rounded()))% of the surface",
                         "\(model.gestures.count - missing.count) gestes sur \(model.gestures.count) · \(Int((model.coverage * 100).rounded())) % de la surface")
         if model.done.isEmpty && model.cells.isEmpty {
             finish(.notTested(.trackpad, reason: L("Nothing received", "Rien reçu"), aborted: true))
         } else if model.isComplete {
-            finish(TestResult(test: .trackpad, outcome: .passed, provenance: .measuredAuto, summary: summary))
+            finish(TestResult(test: .trackpad, outcome: .passed, provenance: .measuredAuto, summary: summary, details: accessory))
         } else {
             var details: [String] = []
             if !missing.isEmpty { details.append(L("Not received: ", "Non reçus : ") + missing.map(\.title).joined(separator: ", ")) }
             if model.cells.count < total { details.append(L("\(total - model.cells.count) squares never touched", "\(total - model.cells.count) cases jamais touchées")) }
-            finish(TestResult(test: .trackpad, outcome: .failed, status: .watch, provenance: .measuredAuto, summary: summary, details: details))
+            finish(TestResult(test: .trackpad, outcome: .failed, status: .watch, provenance: .measuredAuto, summary: summary, details: details + accessory))
         }
     }
 }

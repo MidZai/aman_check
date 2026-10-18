@@ -50,11 +50,22 @@ struct TestsView: View {
                     }
                 }
 
-                if controller.profile.kind.isDesktop {
-                    Callout(tint: .blue, symbol: "keyboard") {
-                        Text(L("Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.",
-                               "Sur ce Mac, clavier, souris et trackpad sont des accessoires : ils ne sont ni testés ni comptés dans le rapport."))
+                let accessories = controller.accessoryTests
+                if !accessories.isEmpty {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(L("Optional: accessories", "Facultatif : accessoires")).font(.headline)
+                        Text(L("Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.",
+                               "Sur ce Mac, clavier, souris et trackpad sont des accessoires. Testez-les s'ils sont vendus avec : un test fait est ajouté au rapport, un test non fait n'est pas compté."))
+                            .foregroundStyle(.secondary)
                             .fixedSize(horizontal: false, vertical: true)
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 300), spacing: AmanDesign.gridSpacing, alignment: .top)],
+                                  alignment: .leading, spacing: AmanDesign.gridSpacing) {
+                            ForEach(accessories) { test in
+                                TestCard(test: test, result: controller.results[test], optional: true) {
+                                    controller.singleTest = test
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -68,6 +79,8 @@ struct TestsView: View {
 private struct TestCard: View {
     let test: TestID
     let result: TestResult?
+    /// Accessoire facultatif : sans résultat, « Facultatif » plutôt que « Non testé ».
+    var optional = false
     let action: () -> Void
 
     var body: some View {
@@ -90,6 +103,10 @@ private struct TestCard: View {
                             StatusPill(result.status, text: result.status == .notTested ? result.outcome.label : nil)
                             Text(result.provenance.shortLabel)
                                 .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else if optional {
+                            Text(L("Optional", "Facultatif"))
+                                .font(.caption.weight(.medium))
                                 .foregroundStyle(.secondary)
                         } else {
                             StatusPill(.notTested)

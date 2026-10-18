@@ -67,8 +67,9 @@ final class KeyboardTestModel: ObservableObject {
         detectedPhysical = type
         isJIS = jis
         physical = type
-        topRow = profile.hasTouchBar ? .touchBar : .functionKeys
-        hasPhysicalEscape = profile.hasPhysicalEscape
+        // Mac de bureau : clavier externe (Magic Keyboard), rangée F1–F12 avec esc.
+        topRow = profile.hasBuiltInKeyboard && profile.hasTouchBar ? .touchBar : .functionKeys
+        hasPhysicalEscape = profile.hasBuiltInKeyboard ? profile.hasPhysicalEscape : true
         refreshLabels()
     }
 
@@ -166,13 +167,14 @@ struct KeyboardTestView: View {
     let profile: DeviceProfile
     let finish: (TestResult) -> Void
     @StateObject private var model: KeyboardTestModel
-    @StateObject private var gate = ExternalInputMonitor(test: .keyboard)
+    @StateObject private var gate: ExternalInputMonitor
     @State private var showMissing = false
 
     init(profile: DeviceProfile, finish: @escaping (TestResult) -> Void) {
         self.profile = profile
         self.finish = finish
         _model = StateObject(wrappedValue: KeyboardTestModel(profile: profile))
+        _gate = StateObject(wrappedValue: ExternalInputMonitor(test: .keyboard, active: profile.hasBuiltInKeyboard))
     }
 
     var body: some View {
@@ -236,8 +238,9 @@ struct KeyboardTestView: View {
     }
 
     private var instruction: String {
-        var text = L("Press every key, one at a time, without holding another key. Each key turns green when it is received.",
-                     "Appuyez sur chaque touche, une à la fois, sans en maintenir une autre. Chaque touche passe au vert quand elle est reçue.")
+        var text = profile.hasBuiltInKeyboard ? "" : L("Test the keyboard that comes with this Mac. ", "Testez le clavier vendu avec ce Mac. ")
+        text += L("Press every key, one at a time, without holding another key. Each key turns green when it is received.",
+                  "Appuyez sur chaque touche, une à la fois, sans en maintenir une autre. Chaque touche passe au vert quand elle est reçue.")
         if model.topRow == .functionKeys {
             text += " " + L("For the top row, hold fn and press each key.", "Pour la rangée du haut, maintenez fn et appuyez sur chaque touche.")
         } else {
@@ -259,7 +262,7 @@ struct KeyboardTestView: View {
             .frame(width: 180)
             InfoButton(L("ISO (most of Europe): tall Return key over two rows and an extra key next to left Shift. ANSI (United States): wide Return key on one row. The drawing switches to ISO by itself when the ISO-only key is pressed.",
                          "ISO (la plupart des claviers européens, AZERTY compris) : touche Entrée haute sur deux rangées et touche en plus à côté de Maj gauche. ANSI (États-Unis) : touche Entrée large sur une rangée. Le dessin passe tout seul en ISO dès que la touche propre à l'ISO est pressée."))
-            if !profile.isRecognized {
+            if !profile.isRecognized && profile.hasBuiltInKeyboard {
                 Picker("", selection: $model.topRow) {
                     Text("F1–F12").tag(KeyboardTopRow.functionKeys)
                     Text("Touch Bar").tag(KeyboardTopRow.touchBar)
@@ -291,14 +294,15 @@ struct KeyboardTestView: View {
         }
         let summary = L("\(model.detected.count) of \(layout.keyCount) keys detected", "\(model.detected.count) touches sur \(layout.keyCount) détectées")
         let layoutText = "\(layout.physical.label) · \(layout.topRow == .touchBar ? "Touch Bar" : "F1–F12")"
+        let accessory = profile.hasBuiltInKeyboard ? [] : accessoryDetail(for: .keyboard)
         if missing.isEmpty {
-            finish(TestResult(test: .keyboard, outcome: .passed, provenance: .measuredAuto, summary: summary, details: [layoutText]))
+            finish(TestResult(test: .keyboard, outcome: .passed, provenance: .measuredAuto, summary: summary, details: [layoutText] + accessory))
         } else if model.detected.isEmpty {
             finish(TestResult.notTested(.keyboard, reason: L("No key pressed", "Aucune touche pressée"), aborted: true))
         } else {
             // Des touches manquantes sont un problème, pas un simple point à surveiller.
             finish(TestResult(test: .keyboard, outcome: .failed, status: .problem, provenance: .measuredAuto, summary: summary,
-                              details: [L("Not detected: ", "Non détectées : ") + missing.map { missingName($0) }.joined(separator: ", "), layoutText]))
+                              details: [L("Not detected: ", "Non détectées : ") + missing.map { missingName($0) }.joined(separator: ", "), layoutText] + accessory))
         }
     }
 }

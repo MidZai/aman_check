@@ -28,6 +28,12 @@ public struct HIDDeviceInfo: Sendable, Equatable {
 public enum ExternalInputGuard {
     /// Noms des périphériques à débrancher avant de lancer `test`. Vide : le test peut démarrer.
     public static func blockers(for test: TestID, devices: [HIDDeviceInfo]) -> [String] {
+        externalDevices(for: test, devices: devices)
+    }
+
+    /// Noms des périphériques externes du type testé (clavier ; souris et trackpads), sans doublon.
+    /// Sur un Mac de bureau, ce sont les accessoires testés.
+    public static func externalDevices(for test: TestID, devices: [HIDDeviceInfo]) -> [String] {
         let kind: HIDDeviceInfo.Kind
         switch test {
         case .keyboard: kind = .keyboard

@@ -1,6 +1,6 @@
 # Aman Check — à vérifier à la main sur le MacBookPro16,1
 
-Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (117 tests).
+Construire : `./build_app.sh` puis ouvrir `Aman Check.app`. Tests unitaires : `./scripts/test.sh` (120 tests).
 Journal de diagnostic : menu Contrôle › Exporter les données de diagnostic (chaque touche, geste, port et son y est consigné).
 
 | Test | Ce qu'il faut constater | Critère |
@@ -49,6 +49,7 @@ Vérifié automatiquement : le QR code du PDF exporté en mode `--snapshot` (fra
 | Haut-parleurs | « Écouter » : un son qui monte, audible du début à la fin (3 s, barre de progression), puis 3 manches de bips qui partent seules ; image neutre pendant le quiz ; jamais d'écran bloqué (fin de son vérifiée sans bruit : 3,08 s et 0,67 s) |
 | Touch ID sans empreinte | « Ouvrir les réglages Touch ID » ; après ajout d'une empreinte, l'app revient au premier plan et demande le doigt d'elle-même |
 | Touch Bar | 10 zones visibles en entier ; bouton volume de la Control Strip + glissé → « extrémité droite OK » |
+| Mac de bureau (`--simulate-model iMac21,1`) | Section « Facultatif : accessoires » sous les tests, clavier et trackpad marqués « Facultatif », compteur sans eux (« 0 sur 6 ») ; un test fait apparaît dans le rapport avec « Accessoire : … » ; sur un vrai iMac, le Magic Keyboard n'est pas bloqué |
 | Accueil | Bandeau « Processeur … °C · Ventilateurs … · en direct » mis à jour toutes les 2 s, absent de la page des résultats (vérifié dans la fenêtre réelle : 71 °C, 3 362 et 3 129 tr/min ; le mode `--snapshot` ne l'affiche pas, ses rendus bloquent la file principale) |
 
 ## Non validé (pas de machine disponible)

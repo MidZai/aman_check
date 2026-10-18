@@ -94,6 +94,8 @@ final class CheckController: ObservableObject {
     }
 
     var plannedTests: [TestID] { TestID.applicable(to: profile) }
+    /// Clavier et trackpad d'un Mac de bureau : testés seulement si la personne le veut.
+    var accessoryTests: [TestID] { TestID.accessories(for: profile) }
 
     func measurement(_ id: String) -> Measurement? { measurements.first { $0.id == id } }
 
@@ -105,10 +107,12 @@ final class CheckController: ObservableObject {
     }
 
     var report: ConditionReport {
-        ConditionReport(reportID: reportID, generatedAt: analyzedAt ?? Date(), appVersion: AppInfo.version, profile: profile,
+        let tests = TestResult.belonging(toAnalysisStartedAt: analysisStartedAt, Array(results.values))
+        let reported = TestID.reported(for: profile, results: tests)
+        return ConditionReport(reportID: reportID, generatedAt: analyzedAt ?? Date(), appVersion: AppInfo.version, profile: profile,
                         measurements: measurements,
-                        tests: TestResult.belonging(toAnalysisStartedAt: analysisStartedAt, plannedTests.compactMap { results[$0] }),
-                        plannedTests: plannedTests,
+                        tests: reported.compactMap { id in tests.first { $0.test == id } },
+                        plannedTests: reported,
                         sellerName: sellerName.trimmingCharacters(in: .whitespaces).isEmpty ? nil : sellerName)
     }
 

@@ -64,7 +64,6 @@
 "{0} of {1} done": "{1} testten {0} tanesi tamamlandı",
 "Reset": "Sıfırla",
 "Continue": "Devam",
-"Keyboard, mouse and trackpad are accessories on this Mac: they are not tested and not counted in the report.": "Bu Mac'te klavye, fare ve izleme dörtgeni aksesuardır: test edilmez ve raporda sayılmaz.",
 "Test": "Test Et",
 "Redo": "Yeniden Yap",
 "Skipped by the user": "Kullanıcı tarafından atlandı",
@@ -775,5 +774,11 @@
 "Where did the beeps come from?": "Bipler nereden geldi?",
 "Both Sides": "İki taraftan",
 "Listen": "Dinle",
-"Listen Again": "Yeniden dinle"
+"Listen Again": "Yeniden dinle",
+"Optional: accessories": "İsteğe bağlı: aksesuarlar",
+"Keyboard, mouse and trackpad are accessories on this Mac. Test them if they come with it: a test done is added to the report, a test not done is not counted.": "Bu Mac'te klavye, fare ve izleme dörtgeni aksesuardır. Mac ile birlikte satılıyorlarsa test edin: yapılan test rapora eklenir, yapılmayan test sayılmaz.",
+"Optional": "İsteğe bağlı",
+"Accessory: ": "Aksesuar: ",
+"Test the keyboard that comes with this Mac. ": "Bu Mac ile birlikte satılan klavyeyi test edin. ",
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Bu Mac ile birlikte satılan izleme dörtgenini test edin (fare bu hareketleri yapamaz). "
 }
