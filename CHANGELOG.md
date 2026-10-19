@@ -2,6 +2,12 @@
 
 All notable changes to Aman Check are documented here.
 
+## 1.1.2 — 2026-10-19
+
+### Battery
+- Apple Silicon: the battery health is now the same "Maximum Capacity" figure macOS shows in System Settings > Battery (Reddit feedback: the app read a few points lower). The raw reading from the battery (mAh / original capacity) is still given in the note. A gap between the two no longer asks for a manual check.
+- Intel: macOS shows no percentage, so the app still computes it from the battery's capacities in mAh.
+
 ## 1.1.1 — 2026-10-18
 
 ### Battery
