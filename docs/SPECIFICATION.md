@@ -168,7 +168,7 @@ Optionnel : lien vers la vérification de couverture Apple (checkcoverage.apple.
 3. **Contrôle d'unité :** `MaxCapacity` est en mAh sur Intel, mais sur Apple Silicon récent il peut être exprimé en pourcentage (valeur ≤ ~100). Si `MaxCapacity ≤ 150`, ne pas le traiter comme des mAh.
 4. `santé % = capacité_max_actuelle (mAh) / DesignCapacity (mAh) × 100`.
 5. **Contrôle de cohérence :** `DesignCapacity` > 0 ; ratio entre 0,3 et 1,2 ; si le ratio dépasse 100 % légèrement, plafonner l'affichage à 100 % et le noter.
-6. **Recoupement :** comparer avec « Maximum Capacity » de `SPPowerDataType` s'il existe. Écart > 5 points ⇒ marquer « Vérification manuelle requise » et afficher les deux valeurs en Avancé.
+6. **Chiffre de macOS d'abord :** si `SPPowerDataType` donne « Maximum Capacity » (Apple Silicon), c'est la santé affichée et jugée (mêmes seuils) : c'est le chiffre que l'utilisateur voit dans Réglages Système > Batterie. La lecture brute (mAh / `DesignCapacity`) est donnée en note. Sans ce chiffre (Intel) : calcul des étapes 2 à 5.
 7. Si une étape échoue : `unavailable` avec note explicative. **Pas de pourcentage inventé.**
 8. Toujours stocker `method` (ex. « NominalChargeCapacity / DesignCapacity ») et l'afficher dans la section Avancé.
 

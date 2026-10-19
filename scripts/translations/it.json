@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "Valore mostrato da macOS (Impostazioni di Sistema > Batteria): la batteria non riporta le sue capacità in mAh.",
 "The values read are inconsistent ({0} / {1} mAh).": "I valori letti sono incoerenti ({0} / {1} mAh).",
 "Measured above 100% ({0}%): shown as 100%.": "Misurato oltre il 100% ({0}%): mostrato come 100%.",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS mostra {0}% mentre la batteria riporta {1}%: verifica in Impostazioni di Sistema > Batteria.",
-"Consistent with macOS ({0}%).": "Coerente con macOS ({0}%).",
 "of its original capacity": "della capacità originale",
 "The battery does not report its cycle count.": "La batteria non riporta il numero di cicli.",
 "out of {0} planned for this battery": "su {0} previsti per questa batteria",
@@ -782,5 +780,6 @@
 "Optional": "Facoltativo",
 "Accessory: ": "Accessorio: ",
 "Test the keyboard that comes with this Mac. ": "Testa la tastiera venduta con questo Mac. ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Testa il trackpad venduto con questo Mac (un mouse non può fare i gesti). "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Testa il trackpad venduto con questo Mac (un mouse non può fare i gesti). ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "Valore mostrato da macOS (Impostazioni di Sistema > Batteria). Lettura grezza della batteria: {0} / {1} mAh = {2}%."
 }

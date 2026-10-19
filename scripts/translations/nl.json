@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "Waarde getoond door macOS (Systeeminstellingen > Batterij): de batterij meldt haar capaciteiten in mAh niet.",
 "The values read are inconsistent ({0} / {1} mAh).": "De uitgelezen waarden zijn inconsistent ({0} / {1} mAh).",
 "Measured above 100% ({0}%): shown as 100%.": "Gemeten boven 100% ({0}%): getoond als 100%.",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS toont {0}% terwijl de batterij {1}% meldt: controleer in Systeeminstellingen > Batterij.",
-"Consistent with macOS ({0}%).": "Consistent met macOS ({0}%).",
 "of its original capacity": "van de oorspronkelijke capaciteit",
 "The battery does not report its cycle count.": "De batterij meldt haar aantal cycli niet.",
 "out of {0} planned for this battery": "van de {0} voorzien voor deze batterij",
@@ -782,5 +780,6 @@
 "Optional": "Optioneel",
 "Accessory: ": "Accessoire: ",
 "Test the keyboard that comes with this Mac. ": "Test het toetsenbord dat bij deze Mac wordt verkocht. ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Test het trackpad dat bij deze Mac wordt verkocht (een muis kan de gebaren niet maken). "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Test het trackpad dat bij deze Mac wordt verkocht (een muis kan de gebaren niet maken). ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "Waarde getoond door macOS (Systeeminstellingen > Batterij). Ruwe meting van de batterij: {0} / {1} mAh = {2}%."
 }

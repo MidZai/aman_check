@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "Значення, яке показує macOS (Системні параметри > Акумулятор): акумулятор не повідомляє свою ємність у мА·год.",
 "The values read are inconsistent ({0} / {1} mAh).": "Зчитані значення суперечливі ({0} / {1} мА·год).",
 "Measured above 100% ({0}%): shown as 100%.": "Виміряно понад 100% ({0}%): показано як 100%.",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS показує {0}%, а акумулятор повідомляє {1}%: перевірте в Системних параметрах > Акумулятор.",
-"Consistent with macOS ({0}%).": "Збігається з macOS ({0}%).",
 "of its original capacity": "від початкової ємності",
 "The battery does not report its cycle count.": "Акумулятор не повідомляє кількість циклів.",
 "out of {0} planned for this battery": "з {0}, розрахованих для цього акумулятора",
@@ -782,5 +780,6 @@
 "Optional": "Необов'язково",
 "Accessory: ": "Аксесуар: ",
 "Test the keyboard that comes with this Mac. ": "Перевірте клавіатуру, що продається з цим Mac. ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Перевірте трекпад, що продається з цим Mac (миша не може виконати жести). "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Перевірте трекпад, що продається з цим Mac (миша не може виконати жести). ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "Значення, яке показує macOS (Системні параметри > Акумулятор). Необроблені дані акумулятора: {0} / {1} мА·год = {2}%."
 }

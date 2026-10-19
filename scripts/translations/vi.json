@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "Con số do macOS hiển thị (Cài đặt Hệ thống > Pin): pin không báo cáo dung lượng theo mAh.",
 "The values read are inconsistent ({0} / {1} mAh).": "Các giá trị đọc được không nhất quán ({0} / {1} mAh).",
 "Measured above 100% ({0}%): shown as 100%.": "Đo được trên 100% ({0}%): hiển thị là 100%.",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS hiển thị {0}% trong khi pin báo {1}%: kiểm tra trong Cài đặt Hệ thống > Pin.",
-"Consistent with macOS ({0}%).": "Nhất quán với macOS ({0}%).",
 "of its original capacity": "dung lượng gốc",
 "The battery does not report its cycle count.": "Pin không báo cáo số chu kỳ.",
 "out of {0} planned for this battery": "trên {0} dự kiến cho pin này",
@@ -782,5 +780,6 @@
 "Optional": "Tùy chọn",
 "Accessory: ": "Phụ kiện: ",
 "Test the keyboard that comes with this Mac. ": "Kiểm tra bàn phím được bán kèm máy Mac này. ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Kiểm tra bàn di chuột được bán kèm máy Mac này (chuột không thể thực hiện các cử chỉ). "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Kiểm tra bàn di chuột được bán kèm máy Mac này (chuột không thể thực hiện các cử chỉ). ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "Số liệu do macOS hiển thị (Cài đặt Hệ thống > Pin). Số đo thô của pin: {0} / {1} mAh = {2}%."
 }

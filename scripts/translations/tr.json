@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "macOS'un gösterdiği değer (Sistem Ayarları > Pil): pil kapasitelerini mAh olarak bildirmiyor.",
 "The values read are inconsistent ({0} / {1} mAh).": "Okunan değerler tutarsız ({0} / {1} mAh).",
 "Measured above 100% ({0}%): shown as 100%.": "%100'ün üzerinde ölçüldü (%{0}): %100 olarak gösterildi.",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS %{0} gösterirken pil %{1} bildiriyor: Sistem Ayarları > Pil'den kontrol edin.",
-"Consistent with macOS ({0}%).": "macOS ile tutarlı (%{0}).",
 "of its original capacity": "orijinal kapasitesinin",
 "The battery does not report its cycle count.": "Pil döngü sayısını bildirmiyor.",
 "out of {0} planned for this battery": "bu pil için öngörülen {0} döngüden",
@@ -782,5 +780,6 @@
 "Optional": "İsteğe bağlı",
 "Accessory: ": "Aksesuar: ",
 "Test the keyboard that comes with this Mac. ": "Bu Mac ile birlikte satılan klavyeyi test edin. ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Bu Mac ile birlikte satılan izleme dörtgenini test edin (fare bu hareketleri yapamaz). "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "Bu Mac ile birlikte satılan izleme dörtgenini test edin (fare bu hareketleri yapamaz). ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "macOS'un gösterdiği değer (Sistem Ayarları > Pil). Pilin ham okuması: {0} / {1} mAh = %{2}."
 }

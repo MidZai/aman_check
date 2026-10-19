@@ -49,16 +49,36 @@ struct BatteryAnalysisTests {
         #expect(health?.method?.hasPrefix("NominalChargeCapacity") == true)
     }
 
-    @Test("Écart de plus de 5 points avec macOS : vérification manuelle")
-    func crossCheck() {
+    @Test("macOS affiche sa « Capacité maximale » (Apple silicon) : ce chiffre est la santé, le calcul brut va en note")
+    func macOSFigureWins() {
         var r = BatteryRegistry()
         r.designCapacity = 5000
         r.appleRawMaxCapacity = 4500
-        let ok = BatteryAnalysis.analyze(registry: r, power: PowerProfile(maximumCapacityPercent: 88), ratedCyclesFromModel: nil)
-        #expect(find(ok, MetricID.batteryHealth)?.status == .good)
-        let mismatch = BatteryAnalysis.analyze(registry: r, power: PowerProfile(maximumCapacityPercent: 80), ratedCyclesFromModel: nil)
-        #expect(find(mismatch, MetricID.batteryHealth)?.status == .manualRequired)
-        #expect(find(mismatch, MetricID.batteryHealth)?.note?.contains("80") == true)
+        let close = find(BatteryAnalysis.analyze(registry: r, power: PowerProfile(maximumCapacityPercent: 93), ratedCyclesFromModel: nil),
+                         MetricID.batteryHealth)
+        #expect(close?.value == .int(93))
+        #expect(close?.status == .good)
+        #expect(close?.method?.contains("sppower_battery_health_maximum_capacity") == true)
+        #expect(close?.note?.contains("4500 / 5000") == true)
+        #expect(close?.note?.contains("90") == true)
+
+        // Grand écart : le chiffre de macOS reste affiché et jugé, sans vérification manuelle.
+        let far = find(BatteryAnalysis.analyze(registry: r, power: PowerProfile(maximumCapacityPercent: 78), ratedCyclesFromModel: nil),
+                       MetricID.batteryHealth)
+        #expect(far?.value == .int(78))
+        #expect(far?.status == .watch)
+    }
+
+    @Test("Pas de chiffre macOS (Intel) : calcul mAh / DesignCapacity, sans note de recoupement")
+    func intelComputes() {
+        var r = BatteryRegistry()
+        r.designCapacity = 8790
+        r.appleRawMaxCapacity = 7274
+        let m = find(BatteryAnalysis.analyze(registry: r, power: PowerProfile(condition: "Normal"), ratedCyclesFromModel: nil),
+                     MetricID.batteryHealth)
+        #expect(m?.value == .int(83))
+        #expect(m?.method?.hasPrefix("AppleRawMaxCapacity") == true)
+        #expect(m?.note == nil)
     }
 
     @Test("Seuils : ≥ 80 bon, 70–79 à surveiller, < 70 problème")
@@ -129,15 +149,15 @@ struct BatteryAnalysisTests {
 struct BatteryStatusTests {
     private func find(_ list: [Measurement], _ id: String) -> Measurement? { list.first { $0.id == id } }
 
-    @Test("« Service recommandé » + écart de 8 points avec macOS : reste un problème, note de divergence ajoutée")
-    func mismatchDoesNotDowngradeProblem() {
+    @Test("« Service recommandé » + chiffre macOS de 82 % : reste un problème")
+    func serviceRecommendedStaysProblem() {
         var r = BatteryRegistry()
         r.designCapacity = 5000
         r.appleRawMaxCapacity = 4500
         let m = find(BatteryAnalysis.analyze(registry: r, power: PowerProfile(condition: "Service Recommended", maximumCapacityPercent: 82),
                                              ratedCyclesFromModel: nil), MetricID.batteryHealth)
         #expect(m?.status == .problem)
-        #expect(m?.note?.contains("82") == true)
+        #expect(m?.value == .int(82))
     }
 
     @Test("Nombre de cycles prévu inconnu : information, pas vert")

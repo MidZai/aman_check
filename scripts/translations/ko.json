@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "macOS가 표시하는 값입니다(시스템 설정 > 배터리). 배터리가 용량(mAh)을 보고하지 않습니다.",
 "The values read are inconsistent ({0} / {1} mAh).": "읽은 값이 일치하지 않습니다 ({0} / {1} mAh).",
 "Measured above 100% ({0}%): shown as 100%.": "100% 초과로 측정됨 ({0}%): 100%로 표시.",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS는 {0}%를 표시하고 배터리는 {1}%를 보고합니다. 시스템 설정 > 배터리에서 확인하십시오.",
-"Consistent with macOS ({0}%).": "macOS와 일치 ({0}%).",
 "of its original capacity": "설계 용량 대비",
 "The battery does not report its cycle count.": "배터리가 충전 주기 수를 보고하지 않습니다.",
 "out of {0} planned for this battery": "이 배터리의 예정 {0}회 중",
@@ -782,5 +780,6 @@
 "Optional": "선택 사항",
 "Accessory: ": "액세서리: ",
 "Test the keyboard that comes with this Mac. ": "이 Mac과 함께 판매되는 키보드를 테스트합니다. ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "이 Mac과 함께 판매되는 트랙패드를 테스트합니다(마우스로는 제스처를 할 수 없습니다). "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "이 Mac과 함께 판매되는 트랙패드를 테스트합니다(마우스로는 제스처를 할 수 없습니다). ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "macOS에 표시된 수치(시스템 설정 > 배터리). 배터리 원시 측정값: {0} / {1} mAh = {2}%."
 }

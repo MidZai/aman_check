@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "macOS द्वारा दिखाया गया आँकड़ा (सिस्टम सेटिंग्स > बैटरी): बैटरी अपनी क्षमताएँ mAh में नहीं बताती।",
 "The values read are inconsistent ({0} / {1} mAh).": "पढ़े गए मान असंगत हैं ({0} / {1} mAh)।",
 "Measured above 100% ({0}%): shown as 100%.": "100% से ऊपर मापा गया ({0}%): 100% दिखाया गया।",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS {0}% दिखाता है जबकि बैटरी {1}% बताती है: सिस्टम सेटिंग्स > बैटरी में जाँचें।",
-"Consistent with macOS ({0}%).": "macOS से संगत ({0}%)।",
 "of its original capacity": "मूल क्षमता का",
 "The battery does not report its cycle count.": "बैटरी अपनी साइकिल गिनती नहीं बताती।",
 "out of {0} planned for this battery": "इस बैटरी के लिए निर्धारित {0} में से",
@@ -782,5 +780,6 @@
 "Optional": "वैकल्पिक",
 "Accessory: ": "सहायक उपकरण: ",
 "Test the keyboard that comes with this Mac. ": "इस Mac के साथ बेचे जा रहे कीबोर्ड का परीक्षण करें। ",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "इस Mac के साथ बेचे जा रहे ट्रैकपैड का परीक्षण करें (माउस ये जेस्चर नहीं कर सकता)। "
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "इस Mac के साथ बेचे जा रहे ट्रैकपैड का परीक्षण करें (माउस ये जेस्चर नहीं कर सकता)। ",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "macOS द्वारा दिखाया गया आँकड़ा (सिस्टम सेटिंग्स > बैटरी)। बैटरी की कच्ची रीडिंग: {0} / {1} mAh = {2}%।"
 }

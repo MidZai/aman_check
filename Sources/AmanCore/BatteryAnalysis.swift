@@ -159,61 +159,70 @@ public enum BatteryAnalysis {
     static func healthMeasurement(_ r: BatteryRegistry, power: PowerProfile?, condition: CheckStatus?,
                                   thresholds: Thresholds, now: Date) -> Measurement {
         let id = MetricID.batteryHealth
+        let raw = rawReading(r)
+
+        // Apple silicon : macOS affiche sa « Capacité maximale » (Réglages Système > Batterie). C'est ce chiffre
+        // que l'utilisateur compare : il fait foi, la lecture brute en mAh passe en note. Intel : pas de chiffre macOS.
+        if let figure = macOSFigure(power, raw: raw, condition: condition, thresholds: thresholds, now: now) {
+            return figure
+        }
+
         guard let design = r.designCapacity, design > 0 else {
-            return macOSFigure(power, condition: condition, thresholds: thresholds, now: now)
-                ?? .unavailable(id, note: L("The battery does not report its original capacity.", "La batterie n'indique pas sa capacité d'origine."))
+            return .unavailable(id, note: L("The battery does not report its original capacity.", "La batterie n'indique pas sa capacité d'origine."))
         }
         guard let (current, source) = currentCapacity(r) else {
-            return macOSFigure(power, condition: condition, thresholds: thresholds, now: now)
-                ?? .unavailable(id, note: L("The battery does not report its current capacity in mAh.", "La batterie n'indique pas sa capacité actuelle en mAh."))
+            return .unavailable(id, note: L("The battery does not report its current capacity in mAh.", "La batterie n'indique pas sa capacité actuelle en mAh."))
         }
-        let ratio = Double(current) / Double(design)
         let method = "\(source) / DesignCapacity = \(current) / \(design) mAh"
-        guard (0.3...1.2).contains(ratio) else {
+        guard let raw else {
             return .unavailable(id, note: L("The values read are inconsistent (\(current) / \(design) mAh).",
                                              "Les valeurs lues sont incohérentes (\(current) / \(design) mAh)."), method: method)
         }
-        let rawPercent = ratio * 100
-        let percent = Int(min(100, rawPercent).rounded())
-        var notes: [String] = []
-        if rawPercent > 100 {
-            notes.append(L("Measured above 100% (\(Int(rawPercent.rounded()))%): shown as 100%.",
-                           "Mesurée au-dessus de 100 % (\(Int(rawPercent.rounded())) %) : affichée à 100 %."))
+        let percent = min(100, raw.percent)
+        var note: String?
+        if raw.percent > 100 {
+            note = L("Measured above 100% (\(raw.percent)%): shown as 100%.",
+                     "Mesurée au-dessus de 100 % (\(raw.percent) %) : affichée à 100 %.")
         }
 
         var status: CheckStatus = percent >= thresholds.good ? .good : (percent >= thresholds.watch ? .watch : .problem)
         if condition == .problem { status = .problem }
-
-        // Recoupement avec la « Capacité maximale » affichée par macOS : il ne peut que dégrader un statut
-        // bon ou à surveiller ; un problème (« Service recommandé ») reste un problème.
-        if let macOS = power?.maximumCapacityPercent {
-            if abs(macOS - percent) > 5 {
-                if status != .problem { status = .manualRequired }
-                notes.append(L("macOS shows \(macOS)% while the battery reports \(percent)%: check in System Settings > Battery.",
-                               "macOS affiche \(macOS) % alors que la batterie indique \(percent) % : vérifiez dans Réglages Système > Batterie."))
-            } else {
-                notes.append(L("Consistent with macOS (\(macOS)%).", "Cohérent avec macOS (\(macOS) %)."))
-            }
-        }
 
         return Measurement(id: id, value: .int(Int64(percent)), unit: "%", status: status, method: method, collectedAt: now,
                            display: "\(percent)\(Formatters.unitSpace)%",
                            detail: L("of its original capacity", "de sa capacité d'origine"),
-                           note: notes.isEmpty ? nil : notes.joined(separator: " "))
+                           note: note)
     }
 
-    /// Capacités en mAh illisibles : la « Capacité maximale » affichée par macOS, présentée comme telle
-    /// (mêmes seuils). Rien d'inventé : sans ce chiffre, la mesure reste « Non disponible ».
-    static func macOSFigure(_ power: PowerProfile?, condition: CheckStatus?, thresholds: Thresholds, now: Date) -> Measurement? {
+    /// Lecture brute de la batterie : capacité actuelle / capacité d'origine, en mAh.
+    /// `nil` si une valeur manque ou si le rapport sort de 30–120 % (valeurs incohérentes).
+    static func rawReading(_ r: BatteryRegistry) -> (current: Int, design: Int, percent: Int)? {
+        guard let design = r.designCapacity, design > 0, let (current, _) = currentCapacity(r) else { return nil }
+        let ratio = Double(current) / Double(design)
+        guard (0.3...1.2).contains(ratio) else { return nil }
+        return (current, design, Int((ratio * 100).rounded()))
+    }
+
+    /// La « Capacité maximale » affichée par macOS (Apple silicon), présentée comme telle (mêmes seuils).
+    /// La lecture brute de la batterie, si elle existe, est donnée en note pour l'expliquer.
+    static func macOSFigure(_ power: PowerProfile?, raw: (current: Int, design: Int, percent: Int)?, condition: CheckStatus?,
+                            thresholds: Thresholds, now: Date) -> Measurement? {
         guard let percent = power?.maximumCapacityPercent, (1...100).contains(percent) else { return nil }
         var status: CheckStatus = percent >= thresholds.good ? .good : (percent >= thresholds.watch ? .watch : .problem)
         if condition == .problem { status = .problem }
+        let note: String
+        if let raw {
+            note = L("Figure shown by macOS (System Settings > Battery). Raw battery reading: \(raw.current) / \(raw.design) mAh = \(raw.percent)%.",
+                     "Chiffre affiché par macOS (Réglages Système > Batterie). Lecture brute de la batterie : \(raw.current) / \(raw.design) mAh = \(raw.percent) %.")
+        } else {
+            note = L("Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.",
+                     "Chiffre affiché par macOS (Réglages Système > Batterie) : la batterie n'indique pas ses capacités en mAh.")
+        }
         return Measurement(id: MetricID.batteryHealth, value: .int(Int64(percent)), unit: "%", status: status,
                            method: "SPPowerDataType · sppower_battery_health_maximum_capacity", collectedAt: now,
                            display: "\(percent)\(Formatters.unitSpace)%",
                            detail: L("of its original capacity", "de sa capacité d'origine"),
-                           note: L("Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.",
-                                   "Chiffre affiché par macOS (Réglages Système > Batterie) : la batterie n'indique pas ses capacités en mAh."))
+                           note: note)
     }
 
     static func cyclesMeasurement(_ r: BatteryRegistry, power: PowerProfile?, ratedCyclesFromModel: Int?, now: Date) -> Measurement {

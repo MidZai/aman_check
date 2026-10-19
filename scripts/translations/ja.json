@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "macOSが表示している値です（システム設定 > バッテリー）。バッテリーは容量（mAh）を報告していません。",
 "The values read are inconsistent ({0} / {1} mAh).": "読み取った値に矛盾があります（{0} / {1} mAh）。",
 "Measured above 100% ({0}%): shown as 100%.": "100%超で測定（{0}%）：100%として表示。",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOSは{0}%を表示し、バッテリーは{1}%を報告しています。システム設定 > バッテリーで確認してください。",
-"Consistent with macOS ({0}%).": "macOSと一致（{0}%）。",
 "of its original capacity": "設計容量比",
 "The battery does not report its cycle count.": "バッテリーは充放電回数を報告していません。",
 "out of {0} planned for this battery": "このバッテリーの想定{0}回中",
@@ -782,5 +780,6 @@
 "Optional": "オプション",
 "Accessory: ": "アクセサリ：",
 "Test the keyboard that comes with this Mac. ": "このMacと一緒に販売されるキーボードをテストします。",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "このMacと一緒に販売されるトラックパッドをテストします（マウスではジェスチャができません）。"
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "このMacと一緒に販売されるトラックパッドをテストします（マウスではジェスチャができません）。",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "macOSが表示している値（システム設定 > バッテリー）。バッテリーの生の値：{0} / {1} mAh = {2}%。"
 }

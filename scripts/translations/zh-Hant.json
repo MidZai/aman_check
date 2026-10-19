@@ -383,8 +383,6 @@
 "Figure shown by macOS (System Settings > Battery): the battery does not report its capacities in mAh.": "macOS 顯示的數值（「系統設定」>「電池」）：電池未回報其容量（mAh）。",
 "The values read are inconsistent ({0} / {1} mAh).": "讀取的數值不一致（{0} / {1} mAh）。",
 "Measured above 100% ({0}%): shown as 100%.": "測得超過 100%（{0}%）：顯示為 100%。",
-"macOS shows {0}% while the battery reports {1}%: check in System Settings > Battery.": "macOS 顯示 {0}%，而電池回報 {1}%：請在「系統設定」>「電池」中核對。",
-"Consistent with macOS ({0}%).": "與 macOS 一致（{0}%）。",
 "of its original capacity": "原始容量",
 "The battery does not report its cycle count.": "電池未回報循環次數。",
 "out of {0} planned for this battery": "此電池設計為 {0} 次",
@@ -782,5 +780,6 @@
 "Optional": "選用",
 "Accessory: ": "配件：",
 "Test the keyboard that comes with this Mac. ": "測試隨這台 Mac 出售的鍵盤。",
-"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "測試隨這台 Mac 出售的觸控式軌跡板（滑鼠無法完成這些手勢）。"
+"Test the trackpad that comes with this Mac (a mouse cannot do the gestures). ": "測試隨這台 Mac 出售的觸控式軌跡板（滑鼠無法完成這些手勢）。",
+"Figure shown by macOS (System Settings > Battery). Raw battery reading: {0} / {1} mAh = {2}%.": "macOS 顯示的數值（「系統設定」>「電池」）。電池原始讀數：{0} / {1} mAh = {2}%。"
 }
